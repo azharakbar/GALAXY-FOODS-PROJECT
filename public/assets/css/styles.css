@@ -1,0 +1,185 @@
+.input-field label {
+     font-size: 12px;
+}
+
+.input-field input[type=text] {
+ font-size: 15px ;
+}
+
+.input-field input[type=password] {
+ font-size: 15px ;
+}
+
+
+#rectBox{
+	position: absolute;
+	top: 229px;
+	height: 180px;
+	width: 2px;
+	background-color: rgba(255, 72, 72, 1);
+	box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+#loginRightDiv{
+    position: absolute ;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 35px;
+    top : 275px ;
+    left : 700px ;
+}
+
+#userNameDiv{
+	position:absolute;
+	width:35.6%;
+	top:213px;
+}
+
+#passwordDiv{
+	position:absolute;
+	width:35.6%;
+	top:280px
+}
+
+#signInButtonDiv{
+	position: absolute;
+	top:390px;
+	left:140px;
+	width:50%
+}
+
+#signInButton{
+	height:58px;
+	width:280px;
+    color :white ;
+	background-color: rgba(35, 46, 64, 1);
+	box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+
+#loginError{
+	position: absolute;
+	top:346px;
+	text-align: center;
+	color: #F44336 ; 
+}
+/*
+
+#grpBg{
+	height: 570px;
+	width: 100%;	
+}
+
+#msg{
+	position: absolute;
+	top: 285px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 30px;
+	text-align: center;
+}
+
+
+#forgotPwd{
+	position: absolute;
+	top: 350px;
+	width: 35%;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 10px;
+}
+
+
+
+
+
+#addBeaconButton{
+	height:58px;
+	width:285px;
+	background-color: rgba(76, 175, 80, 1);
+	box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+#qLogo{
+	position:absolute;
+	width:102px;
+	height:31px;
+	left:65px;
+	top:15px	
+}
+
+#header{
+	background:rgba(35, 46, 64, 1);
+}
+
+#slide-out{
+	position:fixed;
+	top:64px;
+	height:90%;
+}
+
+.side-nav li a:hover{
+	background: #BDBDBD ;
+}
+
+#reorderBtn{
+	position:absolute;
+	width:102px;
+	height:31px;
+	left:27px;
+}
+
+#nameField{
+	font-family: 'Raleway', sans-serif; 
+	font-size: 20px;
+}
+
+#desigField{
+	font-family: 'Raleway', sans-serif; 
+	font-size: 15px;
+}
+
+#dashField{
+	position: absolute;
+	top:150px;
+}
+
+#devicesField{
+	position: absolute;
+	top: 200px;
+	width:100%
+}
+
+#beaconsField{
+	position: absolute;
+	top: 250px;
+	width:100%	
+}
+
+#usersField{
+	position: absolute;
+	top: 300px;	
+	width:100%
+}
+
+#settingsField{
+	position: absolute;
+	top: 360px;	
+	width:100%
+}
+*/
+
+
+.footer{
+	position: absolute;
+	top: 600px;
+    left: 100px ;
+	text-align: center;
+}
+/*
+
+.footer2{
+	position: fixed;
+	top: 600px;
+	text-align: left; 
+}
+*/

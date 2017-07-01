@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col s6" id="loginLeftDiv">
+
+        <div id="userNameDiv">
+            <div class="input-field col s8">
+                <span class="fa fa-user-o prefix"></span>
+                <input id="userNameField" type="text" class="validate" name="username" ng-model="username" ng-init="username = ''">
+                <label for="userNameField" class="asdasd">USERNAME</label>
+            </div>
+        </div>
+        
+        <div id="passwordDiv">
+            <div class="input-field col s8">
+                <span class="fa fa-lock prefix"></span>
+                <input id="passwordField" type="password" class="validate" name="password" ng-model="password" ng-init="password = ''">
+                <label for="passwordField" class="asdasd">PASSWORD</label>
+            </div>
+        </div>        
+        <div id="errorDiv">
+            <div class="col s3" id="loginError">
+                <b>{{error}}</b>
+  		    </div>
+  	     </div>
+        <div id="signInButtonDiv">
+          <div class="col s3" >
+            <button type="button" class="btn waves-effect waves-light" id="signInButton" ng-click="login()">SIGN IN</button>
+            </div>
+        </div>
+        
+        
+    </div>
+    <div class="col s1">
+        <span id="rectBox"></span>
+    </div>
+    <div class="col s5" id="loginRightDiv">
+        <center><u>PC DECORATIONS</u></center>
+        <center><font size="4px">ONE STOP FOR EVENT MANAGEMENT RENTALS</center></font>
+    </div>    
+</div>
