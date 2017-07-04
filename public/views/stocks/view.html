@@ -1,0 +1,37 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+	}
+	.ng-table-pager {
+	    display: none;
+	}	
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+</style>
+<div class="animated">
+<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">VIEW STOCK DETAILS </h2>
+<h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL ITEMS IN DATABSE : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
+
+	<table ng-table="itemTable" class="table table-hover table-responsive list">
+  <thead>
+    <tr style="cursor: default;">
+      <th width ="50%"><i class="fa fa-chevron-right" style="font-size: 12px"></i> NAME</th>
+      <th width ="16.66%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
+      <th width ="16.66%"><center><i class="fa fa-inr" style="font-size: 15px"></i> RENTED</center></th>
+      <th width ="16.66%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
+    </tr>
+  </thead>
+    <tr ng-repeat="item in $data" ng-click="getInfo($index)">
+    <td height="48" width="50%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}} </td>
+    <td height="48" width="16.66%" title = "TOTAL"> <center>{{item.credit}}</center> </td>
+    <td height="48" width="16.66%" title = "IN HAND"> <center>{{item.credit}}</center> </td>
+    <td height="48" width="16.66%" title = "AVAILABLE"> <center>{{item.credit}}</center> </td>
+  	</tr>         
+</table>
+</div>
+

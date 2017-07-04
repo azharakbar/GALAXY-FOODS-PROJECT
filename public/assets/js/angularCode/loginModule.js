@@ -1,4 +1,3 @@
-
 angular.module('loginModule', ['serviceModule'])
     .controller('loginCtrl',function( $scope , $rootScope , $http , $location , user){
         $scope.login = function(){
@@ -6,7 +5,7 @@ angular.module('loginModule', ['serviceModule'])
             var password = $scope.password ;
 
             $http({
-                url : 'http://127.0.0.1:2017/login',
+                url : '/login',
                 method : 'POST' ,
                 headers : {
                     'Content-Type' : 'application/x-www-form-urlencoded'

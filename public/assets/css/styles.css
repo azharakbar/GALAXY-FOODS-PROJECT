@@ -63,33 +63,33 @@
 	text-align: center;
 	color: #F44336 ; 
 }
-/*
 
-#grpBg{
-	height: 570px;
-	width: 100%;	
+
+
+#header{
+	background:rgba(35, 46, 64, 1);
 }
 
-#msg{
-	position: absolute;
-	top: 285px;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 30px;
-	text-align: center;
+#slide-out{
+	position:fixed;
+	top:64px;
+	height:90%;
 }
 
-
-#forgotPwd{
-	position: absolute;
-	top: 350px;
-	width: 35%;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 10px;
+.side-nav li a{
+	text-decoration: none ;
+	cursor: pointer;
 }
 
+.side-nav li a:hover{
+	background: #BDBDBD ;
+	text-decoration: none ;
+	cursor: pointer;
+}
 
-
-
+#logoutBtn a:hover{
+	text-decoration: none ;
+}
 
 #addBeaconButton{
 	height:58px;
@@ -107,20 +107,6 @@
 	top:15px	
 }
 
-#header{
-	background:rgba(35, 46, 64, 1);
-}
-
-#slide-out{
-	position:fixed;
-	top:64px;
-	height:90%;
-}
-
-.side-nav li a:hover{
-	background: #BDBDBD ;
-}
-
 #reorderBtn{
 	position:absolute;
 	width:102px;
@@ -131,42 +117,51 @@
 #nameField{
 	font-family: 'Raleway', sans-serif; 
 	font-size: 20px;
+	margin-top: 9px;
+	margin-left : 60px;
 }
 
 #desigField{
 	font-family: 'Raleway', sans-serif; 
 	font-size: 15px;
+	margin-left: 60px;
 }
 
+#arrow{
+	position: fixed;
+	margin-left: 30px;
+}
+
+/*
 #dashField{
 	position: absolute;
 	top:150px;
-}
+}*/
 
 #devicesField{
-	position: absolute;
-	top: 200px;
-	width:100%
+	/*position: absolute;*/
+	/*top: 200px;*/
+	/*width:100%*/
 }
 
 #beaconsField{
-	position: absolute;
-	top: 250px;
-	width:100%	
+	/*position: absolute;*/
+	/*top: 250px;*/
+	/*width:100%	*/
 }
 
 #usersField{
-	position: absolute;
-	top: 300px;	
-	width:100%
+	/*position: absolute;*/
+	/*top: 300px;	*/
+	/*width:100%*/
 }
 
 #settingsField{
-	position: absolute;
-	top: 360px;	
-	width:100%
+	/*position: absolute;*/
+	/*top: 360px;	*/
+	/*width:100%*/
 }
-*/
+
 
 
 .footer{
@@ -183,3 +178,72 @@
 	text-align: left; 
 }
 */
+
+
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.normal {
+    visibility: visible; /* Show the snackbar */
+
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+#snackbar.success {
+    visibility: visible; /* Show the snackbar */
+    background-color: #388E3C;
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+#snackbar.error {
+    visibility: visible; /* Show the snackbar */
+    background-color: #d50000;
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}

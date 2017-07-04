@@ -1,0 +1,35 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+	}
+	.ng-table-pager {
+	    display: none;
+	}	
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+</style>
+<div class="animated">
+<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">VIEW CUSTOMER DETAILS </h2>
+<h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL CUSTOMERS REGISTERED : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
+
+	<table ng-table="custTable" class="table table-hover table-responsive list">
+  <thead>
+    <tr style="cursor: default;">
+      <th width ="35%"><i class="material-icons">perm_identity</i>NAME</th>
+      <th width ="40%"><i class="material-icons">phone</i>CONTACT NUMBER</th>
+      <th width ="25%"><center><i class="material-icons">attach_money</i>CREDIT</center></th>
+    </tr>
+  </thead>
+    <tr ng-repeat="customer in $data" ng-click="getInfo($index)">
+    <td height="48" width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
+    <td height="48" width="40%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
+    <td height="48" width="25%" title = "Credit"> <center>{{customer.credit}}</center> </td>
+  	</tr>         
+</table>
+</div>
+

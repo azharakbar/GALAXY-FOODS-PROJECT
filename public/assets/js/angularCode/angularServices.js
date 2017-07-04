@@ -1,13 +1,9 @@
-/**
-*  Module
-*
-* Description
-*/
 angular.module('serviceModule', [])
-	.service( 'user' , function(){
+	.service( 'user' , function($rootScope){
 	    var username ;
 	    var token ;
 	    var loggedIn = false ;
+	    var role ;
 
 	    this.getName = function(){
 	        return username ;
@@ -15,28 +11,37 @@ angular.module('serviceModule', [])
 	    this.getToken = function(){
 	        return token
 	    }
+	    this.getRole = function(){
+	    	return role ;
+	    }
 	    this.isLoggedIn = function(){
 	        if ( localStorage.getItem('login') ){
 	            loggedIn = true ;
+	            $rootScope.loggedIn = true ;
 	            var data = JSON.parse(localStorage.getItem('login')) ;
 	            username = data.username ;
 	            token = data.token ;
+	            role = data.role ;
 	        }
 	        return loggedIn ;
 	    }
 	    this.saveData = function(data){
 	        username = data.username ;
 	        token = data.token ;
+	        role = data.role ;
 	        loggedIn = true ;
+	        $rootScope.loggedIn = true ;
 	        localStorage.setItem('login',JSON.stringify({
 	            username : username ,
-	            token : token 
+	            token : token ,
+	            role : role
 	        }))
 	    }
 	    this.clear = function(){
 	        username = '' ;
 	        token = ''; 
 	        loggedIn = false ;
+	        $rootScope.loggedIn = false ;
 	        localStorage.removeItem('login');
 	    }
 	})

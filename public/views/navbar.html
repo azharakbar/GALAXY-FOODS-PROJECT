@@ -1,0 +1,72 @@
+<div class="row">
+<div class="navbar-fixed">
+
+<nav>
+  <div class="nav-wrapper" id="header">
+    <a href="#"><i class="material-icons" id="reorderBtn">reorder</i></a><a class="brand-logo"><img src="./assets/imgs/logo.png" id="qLogo"></a>
+    <ul class="right hide-on-med-and-down">   
+      <li id="logoutBtn"><a ui-sref="logout"><i class="material-icons">input</i></a></li>
+    </ul>
+  </div>
+</nav>
+</div>
+
+<ul id="slide-out" class="side-nav fixed" style="width:250px">
+  <li><div class="user-view">
+    <i class="large material-icons" id="reorderBtn">perm_identity</i>
+    <span class="name" id="nameField">{{userName}}</span>
+    <span class="email" id="desigField">{{ role }}</span>
+  </div></li>
+  <li><div class="divider"></div></li>
+  <br>
+  <!-- <li><a class="subheader" id="dashField">Dashboard</a></li> -->
+  <li><a ui-sref="" class="dropdown-button" data-activates='custDropDown'><i class="material-icons">supervisor_account</i>CUSTOMERS<i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>
+
+  <li><a ui-sref="" class="dropdown-button" data-activates='stockDropDown'><i class="material-icons">dns</i>STOCKS
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>
+
+  <li><a ui-sref="" class="dropdown-button" data-activates='billDropDown'><i class="material-icons">attach_money</i>BILLING  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>
+
+  <li><a ui-sref="" class="dropdown-button" data-activates='orderDropDown'><i class="material-icons">receipt</i>ORDERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>
+</ul>
+
+  <ul id='custDropDown' class='dropdown-content'>
+    <li><a ui-sref="new_customer"><i class="material-icons">person_add</i>New Customer</a></li>
+    <li><a ui-sref="view_customer"><i class="material-icons">remove_red_eye</i>View Customers</a></li>
+    <li><a ui-sref="search_customer"><i class="material-icons">search</i>Search Customer</a></li>
+    <li><a ui-sref="update_customer"><i class="material-icons">update</i>Update Customer</a></li>
+  </ul>
+
+  <ul id='stockDropDown' class='dropdown-content'>
+    <li><a ui-sref="new_item"><i class="material-icons">add</i>New Item</a></li>
+    <li><a ui-sref="view_stock"><i class="material-icons">remove_red_eye</i>View Stocks</a></li>
+    <li><a ui-sref="search_stock"><i class="material-icons">search</i>Search Stocks</a></li>
+    <li><a ui-sref="update_stock"><i class="material-icons">update</i>Update Stocks</a></li>
+  </ul>  
+
+  <ul id='billDropDown' class='dropdown-content'>
+    <li><a ui-sref="new_bill"><i class="material-icons">note_add</i>New Bill</a></li>
+    <li><a ui-sref="pay_bill"><i class="material-icons">attach_money</i>Pay Bills</a></li>
+    <li><a ui-sref="view_bill"><i class="material-icons">search</i>View Bills</a></li>
+  </ul>  
+
+  <ul id='orderDropDown' class='dropdown-content'>
+    <li><a ui-sref="new_order"><i class="material-icons">add_shopping_cart</i>New Order</a></li>
+    <li><a ui-sref="view_order"><i class="material-icons">remove_red_eye</i>View Orders</a></li>
+    <li><a ui-sref="search_order"><i class="material-icons">search</i>Search Orders</a></li>
+    <li><a ui-sref="update_order"><i class="material-icons">update</i>Update Orders</a></li>
+  </ul>      
+
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('.dropdown-button').dropdown({
+        belowOrigin : true
+      }
+    );  
+  })
+</script>

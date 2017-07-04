@@ -1,11 +1,11 @@
-const localStrategy = require('passport-local').Strategy,
+var localStrategy = require('passport-local').Strategy,
 	  hat = require('hat'),
 	  User = require('../models/user')
 
 var genConfig = {
 	TZ : 'Asia/Kolkata' ,
 	secret : 'galaxygalaxy'	,
-	port : '2017'
+	port : '2016'
 }
 
 var dbConfig = {
@@ -19,40 +19,33 @@ var dbConfig = {
 
 var passportConfig = {
 	pass : function(passport){
-		passport.serializeUser(function(user,done){
-			done(null,user.id);
-		})
-		passport.deserializeUser(function(id,done){
-			User.findById(id,function(err,user){
-				if(!err)
-					done(null,user)
-			})
-		})
+		passport.serializeUser(function(user, done) {
+			done(null, user.id);
+		});
 
-		passport.use('local-login',new localStrategy({
+		passport.deserializeUser(function(id, done) {
+			User.findById(id, function(err, user) {
+				done(err, user);
+			});
+		});
+
+		passport.use('login',new localStrategy({
 			userNameField : 'username' ,
 			passwordField : 'password',
 			passReqToCallback : true
 		},function(req,username,password,done){
-			User.findOne({'username':username})
-			.then(function(user){
-				if(!user){
-					return done(null,false)
-				}
-				else{
-					if(!user.checkPassword(password)){
-						return done(null,false)
-					}
-					else{
-						req.session.token = hat() ;
-						req.session.username = user.username ;
-						console.log(`TOKEN SET TO >>>> ${req.session.token}`)
-						return done(null,user)
-					}
-				}
-			},function(err){
-				return done(err)
-			})
+			User.findOne({ 'username' :  username }, function(err, user) {
+				if (err)
+					return done(err);
+
+				if (!user)
+					return done(null, false); 
+
+				if (!user.checkPassword(password))
+					return done(null, false); 
+
+				return done(null, user);
+			});
 		})
 		)		
 	}

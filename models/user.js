@@ -8,7 +8,9 @@ var accountSchema = mongoose.Schema({
 })
 
 accountSchema.methods.checkPassword = function(password){
-	if ( this.pwd === md5(password) )
+	var x = this.pwd ;
+	var y = md5(password)
+	if ( x === y )
 		return true ;
 	else
 		return false ;

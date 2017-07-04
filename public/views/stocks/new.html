@@ -1,0 +1,30 @@
+<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">ADD NEW ITEM </h2>
+<form class="form-inline" style="font-family: 'Raleway', sans-serif; position: relative; margin-top: 50px" name="newItemForm">
+  <div class="input-group input-group-lg">
+  <span class="input-group-addon"><i class="material-icons">code</i></span>
+    <input type="" class="form-control" style="width:425px;height:52px" placeholder="Item Bar Code" ng-model="itemBarCode" ng-init="" ng-keyup="toUpper('itemBarCode')" id="itemBarCode" required>
+  </div>
+  <div class="input-group input-group-lg" style="margin-left: 150px;">
+  <span class="input-group-addon"><i class="fa fa-stack-overflow"></i></span>
+    <input type="" class="form-control" style="width:150px;height:52px;" placeholder="Total Stock" ng-model="totalStock" ng-init="" ng-keyup="checkNumber('totalStock')" ng-blur="rst('valid')" id="totalStock">
+  </div>
+  <br><br>
+  <div class="input-group input-group-lg">
+  <span class="input-group-addon"><i class="material-icons">text_fields</i></span>
+    <input type="" class="form-control" style="width:425px;height:52px" placeholder="Item Name" ng-model="itemName" ng-init="" ng-keyup="toUpper('itemName')" ng-blur="rst('same')" id="itemName" required>
+  </div>
+  <div class="input-group input-group-lg" style="margin-left: 150px;">
+  <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+    <input type="" class="form-control" style="width:150px;height:52px; " placeholder="Stock In Hand" ng-model="stockInHand" ng-init="" ng-keyup="checkNumber('stockInHand')" ng-blur="rst('valid')" id="stockInHand">
+  </div>
+  <br><br>
+  <div class="input-group input-group-lg">
+  <span class="input-group-addon" style="width:55px"><i class="fa fa-inr"></i></span>
+    <input type="" class="form-control" style="width:100px;height:52px" placeholder="Price" ng-model="price" ng-init="" ng-keyup="checkNumber('price')" ng-blur="rst('valid')" id="price" required>
+  </div>
+<br>
+<button class="waves-effect waves-light btn-large" type="submit" style="margin-left: 710px" ng-click="submit()" ><font size="4" >ADD ITEM</font></button>
+
+<div id="snackbar">{{errorMsg}}</div>
+
+</form>
