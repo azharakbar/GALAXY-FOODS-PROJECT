@@ -1,5 +1,5 @@
-angular.module('newItemModule',[])
-.controller('newItemCtrl',function($scope,$rootScope){
+angular.module('newItemModule',['serviceModule'])
+.controller('newItemCtrl',function($scope,$rootScope,$http,user,$state){
 	$rootScope.same = false ;
 	$rootScope.valid = true ;
 	$rootScope.temp = '' ;
@@ -18,38 +18,33 @@ angular.module('newItemModule',[])
 	}
 	$scope.checkNumber = function(modelName){
 		var key = event.keyCode ;
-		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105))
+		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105) || key == 110 || key == 190 )
 			valid = true ;
 		else 
 			valid = false ;
 
-		console.log("inside fn "+modelName)
 		if ( modelName === "totalStock" ){
-			console.log("inside 1")
-			if ( !valid )
+			if ( !valid ){
 				$scope.totalStock = $rootScope.temp ;
-			if ( valid && $scope.totalStock == undefined ){
+			} else if ( valid && $scope.totalStock == undefined ){
 				$rootScope.temp = '' ;
-			}
-			else if ( valid && $scope.totalStock.length >= 1 && $scope.totalStock != undefined ){
+			} else if ( valid && $scope.totalStock.length >= 1 && $scope.totalStock != undefined ){
 				$rootScope.temp = $scope.totalStock ;
 			}
 		} else if ( modelName === "stockInHand"){
-			if ( !valid )
+			if ( !valid ){
 				$scope.stockInHand = $rootScope.temp ;
-			if ( valid && $scope.stockInHand == undefined ){
+			} else if ( valid && $scope.stockInHand == undefined ){
 				$rootScope.temp = '' ;
-			}
-			else if ( valid && $scope.stockInHand.length >= 1 && $scope.stockInHand != undefined ){
+			} else if ( valid && $scope.stockInHand.length >= 1 && $scope.stockInHand != undefined ){
 				$rootScope.temp = $scope.stockInHand ;
 			}
 		} else if ( modelName === "price"){
-			if ( !valid )
+			if ( !valid ){
 				$scope.price = $rootScope.temp ;
-			if ( valid && $scope.price == undefined ){
+			} else if ( valid && $scope.price == undefined ){
 				$rootScope.temp = '' ;
-			}
-			else if ( valid && $scope.price.length >= 1 && $scope.price != undefined ){
+			} else if ( valid && $scope.price.length >= 1 && $scope.price != undefined ){
 				$rootScope.temp = $scope.price ;
 			}
 		}
@@ -59,13 +54,42 @@ angular.module('newItemModule',[])
 			$rootScope.same = false ;
 		else if ( val === "valid")
 			$rootScope.valid = true ;
+		else if ( val === "temp")
+			$rootScope.temp = '' ;
 	}
 
 	$scope.submit = function(){
-		if($scope.itemBarCode.length != undefined && $scope.itemName.length != undefined && $scope.price.length != undefined ){
+		if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != undefined ){
 			if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price.length >= 1 ){
-				$scope.errorMsg = "ITEM SUCCESSFULLY ADDED"
-				showToast("success");
+				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
+					if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
+						if ( $scope.totalStock < $scope.stockInHand ){
+							$scope.errorMsg = "!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!"
+							showToast("error")
+							return ;
+						}
+					} else {
+						$scope.errorMsg = "** ENTER BOTH STOCK VALUES **"
+						showToast("error")
+						return ;
+					}
+				}
+				$scope.errorMsg = "LOADING"
+				showLoading();
+				var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price
+				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
+					data += "&stockInHand="+$scope.stockInHand ;
+				if ( $scope.totalStock != undefined && $scope.totalStock != '' )
+					data += "&totalStock="+$scope.totalStock ;
+				data += "&token="+user.getToken()
+				console.log(data)
+				post(data)
+				.then(function(res){
+					showToast("success");
+				},function(err){
+					console.log("from main err= "+err)
+					showToast("error");
+				})
 			}
 			else{
 				$scope.errorMsg = "SOME VALUES ARE TOO SHORT" ;
@@ -75,5 +99,39 @@ angular.module('newItemModule',[])
 			$scope.errorMsg = "!! ERROR ADDING ITEM !!"
 			showToast("error");
 		} 
+	}
+
+	var post = function( dataObj ){
+		return new Promise(function(resolve,reject){
+			$http({
+				url : '/newItem',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : dataObj
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" ){
+					$scope.errorMsg = "ITEM SUCCESSFULLY ADDED"
+					$scope.itemBarCode = "" 
+					$scope.itemName = "" 
+					$scope.price = "" 
+					$scope.stockInHand = "" 
+					$scope.totalStock = "" 
+					resolve("SUCCESS")
+				} else {
+					if (response.data.status === "REDUNDANT") {
+						$scope.errorMsg = "ITEM ALREADY EXISTS"
+					} else {
+						$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+					}
+					reject ("ERROR1") 
+				}
+			},function(err){
+				$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+				reject ("ERROR2") 
+			})
+	})
 	}
 })

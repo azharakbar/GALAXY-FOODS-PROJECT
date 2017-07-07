@@ -38,6 +38,20 @@ angular.module('viewCustModule',['ngTable','serviceModule'])
 
 	}
 
+	$scope.expandSearch = function(){
+			$('#search').animate( { width:"250px" } )
+			$('#search').focus()
+	}
+
+	$scope.compressSearch = function(){
+		$('#search').animate( { width:"0px" } )
+	}
+
+	$scope.searchFocus = function(){
+		$('#buttonSet').fadeOut()
+		$('.tableRow').animate({'height':48})
+	}
+
 
 	$scope.getInfo= function(t){
 		console.log("here")

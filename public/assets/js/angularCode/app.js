@@ -1,5 +1,5 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
-	,'newCustModule','viewCustModule','newItemModule']) ;
+	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -172,7 +172,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/stocks/view.html" ,
-                controller : ''
+                controller : 'viewItemCtrl'
             }
         }
     })
@@ -198,7 +198,10 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
         }
     })
     .state('update_stock',{
-        url: "/update_stock" ,
+        url: "/update_stock",
+        params : {
+        	item : { value : {barCode:'BARCODE NOT DEFINED'} }
+        },
         resolve : {
             check : function($rootScope,$state,user){
                 if(!user.isLoggedIn()){
@@ -214,7 +217,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/stocks/update.html" ,
-                controller : ''
+                controller : 'updateItem'
             }
         }
     })

@@ -12,11 +12,29 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	#update{
+		font-size: 15px;
+		width: 170px;
+		height: 45px;
+		position: absolute; 
+		left: 550px;
+	}
+	#delete{
+		font-size: 15px;
+		background-color: #d32f2f ;
+		width: 170px;
+		height: 45px;
+		position: absolute; 
+		right: 350px;
+	}	
 </style>
 <div class="animated">
 <h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">VIEW CUSTOMER DETAILS </h2>
 <h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL CUSTOMERS REGISTERED : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
-
+  <div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
+  <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" id="search" style="width: 0px">
+  </div> 
 	<table ng-table="custTable" class="table table-hover table-responsive list">
   <thead>
     <tr style="cursor: default;">
@@ -25,7 +43,7 @@
       <th width ="25%"><center><i class="material-icons">attach_money</i>CREDIT</center></th>
     </tr>
   </thead>
-    <tr ng-repeat="customer in $data" ng-click="getInfo($index)">
+    <tr ng-repeat="customer in $data | filter : search" ng-click="getInfo($index)" id="row{{$index}}">
     <td height="48" width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
     <td height="48" width="40%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
     <td height="48" width="25%" title = "Credit"> <center>{{customer.credit}}</center> </td>
@@ -33,3 +51,43 @@
 </table>
 </div>
 
+<div id="buttonSet">
+<center>
+<button id="update" class="waves-effect waves-light btn-large"><span style="position: relative; bottom:5px"><i class="material-icons">update</i> UPDATE </span></button>
+<button id="delete" class="waves-effect waves-light btn-large"><span style="position: relative; bottom:5px"><i class="material-icons">delete_forever</i> DELETE </span></button>
+</center>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('#buttonSet').hide(); 
+
+    $('.table').click(function(event){
+			var $target = $(event.target);
+			var ele = $target.closest("tr").attr("id");
+			if ( ele != undefined ){
+				var posTop = $target.closest("tr").position().top ;
+				$('#buttonSet').fadeOut()
+				console.log(posTop)
+				if ( $('#'+ele).hasClass('tableRow') ){
+					$('.tableRow').animate({'height':48})
+					$('tr').removeClass('tableRow')
+				}
+				else{
+					$('#'+ele).animate({'height' : 100})
+					$('.tableRow').animate({'height':48})
+					$('tr').removeClass('tableRow')
+					$('#'+ele).addClass('tableRow')
+					$('#buttonSet').fadeIn()
+					$('#update').css('top' , posTop+40 )
+					$('#delete').css('top' , posTop+40 )
+				}
+			}else{
+					$('#buttonSet').fadeOut()
+					$('.tableRow').animate({'height':48})
+			}
+
+    })
+	})
+</script>

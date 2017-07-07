@@ -12,26 +12,104 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	.update{
+		font-size: 15px;
+		width: 170px;
+		height: 45px;
+		position: absolute; 
+		left: 550px;
+	}
+	.delete{
+		font-size: 15px;
+		background-color: #d32f2f ;
+		width: 170px;
+		height: 45px;
+		position: absolute; 
+		right: 350px;
+	}	
 </style>
 <div class="animated">
 <h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">VIEW STOCK DETAILS </h2>
 <h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL ITEMS IN DATABSE : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
-
+  <div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
+  <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-init="" id="search" style="width: 0px">
+  </div>  
 	<table ng-table="itemTable" class="table table-hover table-responsive list">
   <thead>
     <tr style="cursor: default;">
-      <th width ="50%"><i class="fa fa-chevron-right" style="font-size: 12px"></i> NAME</th>
-      <th width ="16.66%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
-      <th width ="16.66%"><center><i class="fa fa-inr" style="font-size: 15px"></i> RENTED</center></th>
-      <th width ="16.66%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
+      <th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
+      <th width ="30%"><i class="fa fa-chevron-right" style="font-size: 12px"></i> NAME</th>
+      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
+      <th width ="12.50%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
+      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> RENTED</center></th>
+      <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
     </tr>
   </thead>
-    <tr ng-repeat="item in $data" ng-click="getInfo($index)">
-    <td height="48" width="50%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}} </td>
-    <td height="48" width="16.66%" title = "TOTAL"> <center>{{item.credit}}</center> </td>
-    <td height="48" width="16.66%" title = "IN HAND"> <center>{{item.credit}}</center> </td>
-    <td height="48" width="16.66%" title = "AVAILABLE"> <center>{{item.credit}}</center> </td>
-  	</tr>         
+    <tr ng-repeat="item in $data | filter : search" ng-click="set(item)" id="row{{$index}}" height="48">
+    <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
+    <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center>{{item.rentedStock}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>
+  	</tr>
 </table>
 </div>
 
+<div id="buttonSet">
+<center>
+<button id="" class="waves-effect waves-light btn-large update" ng-click="update()"><span style="position: relative; bottom:5px"><i class="material-icons">update</i> UPDATE </span></button>
+<button id="" class="waves-effect waves-light btn-large delete" ng-click="delete()" style="background-color: #d32f2f ;"><span style="position: relative; bottom:5px"><i class="material-icons">delete_forever</i> DELETE </span></button>
+</center>
+</div>
+
+<div id="delConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE YOU WANT TO DELETE <b>{{item.name}}</b> ?</h4></center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="delete()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="noDel()"> NO </button></center>
+	</div>
+</div>
+
+<div id="snackbar">{{errorMsg}}</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$('.modal').modal({
+		}) ;
+
+		$('#buttonSet').hide(); 
+
+    $('.table').click(function(event){
+			var $target = $(event.target);
+			var ele = $target.closest("tr").attr("id");
+			var idNew = $target.closest("td").attr("id")
+			if ( ele != undefined ){
+				var posTop = $target.closest("tr").position().top ;
+				$('#buttonSet').fadeOut()
+				if ( $('#'+ele).hasClass('tableRow') ){
+					$('.tableRow').animate({'height':48})
+					$('tr').removeClass('tableRow')
+				}
+				else{
+					$('#'+ele).animate({'height' : 100})
+					$('.tableRow').animate({'height':48})
+					$('tr').removeClass('tableRow')
+					$('#'+ele).addClass('tableRow')
+					$('#buttonSet').fadeIn()
+					$('.update').css('top' , posTop+40 )
+					$('.delete').css('top' , posTop+40 )
+					$('.update').attr('id',idNew)
+					$('.delete').attr('id',idNew)
+				}
+			}else{
+					$('#buttonSet').fadeOut()
+					$('.tableRow').animate({'height':48})
+			}
+
+    })
+	})
+</script>

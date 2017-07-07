@@ -13,9 +13,8 @@ const 	express = require('express') ,
 		cors = require('cors'),
 		md5 = require('md5'),
 		uniqid = require('uniqid'),
-		Customer = require('./models/customer')
-
-// const port = config.genConfig.port ;
+		Customer = require('./models/customer'),
+		Item = require('./models/item')
 
 var app = express() ;
 
@@ -29,6 +28,10 @@ app.use(cors())
 process.env.TZ = config.TZ 
 
 mongoose.Promise = bluebird ;
+
+console.log(` 
+	** SERVER RESTARTED @ ${new Date()} **
+	`)
 
 mongoose.connect ( config.connURI , function(err){
 	if ( err )
@@ -120,6 +123,101 @@ app.post('/allCustomers',isLoggedIn,function(req,res){
 	Customer.find({})
 	.then(function(users){
 		res.json({status : 'SXS' , result : users})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/newItem',isLoggedIn,function(req,res){
+	console.log(req.body);
+	Item.findOne({barCode:req.body.barcode})
+	.then(function(item){
+		if ( item ){
+			res.json({status : 'REDUNDANT'})
+		}
+		else{
+			console.log("THERE'S NOTHING")
+			var item = new Item() ;
+			item.barCode = req.body.barcode 
+			item.name = req.body.name 
+			item.price = req.body.price
+			if ( req.body.totalStock != undefined ){
+				item.totalStock = req.body.totalStock
+				if ( req.body.stockInHand != undefined ){
+					item.availableStock = req.body.stockInHand 
+					item.rentedStock = parseInt(req.body.totalStock) - parseInt(req.body.stockInHand)
+				}
+			}
+			item.save()
+			.then(function(){
+				res.json({status : 'SXS'})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		}
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/totalItems',isLoggedIn,function(req,res){
+	Item.count()
+	.then(function(num){
+		res.json({status : 'SXS' , count : num})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/allItems',isLoggedIn,function(req,res){
+	Item.find({})
+	.then(function(users){
+		res.json({status : 'SXS' , result : users})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
+	Item.findOne({barCode:req.body.barcode})
+	.then(function(item){
+		if ( item && (req.body.barcode != req.params.barCode) ){
+			res.json({status : 'REDUNDANT'})
+		}
+		else{
+			item.barCode = req.body.barcode 
+			item.name = req.body.name 
+			item.price = req.body.price
+			if ( req.body.totalStock != undefined ){
+				item.totalStock = req.body.totalStock
+				if ( req.body.stockInHand != undefined ){
+					item.availableStock = req.body.stockInHand 
+				} else {
+					item.availableStock = 0 ;
+				}
+			} else { 
+				item.totalStock = 0 
+			}
+			if ( item.availableStock && item.totalStock )
+				item.rentedStock = parseInt(item.totalStock) - parseInt(item.availableStock)
+			else
+				item.rentedStock = 0 ;
+			item.save()
+			.then(function(){
+				res.json({status : 'SXS'})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		}
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.delete('/deleteItem/:barCode',isLoggedIn,function(req,res){
+	Item.remove({barCode:req.params.barCode})
+	.then(function(item){
+		res.json({status : 'SXS'})
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
