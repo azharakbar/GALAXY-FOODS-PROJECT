@@ -82,6 +82,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
                 }
             }
         },
+        params : {
+        	showLoading : { value : true }
+        },
         views : {
             'v1' : {
                 templateUrl : "./views/navBar.html" ,
@@ -169,6 +172,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
                 }
             }
         },
+        params : {
+        	showLoading : { value : true }
+        },        
         views : {
             'v1' : {
                 templateUrl : "./views/navBar.html" ,

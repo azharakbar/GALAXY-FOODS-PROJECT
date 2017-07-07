@@ -6,14 +6,12 @@ var showToast = function(type) {
 }
 
 var showLoading = function(){
-	console.log("Here")
 	var x = document.getElementById("snackbar")
 	x.className = "ldg"
-	// setTimeout(function(){ x.className = x.className.replace("ldg", ""); }, 3000);
 }
 
 var hideLoading = function(){
 	var x = document.getElementById("snackbar")
 	x.className = "ldgHide"
-	setTimeout(function(){ x.className = x.className.replace("ldgHide", ""); }, 3000);	
+	setTimeout(function(){ x.className = x.className.replace("ldgHide", ""); }, 1500);	
 }

@@ -238,8 +238,11 @@ However, delay the fade out process for 2.5 seconds */
 #snackbar.ldgHide {
 /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
 However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadeout 0.5s;
-    animation: fadeout 0.5s;
+   visibility: visible; /* Show the snackbar */
+    background-color: #ffffff;
+    color : black;
+    -webkit-animation: fadeout 0.5s 2.5s;
+    animation: fadeout 0.5s 1s;
 }
 
 

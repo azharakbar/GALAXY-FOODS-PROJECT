@@ -1,7 +1,11 @@
 angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
 .controller('viewCustCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
 	$rootScope.delAllowed = false ;
-	var getCount = function(){
+	var getCount = function( showLoad ){
+		if ( showLoad || $stateParams.showLoading ){
+			toast.setMsg("LOADING")
+			showLoading();
+		}
 		$http({
 			url : "/totalCustomers",
 			method : 'POST',
@@ -24,6 +28,9 @@ angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
 				.then(function(response){
 					console.log(response.data);
 					$scope.custTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
+					if( showLoad || $stateParams.showLoading ){
+						hideLoading();
+					}
 				},function(err){
 					console.log("ERROR");
 				})
@@ -58,39 +65,41 @@ angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
 		$state.go('update_customer',{'customer':$rootScope.customer})
 	}
 
+	$scope.delConfirm = function(){
+		if($rootScope.customer.orders === 0 && $rootScope.customer.credit === 0){
+			$rootScope.delAllowed = true ;
+			$('#delConfirm').modal('open');
+		} else {
+			$rootScope.delAllowed = false ;
+			console.log("U R NOT ALLOWED TO DELETE")
+			toast.setMsg("!! CUSTOMERS WITH OUTSTANDING ORDERS AND CREDIT CANT BE DELETED !!")
+			showToast("error")
+		}		
+	}
+
 	$scope.delete = function(){
 		console.log("GOING TO DELETE "+$rootScope.customer.contact)
-		if ( $rootScope.delAllowed == false ){
-			if($rootScope.customer.orders === 0){
-				$rootScope.delAllowed = true ;
-				$('#delConfirm').modal('open');
-			} else {
-				console.log("U R NOT ALLOWED TO DELETE")
-				toast.setMsg("!! CUSTOMERS WITH OUTSTANDING ORDERS CANT BE DELETED !!")
-				showToast("error")
-			}
-		} else { 
-			$('#delConfirm').modal('close');
-			console.log("i m here*+9+*+")
-			toast.setMsg("LOADING")
-			showLoading();
-			var data = "token=" + user.getToken()
-			console.log(data)
-			deleteCustomer( data )
-			.then(function(res){
-				showToast("success");
-				$state.reload()
-				// setTimeout(function() { $state.reload(); }, 1500);
-			},function(err){
-				console.log("from main err= "+err)
-				showToast("error");
-			})
-			$rootScope.delAllowed = false ;
-		}
-
+		$('#delConfirm').modal('close');
+		console.log("i m here*+9+*+")
+		toast.setMsg("LOADING")
+		showLoading();
+		var data = "token=" + user.getToken()
+		console.log(data)
+		deleteCustomer( data )
+		.then(function(res){
+			$('#buttonSet').fadeOut();
+			showToast("success");
+			$('#row'+$rootScope.index).addClass('animated fadeOutRight')
+			setTimeout( function(){ getCount( false ) } , 500 )
+		},function(err){
+			console.log("from main err= "+err)
+			showToast("error");
+		})
+		$rootScope.delAllowed = false ;
 	}
-	$scope.set= function(inComing){
+	$scope.set= function(inComing,index){
 		$rootScope.customer = inComing
+		$rootScope.index = index ;
 	}
 	$scope.noDel = function(){
 		$rootScope.delAllowed = false ;
@@ -128,6 +137,6 @@ angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
 	})
 	}
 
-	getCount() ;
+	getCount( true ) ;
 	// setInterval(getCount,2000)
 })

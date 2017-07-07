@@ -46,7 +46,7 @@
       <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
     </tr>
   </thead>
-    <tr ng-repeat="item in $data | filter : search" ng-click="set(item)" id="row{{$index}}" height="48">
+    <tr ng-repeat="item in $data | filter : search" ng-click="set(item,$index)" id="row{{$index}}" height="48">
     <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
     <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
     <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price}}</center> </td>
@@ -60,7 +60,7 @@
 <div id="buttonSet">
 <center>
 <button id="" class="waves-effect waves-light btn-large update" ng-click="update()"><span style="position: relative; bottom:5px"><i class="material-icons">update</i> UPDATE </span></button>
-<button id="" class="waves-effect waves-light btn-large delete" ng-click="delete()" style="background-color: #d32f2f ;"><span style="position: relative; bottom:5px"><i class="material-icons">delete_forever</i> DELETE </span></button>
+<button id="" class="waves-effect waves-light btn-large delete" ng-click="delConfirm()" style="background-color: #d32f2f ;"><span style="position: relative; bottom:5px"><i class="material-icons">delete_forever</i> DELETE </span></button>
 </center>
 </div>
 

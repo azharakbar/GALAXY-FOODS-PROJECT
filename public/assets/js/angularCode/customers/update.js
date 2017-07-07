@@ -44,7 +44,7 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 					update(data)
 					.then(function(res){
 						showToast("success");
-						$state.go('view_customer')
+						$state.go('view_customer',{showLoading:false})
 						// setTimeout(function() { $state.go('view_customer') ; }, 500);
 					},function(err){
 						console.log("from main err= "+err)
@@ -74,7 +74,7 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 	var checkEquality = function(){
 		if (
 				$stateParams.customer.name == $scope.custName &&
-				$stateParams.customer.contact == $scope.contact  
+				$stateParams.customer.contact == $scope.custContact  
 			) return true ;
 		else  return false ;
 	}
