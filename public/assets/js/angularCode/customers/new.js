@@ -1,8 +1,7 @@
-angular.module('newCustModule',['serviceModule'])
-.controller('newCustCtrl',function($scope,$rootScope,$http,$location,user){
+angular.module('newCustModule',['serviceModule','serviceModule2'])
+.controller('newCustCtrl',function($scope,$rootScope,$http,$location,user,toast){
 	var valid = true ;
 	$rootScope.temp = ''
-	$scope.errorMsg=""
 
 	$scope.toUpper = function(){
 		if(event.which != 8)
@@ -42,7 +41,7 @@ angular.module('newCustModule',['serviceModule'])
 				.then(function(response){
 					console.log(response.data)
 					if ( response.data.status === "SXS" ){
-						$scope.errorMsg = "USER SUCCESSFULLY ADDED"
+						toast.setMsg("USER SUCCESSFULLY ADDED")
 						$scope.custName="" 
 						$scope.custContact="" 
 						$rootScope.temp="" 
@@ -50,30 +49,30 @@ angular.module('newCustModule',['serviceModule'])
 						showToast("success");
 						$location.path('/dashboard')
 					} else if ( response.data.status === "REDUNDANT" ){
-						$scope.errorMsg = "USER ALREADY EXISTS"
+						toast.setMsg("USER ALREADY EXISTS")
 						showToast("normal");		
 					} else {
-						$scope.errorMsg = "!! ERROR ADDING USER !!"
+						toast.setMsg("!! ERROR ADDING USER !!")
 						showToast("error");
 					}
 					$location.path('/new_customer')	
 				},function(err){
-					$scope.errorMsg = "!! ERROR ADDING USER !!"
+					toast.setMsg("!! ERROR ADDING USER !!")
 					showToast("error");
 				})
 				return ;
 			} else {
 				if ( $scope.custName.length < 2 ){
 					$rootScope.newCustFormError = true ;
-					$scope.errorMsg = "NAME TOO SHORT"
+					toast.setMsg("NAME TOO SHORT")
 				} else if ( $scope.custContact.length < 7 ) {
 					$rootScope.newCustFormError = true ;
-					$scope.errorMsg = "CONTACT NUMBER TOO SHORT"
+					toast.setMsg("CONTACT NUMBER TOO SHORT")
 				}
 			}
 		} else {
 			$rootScope.newCustFormError = true ;
-			$scope.errorMsg = "!! ERROR ADDING USER !!"
+			toast.setMsg("!! ERROR ADDING USER !!")
 		}
 		showToast("error");
 	}

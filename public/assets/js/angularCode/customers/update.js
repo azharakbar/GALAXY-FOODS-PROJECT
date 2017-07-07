@@ -1,5 +1,5 @@
-angular.module('updateCustomerModule',['serviceModule'])
-.controller('updateCustomer',function($rootScope,$scope,$state,$stateParams,$http,user){
+angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
+.controller('updateCustomer',function($rootScope,$scope,$state,$stateParams,$http,user,toast){
 	$scope.customer = $stateParams.customer ;
 	if ( $scope.customer.name === "NAME NOT DEFINED")
 		$state.go('dashboard')
@@ -37,14 +37,15 @@ angular.module('updateCustomerModule',['serviceModule'])
 			if ( $scope.custName != undefined && $scope.custContact != undefined ){
 				if ( $scope.custName.length >= 2 && $scope.custContact.length >= 7 ){
 					$rootScope.updateCustForm = false ;
-					$scope.errorMsg = "LOADING"
+					toast.setMsg("LOADING")
 					showLoading();
 					var data = "name=" + $scope.custName + "&contact=" + $scope.custContact+'&token='+user.getToken()
 					console.log(data)
 					update(data)
 					.then(function(res){
 						showToast("success");
-						setTimeout(function() { $state.go('view_customer') ; }, 500);
+						$state.go('view_customer')
+						// setTimeout(function() { $state.go('view_customer') ; }, 500);
 					},function(err){
 						console.log("from main err= "+err)
 						showToast("error");
@@ -52,19 +53,19 @@ angular.module('updateCustomerModule',['serviceModule'])
 				} else {
 					if ( $scope.custName.length < 2 ){
 						$rootScope.updateCustForm = true ;
-						$scope.errorMsg = "NAME TOO SHORT"
+						toast.setMsg("NAME TOO SHORT")
 					} else if ( $scope.custContact.length < 7 ) {
 						$rootScope.updateCustForm = true ;
-						$scope.errorMsg = "CONTACT NUMBER TOO SHORT"
+						toast.setMsg("CONTACT NUMBER TOO SHORT")
 					}
 				}
 			} else {
 				$rootScope.updateCustForm = true ;
-				$scope.errorMsg = "!! ERROR ADDING USER !!"
+				toast.setMsg("!! ERROR ADDING USER !!")
 			}
 			showToast("error");
 		} else {
-			$scope.errorMsg = "!! THERE ARENT ANY CHANGES TO UPDATE !!"
+			toast.setMsg("!! THERE ARENT ANY CHANGES TO UPDATE !!")
 			showToast("error")
 			return ;
 		}
@@ -90,18 +91,18 @@ angular.module('updateCustomerModule',['serviceModule'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					$scope.errorMsg = "CUSTOMER SUCCESSFULLY UPDATED"
+					toast.setMsg("CUSTOMER SUCCESSFULLY UPDATED")
 					resolve("SUCCESS")
 				} else {
 					if (response.data.status === "REDUNDANT") {
-						$scope.errorMsg = "CUSTOMER WITH NEW CONTACT NUMBER ALREADY EXISTS"
+						toast.setMsg("CUSTOMER WITH NEW CONTACT NUMBER ALREADY EXISTS")
 					} else {
-						$scope.errorMsg = "!! ERROR UPDATING CUSTOMER !!"
+						toast.setMsg("!! ERROR UPDATING CUSTOMER !!")
 					}
 					reject ("ERROR1") 
 				}
 			},function(err){
-				$scope.errorMsg = "!! ERROR UPDATING CUSTOMER !!"
+				toast.setMsg("!! ERROR UPDATING CUSTOMER !!")
 				reject ("ERROR2") 
 			})
 	})

@@ -1,5 +1,5 @@
-angular.module('newItemModule',['serviceModule'])
-.controller('newItemCtrl',function($scope,$rootScope,$http,user,$state){
+angular.module('newItemModule',['serviceModule','serviceModule2'])
+.controller('newItemCtrl',function($scope,$rootScope,$http,$state,user,toast){
 	$rootScope.same = false ;
 	$rootScope.valid = true ;
 	$rootScope.temp = '' ;
@@ -64,17 +64,17 @@ angular.module('newItemModule',['serviceModule'])
 				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
 					if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
 						if ( $scope.totalStock < $scope.stockInHand ){
-							$scope.errorMsg = "!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!"
+							toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 							showToast("error")
 							return ;
 						}
 					} else {
-						$scope.errorMsg = "** ENTER BOTH STOCK VALUES **"
+						toast.setMsg("** ENTER BOTH STOCK VALUES **")
 						showToast("error")
 						return ;
 					}
 				}
-				$scope.errorMsg = "LOADING"
+				toast.setMsg("LOADING")
 				showLoading();
 				var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price
 				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
@@ -92,11 +92,11 @@ angular.module('newItemModule',['serviceModule'])
 				})
 			}
 			else{
-				$scope.errorMsg = "SOME VALUES ARE TOO SHORT" ;
+				toast.setMsg("SOME VALUES ARE TOO SHORT")
 				showToast("normal");
 			}
 		} else {
-			$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+			toast.setMsg("!! ERROR ADDING ITEM !!")
 			showToast("error");
 		} 
 	}
@@ -113,7 +113,7 @@ angular.module('newItemModule',['serviceModule'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					$scope.errorMsg = "ITEM SUCCESSFULLY ADDED"
+					toast.setMsg("ITEM SUCCESSFULLY ADDED")
 					$scope.itemBarCode = "" 
 					$scope.itemName = "" 
 					$scope.price = "" 
@@ -122,14 +122,14 @@ angular.module('newItemModule',['serviceModule'])
 					resolve("SUCCESS")
 				} else {
 					if (response.data.status === "REDUNDANT") {
-						$scope.errorMsg = "ITEM ALREADY EXISTS"
+						toast.setMsg("ITEM ALREADY EXISTS")
 					} else {
-						$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+						toast.setMsg("!! ERROR ADDING ITEM !!")
 					}
 					reject ("ERROR1") 
 				}
 			},function(err){
-				$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+				toast.setMsg("!! ERROR ADDING ITEM !!")
 				reject ("ERROR2") 
 			})
 	})

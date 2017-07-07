@@ -1,5 +1,5 @@
-angular.module('viewCustModule',['ngTable','serviceModule'])
-.controller('viewCustCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,NgTableParams){
+angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
+.controller('viewCustCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
 	$rootScope.delAllowed = false ;
 	var getCount = function(){
 		$http({
@@ -66,20 +66,21 @@ angular.module('viewCustModule',['ngTable','serviceModule'])
 				$('#delConfirm').modal('open');
 			} else {
 				console.log("U R NOT ALLOWED TO DELETE")
-				$scope.errorMsg = "!! CUSTOMERS WITH OUTSTANDING ORDERS CANT BE DELETED !!"
+				toast.setMsg("!! CUSTOMERS WITH OUTSTANDING ORDERS CANT BE DELETED !!")
 				showToast("error")
 			}
 		} else { 
 			$('#delConfirm').modal('close');
 			console.log("i m here*+9+*+")
-			$scope.errorMsg = "LOADING"
+			toast.setMsg("LOADING")
 			showLoading();
 			var data = "token=" + user.getToken()
 			console.log(data)
 			deleteCustomer( data )
 			.then(function(res){
 				showToast("success");
-				setTimeout(function() { $state.reload(); }, 1500);
+				$state.reload()
+				// setTimeout(function() { $state.reload(); }, 1500);
 			},function(err){
 				console.log("from main err= "+err)
 				showToast("error");
@@ -114,14 +115,14 @@ angular.module('viewCustModule',['ngTable','serviceModule'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					$scope.errorMsg = "CUSTOMER SUCCESSFULLY DELETED"
+					toast.setMsg("CUSTOMER SUCCESSFULLY DELETED")
 					resolve("SUCCESS")
 				} else {
-					$scope.errorMsg = "!! ERROR DELETING CUSTOMER !!"
+					toast.setMsg("!! ERROR DELETING CUSTOMER !!")
 					reject ("ERROR1") 
 				}
 			},function(err){
-				$scope.errorMsg = "!! ERROR DELETING CUSTOMER !!"
+				toast.setMsg("!! ERROR DELETING CUSTOMER !!")
 				reject ("ERROR2") 
 			})
 	})

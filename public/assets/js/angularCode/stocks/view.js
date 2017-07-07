@@ -1,5 +1,5 @@
-angular.module('viewItemModule',['ngTable','serviceModule'])
-.controller('viewItemCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,NgTableParams){
+angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
+.controller('viewItemCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
 	$rootScope.delAllowed = false ;
 
 	var getCount = function(){
@@ -67,20 +67,21 @@ angular.module('viewItemModule',['ngTable','serviceModule'])
 				$('#delConfirm').modal('open');
 			} else {
 				console.log("U R NOT ALLOWED TO DELETE")
-				$scope.errorMsg = "!! ITEMS WITH RENTED STOCK CANT BE DELETED !!"
+				toast.setMsg("!! ITEMS WITH RENTED STOCK CANT BE DELETED !!")
 				showToast("error")
 			}
 		} else { 
 			$('#delConfirm').modal('close');
 			console.log("i m here*+9+*+")
-			$scope.errorMsg = "LOADING"
+			toast.setMsg("LOADING")
 			showLoading();
 			var data = "token=" + user.getToken()
 			console.log(data)
 			deleteItem( data )
 			.then(function(res){
 				showToast("success");
-				setTimeout(function() { $state.reload(); }, 1500);
+				$state.reload();
+				// setTimeout(function() { $state.reload(); }, 1500);
 			},function(err){
 				console.log("from main err= "+err)
 				showToast("error");
@@ -115,14 +116,14 @@ angular.module('viewItemModule',['ngTable','serviceModule'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					$scope.errorMsg = "ITEM SUCCESSFULLY DELETED"
+					toast.setMsg("ITEM SUCCESSFULLY DELETED")
 					resolve("SUCCESS")
 				} else {
-					$scope.errorMsg = "!! ERROR DELETING ITEM !!"
+					toast.setMsg("!! ERROR DELETING ITEM !!")
 					reject ("ERROR1") 
 				}
 			},function(err){
-				$scope.errorMsg = "!! ERROR DELETING ITEM !!"
+				toast.setMsg("!! ERROR DELETING ITEM !!")
 				reject ("ERROR2") 
 			})
 	})

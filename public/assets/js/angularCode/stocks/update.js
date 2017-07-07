@@ -1,8 +1,6 @@
-angular.module('updateItemModule',['serviceModule'])
-.controller('updateItem',function($rootScope,$scope,$state,$stateParams,$http,user){
+angular.module('updateItemModule',['serviceModule','serviceModule2'])
+.controller('updateItem',function($rootScope,$scope,$state,$stateParams,$http,user,toast){
 	$scope.item = $stateParams.item ;
-	// console.log("price = "+$scope.item.price+" "+typeof($scope.item.price)+" "+$scope.item.price.length)
-	// console.log("stockInHand = "+$scope.item.availableStock+" "+typeof($scope.item.availableStock))
 	if ( $scope.item.barCode === "BARCODE NOT DEFINED")
 		$state.go('dashboard')
 
@@ -69,17 +67,17 @@ angular.module('updateItemModule',['serviceModule'])
 					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
 						if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
 							if ( $scope.totalStock < $scope.stockInHand ){
-								$scope.errorMsg = "!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!"
+								toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 								showToast("error")
 								return ;
 							}
 						} else {
-							$scope.errorMsg = "** ENTER BOTH STOCK VALUES **"
+							toast.setMsg("** ENTER BOTH STOCK VALUES **")
 							showToast("error")
 							return ;
 						}
 					}
-					$scope.errorMsg = "LOADING"
+					toast.setMsg("LOADING")
 					showLoading();
 					var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price
 					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
@@ -91,22 +89,23 @@ angular.module('updateItemModule',['serviceModule'])
 					update(data)
 					.then(function(res){
 						showToast("success");
-						setTimeout(function() { $state.go('view_stock') ; }, 500);
+						$state.go('view_stock') ;
+						// setTimeout(function() { $state.go('view_stock') ; }, 500);
 					},function(err){
 						console.log("from main err= "+err)
 						showToast("error");
 					})
 				}
 				else{
-					$scope.errorMsg = "SOME VALUES ARE TOO SHORT" ;
+					toast.setMsg("SOME VALUES ARE TOO SHORT")
 					showToast("normal");
 				}
 			} else {
-				$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+				toast.setMsg("!! ERROR ADDING ITEM !!")
 				showToast("error");
 			}
 		} else {
-			$scope.errorMsg = "!! THERE ARENT ANY CHANGES TO UPDATE !!"
+			toast.setMsg("!! THERE ARENT ANY CHANGES TO UPDATE !!")
 			showToast("error")
 			return ;
 		}
@@ -135,18 +134,18 @@ angular.module('updateItemModule',['serviceModule'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					$scope.errorMsg = "ITEM SUCCESSFULLY UPDATED"
+					toast.setMsg("ITEM SUCCESSFULLY UPDATED")
 					resolve("SUCCESS")
 				} else {
 					if (response.data.status === "REDUNDANT") {
-						$scope.errorMsg = "ITEM WITH NEW BARCODE ALREADY EXISTS"
+						toast.setMsg("ITEM WITH NEW BARCODE ALREADY EXISTS")
 					} else {
-						$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+						toast.setMsg("!! ERROR ADDING ITEM !!")
 					}
 					reject ("ERROR1") 
 				}
 			},function(err){
-				$scope.errorMsg = "!! ERROR ADDING ITEM !!"
+				toast.setMsg("!! ERROR ADDING ITEM !!")
 				reject ("ERROR2") 
 			})
 	})

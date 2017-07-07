@@ -1,5 +1,6 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
-	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule']) ;
+	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
+	'serviceModule2']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -382,4 +383,13 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     })
 
     $locationProvider.html5Mode(true).hashPrefix('!');
+})
+
+app.controller('indexCtrl',function($scope,$rootScope,toast){
+	$rootScope.$watch('msg',function(oldVal,newVal){
+		if ( newVal != oldVal ){
+			$scope.errorMsg = oldVal 
+			console.log('errorMsg is'+oldVal)
+		}
+	})
 })

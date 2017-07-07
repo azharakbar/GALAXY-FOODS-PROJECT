@@ -46,9 +46,12 @@ angular.module('serviceModule', [])
 	    }
 	})
 
-	.service('toast',function($rootScope,$scope){
-		var msg ;
+angular.module('serviceModule2', [])
+	.service('toast',function($rootScope){
 		this.setMsg = function( text ){
-			msg = text ;
+			$rootScope.msg = text ;
+		}
+		this.getMsg = function(){
+			return $rootScope.msg ;
 		}
 	})
