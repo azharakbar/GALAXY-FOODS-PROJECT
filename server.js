@@ -179,36 +179,66 @@ app.post('/allItems',isLoggedIn,function(req,res){
 })
 
 app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
-	Item.findOne({barCode:req.body.barcode})
+	Item.findOne({barCode:req.params.barCode})
 	.then(function(item){
-		if ( item && (req.body.barcode != req.params.barCode) ){
-			res.json({status : 'REDUNDANT'})
-		}
-		else{
-			item.barCode = req.body.barcode 
-			item.name = req.body.name 
-			item.price = req.body.price
-			if ( req.body.totalStock != undefined ){
-				item.totalStock = req.body.totalStock
-				if ( req.body.stockInHand != undefined ){
-					item.availableStock = req.body.stockInHand 
-				} else {
-					item.availableStock = 0 ;
+			if ( req.body.barcode === req.params.barCode ){
+				item.barCode = req.body.barcode 
+				item.name = req.body.name 
+				item.price = req.body.price
+				if ( req.body.totalStock != undefined ){
+					item.totalStock = req.body.totalStock
+					if ( req.body.stockInHand != undefined ){
+						item.availableStock = req.body.stockInHand 
+					} else {
+						item.availableStock = 0 ;
+					}
+				} else { 
+					item.totalStock = 0 
 				}
-			} else { 
-				item.totalStock = 0 
+				if ( item.availableStock && item.totalStock )
+					item.rentedStock = parseInt(item.totalStock) - parseInt(item.availableStock)
+				else
+					item.rentedStock = 0 ;
+				item.save()
+				.then(function(){
+					res.json({status : 'SXS'})
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
+			} else {
+				Item.findOne({barCode:req.body.barcode})
+				.then(function(item2){
+						if ( item2 ){
+							res.json({status : 'REDUNDANT'})
+						} else {
+							item.barCode = req.body.barcode 
+							item.name = req.body.name 
+							item.price = req.body.price
+							if ( req.body.totalStock != undefined ){
+								item.totalStock = req.body.totalStock
+								if ( req.body.stockInHand != undefined ){
+									item.availableStock = req.body.stockInHand 
+								} else {
+									item.availableStock = 0 ;
+								}
+							} else { 
+								item.totalStock = 0 
+							}
+							if ( item.availableStock && item.totalStock )
+								item.rentedStock = parseInt(item.totalStock) - parseInt(item.availableStock)
+							else
+								item.rentedStock = 0 ;
+							item.save()
+							.then(function(){
+								res.json({status : 'SXS'})
+							},function(err){
+								res.json({status : 'ERROR'})
+							})
+						}
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
 			}
-			if ( item.availableStock && item.totalStock )
-				item.rentedStock = parseInt(item.totalStock) - parseInt(item.availableStock)
-			else
-				item.rentedStock = 0 ;
-			item.save()
-			.then(function(){
-				res.json({status : 'SXS'})
-			},function(err){
-				res.json({status : 'ERROR'})
-			})
-		}
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
@@ -216,6 +246,49 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 
 app.delete('/deleteItem/:barCode',isLoggedIn,function(req,res){
 	Item.remove({barCode:req.params.barCode})
+	.then(function(item){
+		res.json({status : 'SXS'})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.put('/updateCustomer/:contact',isLoggedIn,function(req,res){
+	Customer.findOne({contact:req.params.contact})
+	.then(function(customer){
+			if ( req.body.contact === req.params.contact ){
+				customer.name = req.body.name 
+				customer.contact = req.body.contact 
+				customer.save()
+				.then(function(){
+					res.json({status : 'SXS'})
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
+			} else {
+				Customer.findOne({contact:req.body.contact})
+				.then(function(customer2){
+					if ( customer2 ){
+						res.json({status : 'REDUNDANT'})
+					} else {
+						customer.name = req.body.name 
+						customer.contact = req.body.contact 
+						customer.save()
+						.then(function(){
+							res.json({status : 'SXS'})
+						},function(err){
+							res.json({status : 'ERROR'})
+						})
+					}
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
+			}
+		})
+})
+
+app.delete('/deleteCustomer/:contact',isLoggedIn,function(req,res){
+	Customer.remove({contact:req.params.contact})
 	.then(function(item){
 		res.json({status : 'SXS'})
 	},function(err){

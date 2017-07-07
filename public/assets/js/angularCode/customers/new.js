@@ -10,7 +10,7 @@ angular.module('newCustModule',['serviceModule'])
 	}
 	$scope.checkNumber = function(){
 		var key = event.keyCode ;
-		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105))
+		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105) || key == 110 || key == 190)
 			valid = true ;
 		else 
 			valid = false ;

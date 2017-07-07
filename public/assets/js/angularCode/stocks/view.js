@@ -104,24 +104,6 @@ angular.module('viewItemModule',['ngTable','serviceModule'])
 	})
 
 	var deleteItem = function( dataObj ){
-/*		return new Promise(function(resolve,reject){
-			$http({
-				url : "/deleteItem/"+$rootScope.item.barCode,
-				method : 'DELETE',
-				headers : {
-					'Content-Type' : 'application/x-www-form-urlencoded'
-				},
-				data : dataObj
-			})
-			.then(function(response){
-				console.log(response.data)
-				resolve("SXS")
-			},function(err){
-				reject("ERR")
-			})
-	})*/
-
-
 		return new Promise(function(resolve,reject){
 			$http({
 				url : "/deleteItem/"+$rootScope.item.barCode,

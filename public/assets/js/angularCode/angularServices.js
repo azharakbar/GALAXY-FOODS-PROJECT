@@ -45,3 +45,10 @@ angular.module('serviceModule', [])
 	        localStorage.removeItem('login');
 	    }
 	})
+
+	.service('toast',function($rootScope,$scope){
+		var msg ;
+		this.setMsg = function( text ){
+			msg = text ;
+		}
+	})

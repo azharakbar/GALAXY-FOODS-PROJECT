@@ -1,5 +1,5 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
-	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule']) ;
+	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -115,6 +115,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     })
     .state('update_customer',{
         url: "/update_customer" ,
+        params : {
+        	customer : { value : {name:'NAME NOT DEFINED'} }
+        },
         resolve : {
             check : function($rootScope,$state,user){
                 if(!user.isLoggedIn()){
@@ -130,7 +133,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/customers/update.html" ,
-                controller : ''
+                controller : 'updateCustomer'       
             }
         }
     })
