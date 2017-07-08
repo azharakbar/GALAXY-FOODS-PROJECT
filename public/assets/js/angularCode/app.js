@@ -1,6 +1,6 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
 	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
-	'serviceModule2']) ;
+	'serviceModule2','newOrderModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -311,7 +311,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/orders/new.html" ,
-                controller : ''
+                controller : 'newOrderCtrl'
             }
         }
     })
@@ -394,8 +394,12 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 app.controller('indexCtrl',function($scope,$rootScope,toast){
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){
+			if(oldVal === "LOADING")
+				$scope.bar = true ;
+			else
+				$scope.bar = false ;
+			
 			$scope.errorMsg = oldVal 
-			console.log('errorMsg is'+oldVal)
 		}
 	})
 })

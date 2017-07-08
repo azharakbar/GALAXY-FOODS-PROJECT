@@ -1,0 +1,102 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+		cursor: default;
+	}
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	#searchIcon:hover{
+		cursor: pointer;
+	}
+</style>
+
+<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">PLACE NEW ORDER </h2>
+<h4 style="font-family: 'Montserrat', sans-serif;"> {{titleMsg}} <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
+  <div class="input-field animated" style="position: absolute; top:120px; right:65px; float: right; width:300px;" id="searchContainer">
+  <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" id="search" style="width: 0px">
+  </div> 
+
+<table class="table table-hover table-responsive list animated">
+  <thead>
+  <!-- <tr> -->
+      <th width ="35%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+      <th width ="25%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT NUMBER</th>
+      <th width ="20%"><center><i class="fa fa-cube" style="font-size: 15px"></i> OUTSTANDING ORDERS</center></th>
+      <th width ="20%"><center><i class="fa fa-inr" style="font-size: 15px"></i> CREDIT</center></th>
+  <!-- </tr> -->
+  </thead>
+	<tr ng-repeat="customer in list | filter : search" ng-click="set(customer,$index)" id="row{{$index}}" height="48">
+    <td width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
+    <td width="25%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
+    <td width="20%" title = "Credit"> <center>{{customer.credit}}</center> </td>
+    <td width="20%" title = "Orders"> <center>{{customer.orders}}</center> </td>	
+	</tr>
+</table>
+
+<div id="orderConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE TO ISSUE ORDER TO <b>{{customer.name}}</b> ?</h4></center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="orderProceed()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="noOrder()"> NO </button></center>
+	</div>
+</div>
+
+<div id="nextContent" class="hide animated">
+	
+	<div class="card blue-grey darken-1">
+		<div class="card-content white-text">
+			<span class="card-title">CUSTOMER DETAILS</span>
+				<span style="position: fixed; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 22%"><i class="fa fa-user-o" style="font-size: 15px"></i> {{customer.name}}</span>
+				<span style="position: fixed; right:700px;"><i class="fa fa-phone" style="font-size: 15px"></i> {{customer.contact}}</span>
+				<span style="position: fixed; right:550px;"><i class="fa fa-cube" style="font-size: 15px"></i> {{customer.credit}}</span>
+				<span style="position: fixed; right:450px;"><i class="fa fa-inr" style="font-size: 15px"></i> {{customer.orders}}</span>
+				<span style="position: fixed; right:270px;" ng-show="formattedDate!=''"><i class="fa fa-calendar" style="font-size: 15px"></i> {{formattedDate}}</span>				
+				<span style="position: relative; left:900px;" ng-show="eveLoxn!=''"><i class="fa fa-map-marker" style="font-size: 15px"></i> {{eveLoxn}}</span>						
+				<br>
+		</div>
+	</div>
+	<br>
+	<div id="nextContentForm" class="animated">
+	<form class="form form-horizontal">
+	<div style="margin-left: 100px; font-size: 19px">
+		<div class="input-field">
+			<i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp; ORDER PLACED ON <input type="date" class="datepicker" pick-a-date="todayDate" id="todayDate" name="todayDate" style="width: 250px" disabled>
+		</div>
+		<div class="input-field">
+			<i class="fa fa-calendar"></i>&nbsp;&nbsp;&nbsp; RETURN ON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" class="datepicker" pick-a-date="returnDate" id="returnDate" name="returnDate" style="width: 250px" required>
+		</div>
+		<div class="input-field">
+    		<i class="fa fa-connectdevelop"></i>&nbsp;&nbsp; EVENT PURPOSE &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" ng-model="evePurpose" ng-keyup="toUpper('evePurpose')" ng-init="" id="evePurpose" style="width: 250px">
+		</div>
+		<div class="input-field">
+    		<i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp; EVENT LOCATION&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" maxlength="14" ng-model="eveLoxn" ng-keyup="toUpper('eveLoxn')" ng-init="" id="evePurpose" style="width: 250px">
+		</div>			
+	</div>
+	<span style="position: relative; bottom: 30px; margin-left: 710px;">
+		<button class="waves-effect waves-light btn-large" id="backBtn" ng-model="backBtn" ng-click="back()" ><font size="4" ><i class="fa fa-chevron-left"></i> BACK</font></button>
+		<button class="waves-effect waves-light btn-large" type="submit" id="proceedBtn" ng-model="proceedBtn" ng-click="proceed()" ><font size="4" > PROCEED <i class="fa fa-chevron-right"></i> </font></button>
+	</span>
+	</form>
+	</div>
+</div>
+
+
+
+<div id="itemContent" class="hide animated">
+	
+</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.modal').modal();
+		$('.datepicker').css('font-size','19px')
+	})
+</script>

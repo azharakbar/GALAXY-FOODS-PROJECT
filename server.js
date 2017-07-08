@@ -296,6 +296,25 @@ app.delete('/deleteCustomer/:contact',isLoggedIn,function(req,res){
 	})
 })
 
+app.post('/testAPI/:name?',isLoggedIn,function(req,res){
+	console.log("IN NEW API")
+	console.log(req.params)
+
+	var re = new RegExp(req.params.name, 'i')
+
+	// Customer.find({ name: re },'name contact -_id')
+	// Customer.find({ "name": { "$regex": req.params.name, "$options": "i" } },'name contact -_id')
+	Customer.find( )
+	.then(function(customers){
+		console.log(customers)
+		res.json ({ status : 'SXS' , result:customers })
+	},function(err){
+		res.json ({ status : 'ERROR' })
+	})
+
+	
+})
+
 app.get('*'  , function(req,res){
 	var newUrl = "http://localhost:2016/#!"+req.originalUrl ;
 	res.redirect ( newUrl ) ;

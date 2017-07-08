@@ -1,5 +1,5 @@
-angular.module('loginModule', ['serviceModule'])
-    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , user){
+angular.module('loginModule', ['serviceModule','serviceModule2'])
+    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , user , toast){
         $scope.login = function(){
             var username = $scope.username ;
             var password = $scope.password ;
@@ -16,6 +16,8 @@ angular.module('loginModule', ['serviceModule'])
                 console.log(response.data)
                 if ( response.data.status === "authDone" ){
                     user.saveData( response.data )
+                    toast.setMsg("!! LOGGED IN !!")
+                    showToast("success")
                     $location.path('/dashboard')
                 }else{
                     if ( $rootScope.error != undefined ){

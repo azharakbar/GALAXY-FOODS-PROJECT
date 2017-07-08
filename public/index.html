@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">    
 <body ng-controller="indexCtrl">
     
     <div ng-class="{'container-fluid':loggedIn , 'container':!loggedIn }">
@@ -26,47 +27,42 @@
     
     <div id="snackbar">
     {{errorMsg}}
-    <center>
+    <center ng-show="bar">
         <div class="progress" style="height:2px;width: 400px;">
             <div class="indeterminate" style="background-color :#c62828"></div>
         </div>
     </center>
     </div>
 
-
-
 <!--     <footer class="footer">
       <div class="container">
        <p class="text-muted">MADE WITH <img src="./assets/imgs/shape 1.png"> AT QBURST</p>
       </div>
     </footer> -->    
-    <script src="./assets/js/jquery.js"></script>
+    <script src = "./assets/js/jquery.js"></script>
     <script src = "./assets/js/angular.js"></script>
-    <script src ="./assets/js/angular-route.min.js"></script>
+    <script src = "./assets/js/ng-pickadate.js"></script>
+    <script src = "./assets/js/angular-route.min.js"></script>
     <script src = "./assets/js/ui-router.js"></script>
     <script src = "./assets/js/ngTable.js"></script>
-    <script src= "./assets/js/angularCode/loginModule.js"></script>
+    <script src=  "./assets/js/angularCode/loginModule.js"></script>
     <script src = "./assets/js/materialize.min.js"></script>
     <script src = "./assets/js/myScripts.js"></script>
     
-    <script src="./assets/js/angularCode/app.js"></script>
-    <script src="./assets/js/angularCode/angularServices.js"></script>
-    <script src="./assets/js/angularCode/loginModule.js"></script>
-    <script src="./assets/js/angularCode/logutModule.js"></script>
-    <script src="./assets/js/angularCode/dashModule.js"></script>
-    <script src="./assets/js/angularCode/sideNavModule.js"></script>
-    <script src="./assets/js/angularCode/customers/new.js"></script>
-    <script src="./assets/js/angularCode/customers/view.js"></script>
-    <script src="./assets/js/angularCode/customers/update.js"></script>
-    <script src="./assets/js/angularCode/stocks/new.js"></script>
-    <script src="./assets/js/angularCode/stocks/update.js"></script>
-    <script src="./assets/js/angularCode/stocks/view.js"></script>
-    
-    
-<!--    <script src = "https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0/ng-table.min.js"></script>-->
-    
-<!--    <script src = "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.11/angular-cookies.js"></script>-->    
-    
+    <script src = "./assets/js/angularCode/app.js"></script>
+    <script src = "./assets/js/angularCode/angularServices.js"></script>
+    <script src = "./assets/js/angularCode/loginModule.js"></script>
+    <script src = "./assets/js/angularCode/logutModule.js"></script>
+    <script src = "./assets/js/angularCode/dashModule.js"></script>
+    <script src = "./assets/js/angularCode/sideNavModule.js"></script>
+    <script src = "./assets/js/angularCode/customers/new.js"></script>
+    <script src = "./assets/js/angularCode/customers/view.js"></script>
+    <script src = "./assets/js/angularCode/customers/update.js"></script>
+    <script src = "./assets/js/angularCode/stocks/new.js"></script>
+    <script src = "./assets/js/angularCode/stocks/update.js"></script>
+    <script src = "./assets/js/angularCode/stocks/view.js"></script>
+    <script src = "./assets/js/angularCode/orders/new.js"></script>
+        
 </body>
     
 </html>
