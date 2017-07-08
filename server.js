@@ -297,11 +297,7 @@ app.delete('/deleteCustomer/:contact',isLoggedIn,function(req,res){
 })
 
 app.post('/testAPI/:name?',isLoggedIn,function(req,res){
-	console.log("IN NEW API")
-	console.log(req.params)
-
-	var re = new RegExp(req.params.name, 'i')
-
+	// var re = new RegExp(req.params.name, 'i')
 	// Customer.find({ name: re },'name contact -_id')
 	// Customer.find({ "name": { "$regex": req.params.name, "$options": "i" } },'name contact -_id')
 	Customer.find( )
@@ -313,6 +309,15 @@ app.post('/testAPI/:name?',isLoggedIn,function(req,res){
 	})
 
 	
+})
+
+app.post('/allItemsNew',isLoggedIn,function(req,res){
+	Item.find({})
+	.then(function(users){
+		res.json({status : 'SXS' , result : users})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
 })
 
 app.get('*'  , function(req,res){

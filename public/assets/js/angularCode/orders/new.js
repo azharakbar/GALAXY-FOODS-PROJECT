@@ -3,11 +3,14 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 	
 	var monthNames = ["January", "February", "March", "April", "May", "June",
 	  "July", "August", "September", "October", "November", "December"];
-	
+	var orderedItem = {} ;
+
 	$scope.todayDate = new Date();
 	$scope.returnDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000) ;
 
-	var getList = function(){
+	$scope.orderedList = [] ;
+
+	var getCustomerList = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
 				url : '/allCustomers',
@@ -29,6 +32,29 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 			})
 		})
 	}
+
+	var getItemList = function(){
+		return new Promise( function( resolve , reject ){
+			$http({
+				url : '/allItemsNew',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : "token="+user.getToken()
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" )
+					resolve(response.data.result)
+				else{
+					toast.setMsg("** ERROR IN GETTING ITEM LIST **")
+					reject("ERROR1")
+				}
+			},function(err){
+				reject("ERROR2")
+			})
+		})
+	}	
 
 	$scope.toUpper = function(modelName){
 		if ( modelName === "evePurpose"){
@@ -52,16 +78,62 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 		$('.tableRow').animate({'height':48})
 	}
 
-	$scope.set= function(inComing,index,len){
+	$scope.set= function(inComing,index){
 		$rootScope.customer = inComing
 		$rootScope.index = index ;
 		$('#orderConfirm').modal('open')
 		console.log("INDEX IS :"+$rootScope.index)
 	}
+	
+	$scope.setItem= function(inComing,index){
+		$rootScope.item = inComing
+		$rootScope.index = index ;
+		$('#orderItemConfirm').modal('open')
+		console.log("INDEX IS :"+$rootScope.index)
+	}
+	
 	$scope.noOrder = function(){
 		$('#orderConfirm').modal('close');
 	}	
+	$scope.cancelItem = function(){
+		$('#orderItemConfirm').modal('close');
+	}		
 
+	$scope.enrollItem = function(){
+		console.log("I AM HERE" + $scope.qty + ' ' + $rootScope.item.availableStock )
+		if ( $scope.qty > $rootScope.item.availableStock || $scope.qty === undefined ){
+			console.log("I AM INSEIDE IF")
+			$('#maxVal').removeClass('shake')
+			$('#maxVal').addClass('shake')
+		} else {
+			orderedItem.barCode = $rootScope.item.barCode
+			orderedItem.name = $rootScope.item.name
+			orderedItem.price = $rootScope.item.price 
+			orderedItem.qty = $scope.qty 
+
+			var flag = 0 ;
+			for ( var i = 0 ; i < $scope.orderedList.length ; ++i ){
+				if ( $scope.orderedList[i].barCode === orderedItem.barCode ){
+					$scope.orderedList[i].qty = $scope.qty
+					flag = 1 ;
+					break ;
+				}
+			}
+			if ( !flag )
+				$scope.orderedList.push( orderedItem )
+			flag = 0 ;
+			orderedItem = {} ;
+			$scope.qty = 1 ;
+			$('#orderItemConfirm').modal('close')
+		}
+
+	}
+
+	$scope.delThisItem = function( index ){
+		$('#item'+index).removeClass('fadeInLeft')
+		$('#item'+index).addClass('fadeOutRight')
+		setTimeout(function() { $scope.orderedList.splice(index,1); $scope.$apply(); }, 750 );
+	}
 
 	var nextStep = function(){
 		$('#nextContent').removeClass('hide')
@@ -78,23 +150,34 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 	var itemStep = function(){
 		$('#itemContent').removeClass('hide')
 		$('#itemContent').removeClass('flipOutX')
+		$('#itemContent').removeClass('hide')
 		$('#itemContent').show()
 		$('#itemContent').addClass('flipInX')
 		$scope.titleMsg = "PICK THE ITEMS TO PLACE ORDER"
 		$scope.$apply()
 		$('#searchContainer').removeClass('rollOut')
 		$('#searchContainer').addClass('rollIn')
+
+		getItemList()
+		.then(function(response){
+			console.log("SXS RESPONSE")
+			$scope.itemList = response
+			$scope.$apply()
+		},function(err){
+			showToast("error")
+		})	
+
 	}	
 
 	$scope.orderProceed= function(){
 		$('#orderConfirm').modal('close');
-		$('.table').removeClass('flipInX');
-		$('.table').addClass('flipOutX');
-		setTimeout( function(){ $('.table').hide(); nextStep(); }, 500);
+		$('#custList').removeClass('flipInX');
+		$('#custList').addClass('flipOutX');
+		setTimeout( function(){ $('#custList').hide(); nextStep(); }, 500);
 	}
 
 
-	getList()
+	getCustomerList()
 	.then(function(response){
 		console.log("SXS RESPONSE")
 		$scope.titleMsg = "PICK THE CUSTOMER TO PLACE ORDER"
@@ -130,9 +213,9 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 		$('#nextContent').addClass('flipOutX')
 		setTimeout( function(){ 
 			$('#nextContent').addClass('hide'); 
-			$('.table').removeClass('flipOutX');
-			$('.table').show();
-			$('.table').addClass('flipInX');
+			$('#custList').removeClass('flipOutX');
+			$('#custList').show();
+			$('#custList').addClass('flipInX');
 			$('#searchContainer').removeClass('rollOut')
 			$('#searchContainer').addClass('rollIn')
 		}, 500);

@@ -22,7 +22,7 @@
     <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" id="search" style="width: 0px">
   </div> 
 
-<table class="table table-hover table-responsive list animated">
+<table class="table table-hover table-responsive list animated" id="custList">
   <thead>
   <!-- <tr> -->
       <th width ="35%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
@@ -90,7 +90,81 @@
 
 
 <div id="itemContent" class="hide animated">
-	
+<b> ORDERED LIST </b>
+<br>
+<span ng-show="orderedList.length == 0">NO ITEMS ORDERED YET
+<br><br>
+</span>
+<!-- <ul ng-repeat="orderedItem in orderedList"> -->
+<!-- <li class="animated fadeIn">{{orderedItem}}</li> -->
+
+<table class="table table-hover table-responsive list animated" id="orderedItemList" ng-show="orderedList.length > 0">
+  <thead>
+  <!-- <tr> -->
+      <th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
+      <th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
+      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
+      <th width ="12.50%"><center><i class="fa fa-cubes" style="font-size: 20px"></i> QUANTITY</center></th>
+      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> TOTAL</center></th>
+      <!-- <th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> AVAILABLE ON {{formattedDate}}</center></th> -->
+  <!-- </tr> -->
+  </thead>
+  <tbody>
+    <tr ng-repeat="orderedItem in orderedList" class="animated fadeInLeft" height="48" id="item{{$index}}">
+    <td width="20%" title = "CODE"> {{orderedItem.barCode}} </td>
+    <td width="30%" title = "NAME" style="position:relative; left:10px">  {{orderedItem.name}} </td>
+    <td width="12.50%" title = "PRICE"> <center>{{orderedItem.price}}</center> </td>
+    <td width="12.50%" title = "TOTAL STOCK"> <center>{{orderedItem.qty}}</center> </td>
+    <td width="12.50%" title = "AVAILABLE"> <center>{{orderedItem.price*orderedItem.qty}}</center> </td>
+    <td width="12.50%" title = "AVAILABLE"> <center><button class="btn waves-effect waves-light" style="background-color: #d32f2f; position: relative; bottom: 2px" ng-click="delThisItem($index)"><i class="fa fa-trash-o"></i></button></center> </td>
+  	</tr>
+  </tbody>
+</table>
+
+
+
+
+
+<!-- </ul> -->
+<b> ALL ITEMS LIST </b>
+<table class="table table-hover table-responsive list animated" style="position: relative; bottom: 15px" id="itemList">
+  <thead>
+  <!-- <tr> -->
+      <th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
+      <th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
+      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
+      <th width ="12.50%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
+      <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
+      <th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> AVAILABLE ON {{formattedDate}}</center></th>
+  <!-- </tr> -->
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in itemList | filter : search" ng-click="setItem(item,$index)" id="row2{{$index}}" height="48">
+    <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
+    <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center> !!! </center> </td>
+  	</tr>
+  </tbody>
+</table>
+</div>
+
+<div id="orderItemConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4><i class="fa fa-cubes" id="qtyIcon"></i> ENTER THE QUANTITY FOR <b>{{item.name}}</b> 
+  		&nbsp;&nbsp;<div class="input-field animated" id="quantity" style="display: inline-block;">
+    		<input type="number" ng-model="qty" id="qtySearch" ng-init="qty=1" min="1" max="{{item.availableStock}}" style="font-size: 20px; width: 50px">
+  		</div> 
+  		<div id="maxVal" class="animated shake" style="display: inline-block;">(MAX : {{item.availableStock}} )</div>
+  		<form style="display: inline-block;">
+		<button class="btn waves-effect waves-light" style="background-color: #388E3C" type="submit" name="sbm" ng-click="enrollItem()"><i class="fa fa-check"></i></button>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="cancelItem()"><i class="fa fa-times"></i></button>
+		</form>
+		</h4></center>
+	</div>
 </div>
 
 
