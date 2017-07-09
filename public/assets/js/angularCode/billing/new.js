@@ -41,6 +41,32 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		})
 	}
 
+	var saveNewBill = function(dataObj){
+		return new Promise( function( resolve , reject ){
+			$http({
+				url : '/saveBill',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : "finalObj="+JSON.stringify(dataObj)+"&token="+user.getToken()
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" )
+					resolve(response.data.status)
+				else{
+					console.log("RESPONSE = ")
+					console.log(response)
+					toast.setMsg("** ERROR IN SAVING BILL **")
+					reject("ERROR1")
+				}
+			},function(err){
+				console.log(err)
+				reject(err)
+			})
+		})
+	}	
+
 	$scope.content = 1
 
 	getBillCount()
@@ -77,7 +103,53 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	}
 
 	$scope.saveBill = function(){
+		$('.modal').modal('close')
+		var list = [] ;
+		var x = {} ;
+		for ( var i = 0 ; i < $scope.orderData.length ; ++i ){
+			x = {} ;
+			x.barCode = $scope.orderData[i].barCode ;
+			x.price = $scope.orderData[i].price ;
+			x.qty = $scope.orderData[i].qty ;
+			list.push(x) ;
+		}
+		var finalObj = {
+			billSchema : {
+				billId : $scope.billNo ,
+				billDate : $scope.dateData.issueDate ,
+				customer : $scope.customerData.contact ,
+				orderId :  $scope.orderId ,
+				billAmount : $scope.orderTotal ,
+				prevCredit : $scope.customerData.credit ,
+				totalAmount	: $scope.grandTotal
+			},
+			orderSchema : {
+				orderId : $scope.orderId,
+				issueDate : $scope.dateData.issueDate,
+				pickupDate : $scope.dateData.pickupDate,
+				returnDate : $scope.returnDate,
+				customer : $scope.customerData.contact,
+				items : list ,
+				billId : $scope.billNo,
+			},
+			customerSchema : {
+				customer : $scope.customerData.contact , 
+				totalAmount	: $scope.grandTotal
+			}
 
+		}
+		// console.log("FINAL OBJ")
+		// console.log(finalObj)
+
+		saveNewBill( finalObj )
+		.then(function(response){
+			toast.setMsg("!! BILL SAVED SUCCESSFULLY !!")
+			showToast("success")
+			$state.go('new_order')
+		},function(err){
+			console.log(err)
+			showToast("error")
+		})	
 	}
 
 })

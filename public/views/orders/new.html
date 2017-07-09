@@ -51,8 +51,8 @@
 	<tr ng-repeat="customer in list | filter : search" ng-click="set(customer,$index)" id="row{{$index}}" height="48">
     <td width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
     <td width="25%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
-    <td width="20%" title = "Credit"> <center>{{customer.credit}}</center> </td>
     <td width="20%" title = "Orders"> <center>{{customer.orders}}</center> </td>	
+    <td width="20%" title = "Credit"> <center>{{customer.credit}}</center> </td>
 	</tr>
 </table>
 

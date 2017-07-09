@@ -274,7 +274,7 @@ app.put('/updateCustomer/:contact',isLoggedIn,function(req,res){
 						res.json({status : 'REDUNDANT'})
 					} else {
 						customer.name = req.body.name 
-						customer.contact = req.body.contact 
+						customer.contact = req.body.contact 					
 						customer.save()
 						.then(function(){
 							res.json({status : 'SXS'})
@@ -338,6 +338,67 @@ app.post('/totalBills',isLoggedIn,function(req,res){
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
+})
+
+app.post('/saveBill' , isLoggedIn , function(req,res){
+	var finalObj = JSON.parse(req.body.finalObj)
+	var dataForBillSchema = finalObj.billSchema ;
+	var dataForOrderSchema = finalObj.orderSchema ;
+	var dataForCustomerSchema = finalObj.customerSchema ;
+
+	var bill = new Bill() ;
+	var order = new Order() ;
+
+	bill.billId = dataForBillSchema.billId
+	bill.billDate = dataForBillSchema.billDate
+	bill.customer = dataForBillSchema.customer
+	bill.orderId = dataForBillSchema.orderId
+	bill.billAmount = dataForBillSchema.billAmount
+	bill.prevCredit = dataForBillSchema.prevCredit
+	bill.totalAmount = dataForBillSchema.totalAmount
+
+	order.orderId = dataForOrderSchema.orderId
+	order.issueDate = dataForOrderSchema.issueDate
+	order.pickupDate = dataForOrderSchema.pickupDate
+	order.returnDate = dataForOrderSchema.returnDate
+	order.customer = dataForOrderSchema.customer
+	order.items = dataForOrderSchema.items
+	order.billId = dataForOrderSchema.billId
+
+	var custContact = dataForCustomerSchema.customer
+	var cr = dataForCustomerSchema.totalAmount
+
+	Customer.findOne( { contact:custContact } )
+	.then( function(cust){
+		cust.orders += 1 ;
+		cust.credit += cr
+
+		cust.save()
+		.then(function(response){
+			bill.save()
+			.then(function(response){
+				order.save()
+				.then(function(response){
+					console.log({status : 'SXS'})
+					res.json({status : 'SXS'})
+				},function(err){
+					console.log({status : 'ERROR IN ADDING ORDER'})			
+					res.json({status : 'ERROR IN ADDING ORDER'})			
+				})
+			},function(err){
+				console.log({status : 'ERROR IN ADDING BILL'})		
+				res.json({status : 'ERROR IN ADDING BILL'})		
+			})
+		},function(err){
+			console.log({status : 'ERROR IN UPDATING CUSTOMER'})	
+			res.json({status : 'ERROR IN UPDATING CUSTOMER'})	
+		})
+
+	},function(err){
+		console.log({status : 'ERROR IN CUSTOMER SCHEMA'})
+		res.json({status : 'ERROR IN CUSTOMER SCHEMA'})
+	})
+
 })
 
 app.get('*'  , function(req,res){
