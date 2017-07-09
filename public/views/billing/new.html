@@ -1,4 +1,121 @@
-asd
-<button onClick="showLoading()">TRY</button>
-<button onClick="showToast('success')">TRY2</button>
-<div id="snackbar">LOADING</div>
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	.tabs li:hover a:hover{
+		text-decoration: none ;
+		cursor: pointer;
+		background-color: #e0e0e0;
+	}
+	hr.style2 {
+		border-top: 3px double #8c8b8b;
+	}
+</style>
+
+
+<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">NEW BILL </h2>
+
+  <!-- <div class="card grey lighten-2" ng-show="showBill"> -->
+  <div class="card grey lighten-2">
+    <div class="card-tabs">
+      <ul class="tabs tabs-fixed-width">
+        <li class="tab"><a ng-class="{'active':content === 1}" ng-click="set(1)"><i class="fa fa-file"></i> VIEW BILL</a></li>
+        <li class="tab"><a ng-class="{'active':content === 2}" ng-click="set(2)"><i class="fa fa-eye"></i> VIEW ORDERS</a></li>
+      </ul>
+    </div>
+    <div class="card-content ">
+    <span class="card-title"><i class="fa fa-info"></i> BILL INFORMATION</span>
+    </div>    
+    <div class="card-content grey lighten-4">
+      
+
+      <div ng-show="content==1" style="font-size: 16px">
+			<span style="font-size: 18px"><b> BILL NUMBER &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{billNo}}</span>
+			<span style="position: relative; float: right; right:195px">
+			<b style="font-size: 18px"> BILL DATE </b>
+			</span>
+			<span style="position: relative; float: right; left:65px; font-size: 18px">
+			{{dateData.issueDate | date:"dd MMMM, yyyy"}}
+			</span>
+			<hr>
+			<b> NAME </b><span style="position: absolute; float: right; right: 645px">{{customerData.name}}</span>
+			<br>
+			<b> CONTACT NUMBER </b><span style="position: absolute; float: right; right: 645px">{{customerData.contact}}</span>
+			<br>
+			<span style="position: absolute; float: right; right:220px; top:226px"><b> ORDER NUMBER </b></span>
+			<span style="position: absolute; float: right; right:60px; top:226px">{{orderId}}</span>
+			<span style="position: absolute; float: right; right:220px; top:248px"><b> PICKUP DATE  </b></span>
+			<span style="position: absolute; float: right; right:60px; top:248px">{{dateData.pickupDate | date:"dd MMMM, yyyy"}}</span>
+			<span style="position: absolute; float: right; right:220px; top:270px"><b> RETURN DATE  </b></span>
+			<span style="position: absolute; float: right; right:60px; top:270px">{{dateData.returnDate | date:"dd MMMM, yyyy"}}</span>
+
+			<br><br>
+			<div style="font-size: 20px">
+				<span style="position: relative; float: right; right:199px;"><b> BILL AMOUNT </b></span>
+				<span style="position: absolute; float: right; right:60px; top:315px">{{orderTotal | currency:""}} ₹</span>
+				<br>
+				<span style="position: relative; float: right; right:199px;"><b> PREVIOUS CREDIT </b></span>
+				<span style="position: absolute; float: right; right:60px; top:342px">{{customerData.credit | currency:""}} ₹</span>		
+				<hr class="style2" style="position: relative; top: 15px; left:444px; width: 250px">
+				<span style="position: relative; float: right; right:199px;"><b> TOTAL AMOUNT </b></span>
+				<span style="position: absolute; float: right; right:60px; top:386px">{{ grandTotal | currency:""}} ₹</span>	
+			</div>	
+			<br><br>
+      </div>
+      
+
+
+      <div ng-show="content==2" ng-class="{'animated fadeInRight' : content === 2}">
+      	<table class="table">
+      		<thead>
+				<th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
+				<th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
+				<th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
+				<th width ="12.50%"><center><i class="fa fa-cubes" style="font-size: 20px"></i> QUANTITY</center></th>
+				<th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> TOTAL</center></th>
+      		</thead>
+      		<tbody>
+				<tr ng-repeat="orderedItem in orderData" height="48" id="item{{$index}}">
+					<td width="20%" title = "CODE"> {{orderedItem.barCode}} </td>
+					<td width="30%" title = "NAME" style="position:relative; left:10px">  {{orderedItem.name}} </td>
+					<td width="12.50%" title = "PRICE"> <center>{{orderedItem.price | currency :""}} ₹</center> </td>
+					<td width="12.50%" title = "TOTAL STOCK"> <center>{{orderedItem.qty}}</center> </td>
+					<td width="12.50%" title = "AVAILABLE"> <center>{{orderedItem.price*orderedItem.qty | currency :""}} ₹</center> </td>
+				</tr>      			
+      		</tbody>
+      	</table>
+      </div>
+
+            <div class="card-action" style="height:50px">
+            	<span style="float:right">
+					<button style="position: relative; bottom: 10px; background-color: #d32f2f" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="checkoutBtn" data-target="cancelConfirm"><font size="4"><i class="fa fa-ban"></i> CANCEL ORDER </font></button>
+					<button style="position: relative; bottom: 10px; background-color: #388e3c" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="checkoutBtn" data-target="saveBillConfirm"><font size="4" > SAVE BILL <i class="fa fa-floppy-o"></i></font></button>		
+              	</span>
+            </div>
+
+    </div>
+  </div>
+
+<div id="saveBillConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE TO SAVE THIS ORDER &amp; BILL ?</h4>
+		<p>!! NO MORE CHANGES CAN BE MADE !!</p>
+		</center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="saveBill()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
+	</div>
+</div>
+
+<div id="cancelConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE TO CANCEL THIS ORDER ?</h4></center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="cancel()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
+	</div>
+</div>
+
+  <div ng-show="!showBill">
+  	WE ARE WORKING ON THIS ... 
+  </div>

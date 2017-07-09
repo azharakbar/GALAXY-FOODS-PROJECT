@@ -49,7 +49,7 @@
     <tr ng-repeat="item in $data | filter : search" ng-click="set(item,$index)" id="row{{$index}}" height="48">
     <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
     <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price}}</center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price | currency:""}} ₹</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center>{{item.rentedStock}}</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>

@@ -1,6 +1,6 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
 	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
-	'serviceModule2','newOrderModule']) ;
+	'serviceModule2','newOrderModule','newBillModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -241,6 +241,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
                 }
             }
         },
+        params : {
+        	orderDetails : { value : { orderId : "NOT DEFINED"} }
+        },        
         views : {
             'v1' : {
                 templateUrl : "./views/navBar.html" ,
@@ -248,7 +251,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/billing/new.html" ,
-                controller : ''
+                controller : 'newBillCtrl'
             }
         }
     })

@@ -1,5 +1,8 @@
 angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
-.controller('newOrderCtrl',function( $rootScope , $scope , $http , user , toast ){
+.controller('newOrderCtrl',function( $rootScope , $scope , $state , $http , user , toast ){
+
+	$('.modal').modal();
+	$('.datepicker').css('font-size','19px')
 	
 	var monthNames = ["January", "February", "March", "April", "May", "June",
 	  "July", "August", "September", "October", "November", "December"];
@@ -7,6 +10,7 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 	$scope.todayDate = new Date();
 	$scope.returnDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000) ;
+	$scope.pickupDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000) ;
 
 	$scope.orderedList = [] ;
 
@@ -33,6 +37,29 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 		})
 	}
 
+	var getOrderCount = function(){
+		return new Promise( function( resolve , reject ){
+			$http({
+				url : '/totalOrders',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : "token="+user.getToken()
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" )
+					resolve(response.data.count)
+				else{
+					toast.setMsg("** ERROR IN GETTING ORDER ID **")
+					reject("ERROR1")
+				}
+			},function(err){
+				reject("ERROR2")
+			})
+		})
+	}	
+
 	var getItemList = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
@@ -45,7 +72,7 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" )
-					resolve(response.data.result)
+					resolve(response.data)
 				else{
 					toast.setMsg("** ERROR IN GETTING ITEM LIST **")
 					reject("ERROR1")
@@ -135,24 +162,64 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 		setTimeout(function() { $scope.orderedList.splice(index,1); $scope.$apply(); }, 750 );
 	}
 
+	$scope.checkout = function(){
+		var orderTotal = 0 ; 
+		for ( var i = 0 ; i < $scope.orderedList.length ; ++i ){
+			orderTotal += ( $scope.orderedList[i].price * $scope.orderedList[i].qty )
+		}
+
+		var orderObj = {
+			customer : $rootScope.customer,
+			dates : {
+				issueDate : $rootScope.todayDate ,
+				pickupDate : $rootScope.pickupDate ,
+				returnDate : $rootScope.returnDate
+			},
+			event : {
+				evePurpose : $rootScope.evePurpose ,
+				eveLoxn : $rootScope.eveLoxn
+			},
+			orderId : $scope.orderId , 
+			orders : $scope.orderedList ,
+			orderTotal : orderTotal
+		}	
+		console.log(orderObj)
+		$state.go('new_bill',{ orderDetails : orderObj } )
+	}
+
 	var nextStep = function(){
+		$scope.showDetails = false ;
 		$('#nextContent').removeClass('hide')
-		$('#nextContent').removeClass('flipOutX')
+		$('#nextContent').removeClass('fadeOut')
 		$('#nextContent').show()
-		$('#nextContent').addClass('flipInX')
+		$('#nextContent').addClass('fadeIn')
 		$('#searchContainer').addClass('rollOut')
-		// $scope.titleMsg = "PICK THE ITEMS TO PLACE ORDER"
 		$scope.titleMsg = "ENTER EVENT & RETURN DETAILS"
-		// $scope.list = response
 		$scope.$apply()
+		getOrderCount()
+		.then(function(response){
+			$scope.orderId = pad( response )
+			$scope.$apply()
+		},function(err){
+			showToast("error")
+		})
+
+	}
+
+
+	var pad = function( num ){
+		while ( num.toString().length < 5 )
+			num = "0" + num ; 
+		return num ;
 	}
 
 	var itemStep = function(){
 		$('#itemContent').removeClass('hide')
-		$('#itemContent').removeClass('flipOutX')
+		$('#itemContent').removeClass('fadeOut')
 		$('#itemContent').removeClass('hide')
 		$('#itemContent').show()
-		$('#itemContent').addClass('flipInX')
+		$('#itemContent').addClass('fadeIn')
+		$scope.showDetails = true ;
 		$scope.titleMsg = "PICK THE ITEMS TO PLACE ORDER"
 		$scope.$apply()
 		$('#searchContainer').removeClass('rollOut')
@@ -160,8 +227,7 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 		getItemList()
 		.then(function(response){
-			console.log("SXS RESPONSE")
-			$scope.itemList = response
+			$scope.itemList = response.result
 			$scope.$apply()
 		},function(err){
 			showToast("error")
@@ -169,10 +235,12 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 	}	
 
+
+
 	$scope.orderProceed= function(){
 		$('#orderConfirm').modal('close');
-		$('#custList').removeClass('flipInX');
-		$('#custList').addClass('flipOutX');
+		$('#custList').removeClass('fadeIn');
+		$('#custList').addClass('fadeOut');
 		setTimeout( function(){ $('#custList').hide(); nextStep(); }, 500);
 	}
 
@@ -194,30 +262,54 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 			$scope.eveLoxn = ''
 		$rootScope.todayDate = $scope.todayDate ;
 		$rootScope.returnDate = $scope.returnDate ;
-		$rootScope.formattedDate = $rootScope.returnDate.getDate() + ' ' + monthNames[$rootScope.returnDate.getMonth()] + ', ' + ($rootScope.returnDate.getYear()+1900)
+		$rootScope.pickupDate = $scope.pickupDate ;
+		$rootScope.formattedReturnDate = $rootScope.returnDate.getDate() + ' ' + monthNames[$rootScope.returnDate.getMonth()] + ', ' + ($rootScope.returnDate.getYear()+1900)
+		$rootScope.formattedPickupDate = $rootScope.pickupDate.getDate() + ' ' + monthNames[$rootScope.pickupDate.getMonth()] + ', ' + ($rootScope.pickupDate.getYear()+1900)
 		$rootScope.evePurpose = $scope.evePurpose ;
 		$rootScope.eveLoxn = $scope.eveLoxn ;
 
-		if ( $rootScope.returnDate >= $rootScope.todayDate ){
-			toast.setMsg(":: EVERYTHING OK ::")
-			$('#nextContentForm').removeClass('flipInX');
-			$('#nextContentForm').addClass('flipOutX');
+		if ( $rootScope.returnDate >= $rootScope.todayDate && $rootScope.pickupDate >= $rootScope.todayDate && $rootScope.returnDate >= $rootScope.pickupDate ){
+/*			toast.setMsg(":: EVERYTHING OK ::")
+			showToast("success")*/
+			$('#nextContentForm').removeClass('fadeIn');
+			$('#nextContentForm').addClass('fadeOut');
 			setTimeout( function(){ $('#nextContentForm').hide(); itemStep(); }, 500);
 		} else  {
 			toast.setMsg("** RETURN DATE HAS TO BE ON OR AFTER TODAY **")
 			showToast("error")
 		}
 	}	
-	$scope.back = function(){
-		$('#nextContent').removeClass('flipInX')
-		$('#nextContent').addClass('flipOutX')
-		setTimeout( function(){ 
-			$('#nextContent').addClass('hide'); 
-			$('#custList').removeClass('flipOutX');
-			$('#custList').show();
-			$('#custList').addClass('flipInX');
-			$('#searchContainer').removeClass('rollOut')
-			$('#searchContainer').addClass('rollIn')
-		}, 500);
+	$scope.back = function( Type ){
+		$scope.showDetails = false ;
+		if ( Type == 1 ){
+			$('#nextContent').removeClass('fadeIn')
+			$('#nextContent').addClass('fadeOut')
+			setTimeout( function(){ 
+				$('#nextContent').addClass('hide'); 
+				$('#custList').removeClass('fadeOut');
+				$scope.titleMsg = "PICK THE CUSTOMER TO PLACE ORDER"
+				$scope.$apply();
+				$('#custList').show();
+				$('#custList').addClass('fadeIn');
+				$('#searchContainer').removeClass('rollOut')
+				$('#searchContainer').addClass('rollIn')
+			}, 500);			
+		} else if ( Type == 2 ) {
+			console.log("IN NEW BACK")
+			$('#itemContent').removeClass('fadeIn')
+			$('#itemContent').addClass('fadeOut')
+			setTimeout(function(){
+				$('#itemContent').hide()
+				$('#itemContent').addClass('hide')
+				$scope.titleMsg = "ENTER EVENT & RETURN DETAILS"
+				$scope.$apply();
+				$('#nextContentForm').removeClass('fadeOut');
+				$('#nextContentForm').show();
+				$('#nextContentForm').addClass('fadeIn');
+				$('#searchContainer').removeClass('rollIn')
+				$('#searchContainer').addClass('rollOut')
+			}, 500);
+		}
+
 	}
 })

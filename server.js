@@ -14,7 +14,9 @@ const 	express = require('express') ,
 		md5 = require('md5'),
 		uniqid = require('uniqid'),
 		Customer = require('./models/customer'),
-		Item = require('./models/item')
+		Item = require('./models/item'),
+		Order = require('./models/order'),
+		Bill = require('./models/bill')
 
 var app = express() ;
 
@@ -313,8 +315,26 @@ app.post('/testAPI/:name?',isLoggedIn,function(req,res){
 
 app.post('/allItemsNew',isLoggedIn,function(req,res){
 	Item.find({})
-	.then(function(users){
-		res.json({status : 'SXS' , result : users})
+	.then(function(items){
+		res.json({status : 'SXS' , result : items})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/totalOrders',isLoggedIn,function(req,res){
+	Order.count()
+	.then(function(num){
+		res.json({status : 'SXS' , count : num+1})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/totalBills',isLoggedIn,function(req,res){
+	Bill.count()
+	.then(function(num){
+		res.json({status : 'SXS' , count : num+1})
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
