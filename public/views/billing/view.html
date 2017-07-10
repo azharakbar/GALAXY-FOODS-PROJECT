@@ -1,0 +1,116 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+		cursor: default;
+	}
+	table th:hover{
+		cursor: default;
+	}
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.redTextOnly{
+		color : red;
+	}
+</style>
+<div class="animated">
+	<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">BILLING CENTRAL </h2>
+	<!-- <h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL UNSETTLED BILLS : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> -->
+	<br>
+	<div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
+		<i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+		<input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-init="" id="search" style="width: 0px">
+	</div>
+
+	<table class="table table-hover table-responsive list">
+		<thead>
+			<th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> NUMBER</th>
+			<th width ="30%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+			<th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> DATE</center></th>
+			<th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> AMOUNT</center></th>
+			<th width ="12.50%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
+			<th width ="12.50%"><center><i class="fa fa-chevron-down" style="font-size: 15px"></i> PAY NOW</center></th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="bill in billList | filter : search" ng-click="set(bill)" id="row{{$index}}" ng-class="{'danger': bill.status === 'NOT PAID' , 'success' : bill.status === 'PAID' , 'warning' : bill.status === 'ADVANCE PAYMENT'}" height="48">
+			<td width="20%"> {{bill.billId}} </td>
+			<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{bill.name}} </td>
+			<td width="12.50%"><center>{{bill.billDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="12.50%"><center>{{bill.billAmount | currency:""}} ₹</center> </td>
+			<td width="12.50%"><center>{{bill.status}}</center> </td>
+			<td width="12.50%">
+			<center>
+				<button class="btn waves-effect waves-light" style="background-color: #43a047; position: relative; bottom: 2px; width: 50px;" data-target="payNow"><i class="fa fa-inr"></i></button> 
+<!-- 				<button class="btn waves-effect waves-light" style="background-color: teal; position: relative; bottom: 2px" data-target="viewBill"><i class="fa fa-eye"></i></button> -->
+			</center> </td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+
+<div id="payNow" class="modal modal-fixed-footer">
+	<div class="modal-content">
+		<h3>Pay Now</h3>
+		  <span class="switch" ng-show="bill.status != 'PAID'" style="position: absolute;float: right; right: 10px; top: 25px;">
+		    <label style="font-size: 15px">
+		      <span ng-class="{'redTextOnly' : !t}"> Pay This Bill Only </span>
+		      <input type="checkbox" ng-model="t">
+		      <span class="lever"></span>
+		      <span ng-class="{'redTextOnly' : t}"> Pay Off Customer </span>
+		    </label>
+		  </span>		
+
+		<div style="position: absolute; float: left; top:110px; left:200px;font-size: 17px" ng-show="!t">
+			<b> BILL NUMBER</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billId}}
+			<br>
+			<b> BILL DATE</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billDate | date:"dd MMMM, yyyy"}}
+			<br>
+			<b> BILL AMOUNT</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billAmount | currency:""}} ₹
+			<br>
+			<b> ORDER ID</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.orderId}}
+			<br><br>
+
+			<span ng-show="bill.remAmount != 0">
+				<span ng-show="bill.remAmount != bill.billAmount">
+				<b> PREVIOUS AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billAmount-bill.remAmount | currency:""}} ₹			
+				<br>
+				</span>
+				<b> PAYABLE AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{roundedAmount | currency:""}} ₹
+				<br>
+				<b> AMOUNT PAID</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+				<div class="input-field" style="display: inline-block; left:50px;">
+					<input type="number" style="font-size: 17px " min=1 max="{{roundedAmount}}" ng-model="paid" ng-init="paid=1" id="" style="width: 120px">
+				</div>
+				<br>  			
+				<center ng-show="!check()" ng-class="{'animated shake' : !check()}">ENTER A VALID PAYMENT AMOUNT</center>
+			</span>
+			<span ng-show="bill.remAmount == 0">
+				
+				<b> BILL SETTLED ON</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			
+				<br><br>			
+				<center><div id="sxsMsg" class="animated flash"><b> !! PAYMENT COMPLETED !! </b></div></center>
+			</span>
+		</div>
+
+
+	</div>
+		<div class="modal-footer">
+			<button style="position: relative; bottom: 5px; height:43px; background-color: #d32f2f" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="checkoutBtn" ng-click="no()"><font size="4"><span style="position: relative; bottom: 5px;"><i class="fa fa-ban"></i> CANCEL </span></font></button>
+			<button style="position: relative; bottom: 5px; height:43px; background-color: #388e3c" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="payNowBtn" ng-click="payNow()" ng-disabled="!check()"><font size="4" ><span style="position: relative; bottom: 5px;"> PAY NOW <i class="fa fa-inr"></i></span></font></button>	
+		</div>
+</div>
+
+<div id="viewBill" class="modal modal-fixed-footer">
+	<div class="modal-content">
+		<h4>View Bill</h4>
+		<p>A bunch of text</p>
+	</div>
+		<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+	</div>
+</div>

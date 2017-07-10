@@ -1,6 +1,6 @@
 var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
 	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
-	'serviceModule2','newOrderModule','newBillModule']) ;
+	'serviceModule2','newOrderModule','newBillModule','viewBillModule','viewOrderModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
     $urlRouterProvider.otherwise('/error') ;
@@ -286,6 +286,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
                 }
             }
         },
+        params : {
+        	showLoading : { value : true }
+        },        
         views : {
             'v1' : {
                 templateUrl : "./views/navBar.html" ,
@@ -293,7 +296,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/billing/view.html" ,
-                controller : ''
+                controller : 'viewBillCtrl'
             }
         }
     })
@@ -335,7 +338,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
             },
             'v2' : {
                 templateUrl : "./views/orders/view.html" ,
-                controller : ''
+                controller : 'viewOrderCtrl'
             }
         }
     })

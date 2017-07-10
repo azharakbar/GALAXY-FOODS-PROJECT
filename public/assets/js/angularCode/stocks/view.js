@@ -96,7 +96,7 @@ angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 		})
 		$rootScope.delAllowed = false ;
 	}
-	$scope.set= function(inComing,index,len){
+	$scope.set= function(inComing,index){
 		$rootScope.item = inComing
 		$rootScope.index = index ;
 		console.log("INDEX IS :"+$rootScope.index)

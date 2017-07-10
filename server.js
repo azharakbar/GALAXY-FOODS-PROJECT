@@ -354,8 +354,10 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 	bill.customer = dataForBillSchema.customer
 	bill.orderId = dataForBillSchema.orderId
 	bill.billAmount = dataForBillSchema.billAmount
+	bill.remAmount = bill.billAmount
 	bill.prevCredit = dataForBillSchema.prevCredit
 	bill.totalAmount = dataForBillSchema.totalAmount
+	bill.name = dataForBillSchema.name
 
 	order.orderId = dataForOrderSchema.orderId
 	order.issueDate = dataForOrderSchema.issueDate
@@ -364,6 +366,7 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 	order.customer = dataForOrderSchema.customer
 	order.items = dataForOrderSchema.items
 	order.billId = dataForOrderSchema.billId
+	order.name = dataForOrderSchema.name
 
 	var custContact = dataForCustomerSchema.customer
 	var cr = dataForCustomerSchema.totalAmount
@@ -399,6 +402,49 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 		res.json({status : 'ERROR IN CUSTOMER SCHEMA'})
 	})
 
+})
+
+app.post('/allBills',isLoggedIn,function(req,res){
+	Bill.find({})
+	.then(function(bills){
+		res.json({status : 'SXS' , result : bills})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+app.post('/payBill',isLoggedIn,function(req,res){
+	Bill.findOne({billId : req.body.billId})
+	.then(function(bill){
+		bill.remAmount -= Math.round(parseInt(req.body.paid))
+		console.log(`Rem amount = ${bill.remAmount}`)
+		if ( bill.remAmount < 1 ){
+			bill.remAmount = 0 ;
+			bill.status = "PAID"
+		}
+		else
+			bill.status = "ADVANCE PAYMENT"
+		bill.lastPaidDate = new Date()
+		bill.save()
+		.then(function(){
+			Customer.findOne({contact : bill.customer})
+			.then(function(cust){
+				cust.credit -= parseInt(req.body.paid)
+				cust.save()
+				.then(function(){
+					res.json({status : 'SXS'})
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		},function(err){
+			res.json({status : 'ERROR'})
+		})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
 })
 
 app.get('*'  , function(req,res){

@@ -6,8 +6,10 @@ var orderSchema = mongoose.Schema({
 	pickupDate : { type : Date } ,
 	returnDate : { type : Date } ,			
 	customer : { type : String , default : "NOT ASSIGNED"},
+	name : { type : String , default : "NOT ASSIGNED"},
 	items : { type : Array , default : [] },
-	billId : {type : String , default: "PC0"}	
+	billId : {type : String , default: "PC0"},
+	status : { type : String , default : "NOT PICKED UP"}
 })
 
 module.exports = mongoose.model('order',orderSchema)

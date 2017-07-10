@@ -1,0 +1,55 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+		cursor: default;
+	}
+	table th:hover{
+		cursor: default;
+	}
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.redTextOnly{
+		color : red;
+	}
+</style>
+<div class="animated">
+	<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">ORDERS CENTRAL </h2>
+	<br>
+	<div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
+		<i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+		<input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-init="" id="search" style="width: 0px">
+	</div>
+
+	<table class="table table-hover table-responsive list">
+		<thead>
+			<th width ="20%"><i class="fa fa-code" style="font-size: 12px"></i> NUMBER</th>
+			<th width ="30%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+			<th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> DATE</center></th>
+			<th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> AMOUNT</center></th>
+			<th width ="12.50%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
+			<th width ="12.50%"><center><i class="fa fa-chevron-down" style="font-size: 15px"></i> PAY NOW</center></th>
+		</thead>
+		<tbody>
+			<!-- <tr ng-repeat="order in orderList | filter : search" ng-click="set(order)" id="row{{$index}}" ng-class="{'danger': order.status === 'NOT PAID' , 'success' : order.status === 'PAID' , 'warning' : order.status === 'ADVANCE PAYMENT'}" height="48"> -->
+			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order)" id="row{{$index}}" height="48">
+			<td width="20%"> {{order.orderId}} </td>
+			<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{order.name}} </td>
+			<td width="12.50%"><center>{{order.orderDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="12.50%"><center>{{order.orderAmount | currency:""}} ₹</center> </td>
+			<td width="12.50%"><center>{{order.status}}</center> </td>
+			<td width="12.50%">
+			<center>
+				<button class="btn waves-effect waves-light" style="background-color: #43a047; position: relative; bottom: 2px;" data-target="payNow"><i class="fa fa-inr"></i></button> 
+				<button class="btn waves-effect waves-light" style="background-color: teal; position: relative; bottom: 2px" data-target="viewBill"><i class="fa fa-eye"></i></button>
+			</center> </td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+</div>
