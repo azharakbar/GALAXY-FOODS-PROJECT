@@ -355,8 +355,6 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 	bill.orderId = dataForBillSchema.orderId
 	bill.billAmount = dataForBillSchema.billAmount
 	bill.remAmount = bill.billAmount
-	bill.prevCredit = dataForBillSchema.prevCredit
-	bill.totalAmount = dataForBillSchema.totalAmount
 	bill.name = dataForBillSchema.name
 
 	order.orderId = dataForOrderSchema.orderId
@@ -369,8 +367,8 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 	order.name = dataForOrderSchema.name
 
 	var custContact = dataForCustomerSchema.customer
-	var cr = dataForCustomerSchema.totalAmount
-
+	var cr = parseFloat(dataForBillSchema.billAmount)
+	
 	Customer.findOne( { contact:custContact } )
 	.then( function(cust){
 		cust.orders += 1 ;

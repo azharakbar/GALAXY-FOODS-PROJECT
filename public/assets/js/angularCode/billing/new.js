@@ -111,6 +111,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			x.barCode = $scope.orderData[i].barCode ;
 			x.price = $scope.orderData[i].price ;
 			x.qty = $scope.orderData[i].qty ;
+			x.name = $scope.orderData[i].name ;
 			list.push(x) ;
 		}
 		var finalObj = {
@@ -120,9 +121,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				customer : $scope.customerData.contact ,
 				name : $scope.customerData.name,
 				orderId :  $scope.orderId ,
-				billAmount : $scope.orderTotal ,
-				prevCredit : $scope.customerData.credit ,
-				totalAmount	: $scope.grandTotal
+				billAmount : $scope.orderTotal 
 			},
 			orderSchema : {
 				orderId : $scope.orderId,

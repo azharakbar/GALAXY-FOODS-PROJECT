@@ -116,6 +116,7 @@ angular.module('viewOrderModule',['serviceModule','serviceModule2'])
 	$scope.set= function(inComing,idx){
 		$rootScope.selectedOrder = inComing
 		$rootScope.idx = idx 
+		console.log($rootScope.selectedOrder)
 		$('#orderDetails').modal('open')
 	}
 
