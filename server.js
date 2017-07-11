@@ -447,6 +447,114 @@ app.post('/payBill',isLoggedIn,function(req,res){
 	})
 })
 
+// app.post('/allOrders',function(req,res){
+app.post('/allOrders',isLoggedIn,function(req,res){
+	Order.find({})
+	.then(function(bills){
+		res.json({status : 'SXS' , result : bills})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
+// app.post('/pickUpOrder',function(req,res){
+app.post('/pickUpOrder',isLoggedIn,function(req,res){
+	var list = JSON.parse(req.body.dataObj)
+	var updateItemsForPickup = [] ;
+	updateItemsForPickup.length = list.length
+	var cnt = 0 ;
+	for ( var i = 0 ; i < list.length ; ++i ){
+		updateItemsForPickup[i] = 
+		Item.findOne({ barCode : list[i].barCode })
+		.then(function(item){
+			var v = list[cnt++].qty ;
+			item.availableStock = item.availableStock - v
+			item.rentedStock = item.rentedStock + v
+			item.save()
+			.then(function(){
+				console.log(`PICKED UP ${item.name}`)
+			},function(err){
+			})
+		},function(err){
+			reject(err)
+		})
+	}
+	Promise.all( updateItemsForPickup )
+	.then(function(response){
+		Order.findOne({orderId : req.body.orderId})
+		.then(function(order){
+			order.status = "PICKED UP"
+			order.pickupDate = new Date()
+			order.save()
+			.then(function(){
+				res.json({status : "SXS"})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		},function(err){
+			res.json({status : 'ERROR'})
+		})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+	
+})
+
+
+app.post('/returnOrder',isLoggedIn,function(req,res){
+	var list = JSON.parse(req.body.dataObj)
+	var updateItemsForReturn = [] ;
+	updateItemsForReturn.length = list.length
+	var cnt = 0 ;
+	for ( var i = 0 ; i < list.length ; ++i ){
+		updateItemsForReturn[i] = 
+		Item.findOne({ barCode : list[i].barCode })
+		.then(function(item){
+			var v = list[cnt++].qty ;
+			item.availableStock = item.availableStock + v
+			item.rentedStock = item.rentedStock - v
+			item.save()
+			.then(function(){
+				console.log(`REURNED ${item.name}`)
+			},function(err){
+			})
+		},function(err){
+			reject(err)
+		})
+	}
+	Promise.all( updateItemsForReturn )
+	.then(function(response){
+		Order.findOne({orderId : req.body.orderId})
+		.then(function(order){
+			order.status = "ORDER RETURNED"
+			order.returnDate = new Date() 
+			order.save()
+			.then(function(){
+				Customer.findOne({contact: req.body.custId})
+				.then(function(customer){
+					customer.orders = customer.orders - 1
+					customer.save()
+					.then(function(){
+						res.json({status : "SXS"})
+					},function(err){
+						res.json({status : "ERROR"})
+					})
+				},function(err){
+					res.json({status : "ERROR"})
+				})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		},function(err){
+			res.json({status : 'ERROR'})
+		})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+	
+})
+
+
 app.get('*'  , function(req,res){
 	var newUrl = "http://localhost:2016/#!"+req.originalUrl ;
 	res.redirect ( newUrl ) ;
