@@ -162,7 +162,8 @@ app.post('/newItem',isLoggedIn,function(req,res){
 	})
 })
 
-app.post('/totalItems',isLoggedIn,function(req,res){
+// app.post('/totalItems',isLoggedIn,function(req,res){
+app.post('/totalItems',function(req,res){
 	Item.count()
 	.then(function(num){
 		res.json({status : 'SXS' , count : num})
@@ -171,7 +172,8 @@ app.post('/totalItems',isLoggedIn,function(req,res){
 	})
 })
 
-app.post('/allItems',isLoggedIn,function(req,res){
+// app.post('/allItems',isLoggedIn,function(req,res){
+app.post('/allItems',function(req,res){
 	Item.find({})
 	.then(function(users){
 		res.json({status : 'SXS' , result : users})
@@ -368,7 +370,7 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 
 	var custContact = dataForCustomerSchema.customer
 	var cr = parseFloat(dataForBillSchema.billAmount)
-	
+
 	Customer.findOne( { contact:custContact } )
 	.then( function(cust){
 		cust.orders += 1 ;
@@ -552,6 +554,33 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 	
 })
 
+// app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
+app.post('/stockDetails/:itemId',function(req,res){
+	console.log(req.params.itemId)
+	var resObj = [] ;
+	var x = {} ;
+	Order.find({status : { $eq: 'PICKED UP' } }, 'name customer items pickupDate returnDate -_id' )
+	.then(function(orders){
+		console.log(orders)
+		var cnt = 0 ;
+		for( var i = 0 ; i < orders.length ; ++i ){
+			for( var j = 0 ; j < orders[i].items.length ; ++j ){
+				if ( orders[i].items[j].barCode === req.params.itemId ){
+					x = {} ;
+					x.custName = orders[i].name ;
+					x.custContact = orders[i].customer ;
+					x.pickupDate = orders[i].pickupDate ;
+					x.returnDate = orders[i].returnDate ;
+					x.qty = orders[i].items[j].qty ;
+					resObj.push(x)
+				}
+			}
+		}
+		res.json({status : "SXS" , result : resObj})
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
 
 app.get('*'  , function(req,res){
 	var newUrl = "http://localhost:2016/#!"+req.originalUrl ;

@@ -1,6 +1,10 @@
 angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 .controller('viewItemCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
+	$('.modal').modal({}) ;
+	$('#buttonSet').hide(); 	
+
 	$rootScope.delAllowed = false ;
+
 	var getCount = function( showLoad ){
 		if ( showLoad || $stateParams.showLoading ){
 			toast.setMsg("LOADING")
@@ -42,8 +46,41 @@ angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 		})
 	}
 
-	var getList = function(){
-
+	var getPossessionDetails = function(){
+		return new Promise(function(resolve,reject){
+			// if ( showLoad || $stateParams.showLoading ){
+				toast.setMsg("LOADING")
+				showLoading();
+			// }
+			$http({
+				url : "/stockDetails/"+$rootScope.item.barCode,
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : "token="+user.getToken()
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" ){
+					// if( showLoad || $stateParams.showLoading ){
+						hideLoading();
+					// }
+					resolve(response.data.result)
+				} else {
+					// if( showLoad || $stateParams.showLoading ){
+						hideLoading();
+					// }					
+					toast.setMsg("!! ERROR GETTING STOCK DETAILS !!")
+					reject ("ERROR1") 
+				}
+			},function(err){
+				// if( showLoad || $stateParams.showLoading ){
+					hideLoading();
+				// }				
+				toast.setMsg("!! ERROR GETTING STOCK DETAILS !!")
+				reject ("ERROR2") 
+			})
+	})	
 	}
 
 	$scope.expandSearch = function(){
@@ -62,10 +99,12 @@ angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 
 	$scope.update = function(){
 		console.log("GOING TO UPDATE "+$rootScope.item.barCode)
+		$('.modal').modal('close')
 		$state.go('update_stock',{'item':$rootScope.item})
 	}
 
 	$scope.delConfirm = function(){
+		$('.modal').modal('close')
 		if($rootScope.item.rentedStock === 0){
 			$rootScope.delAllowed = true ;
 			$('#delConfirm').modal('open');
@@ -96,9 +135,25 @@ angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 		})
 		$rootScope.delAllowed = false ;
 	}
-	$scope.set= function(inComing,index){
+	$scope.set = function(inComing,index){
 		$rootScope.item = inComing
 		$rootScope.index = index ;
+		getPossessionDetails()
+		.then(function(res){
+			$('#stockViewModal').modal('open');
+			var resLength = res.length
+			var newHeight = 0 
+			if ( resLength == 1 )
+				newHeight = 440
+			else 
+				newHeight = 440 + ( 60 * ( resLength-1 ) )
+			$('#contentsModal').css('height' , newHeight )
+			console.log(res)
+			$scope.posDetails = res ;
+			$scope.$apply() ;
+		},function(err){
+			showToast("error");
+		})
 		console.log("INDEX IS :"+$rootScope.index)
 	}
 	$scope.noDel = function(){

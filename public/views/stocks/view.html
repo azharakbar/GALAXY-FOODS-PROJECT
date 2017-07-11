@@ -5,6 +5,9 @@
 	table{
 		font-family: 'Montserrat',sans-serif;
 	}
+	#contentsModal table :hover{
+		cursor: default;
+	}
 	.ng-table-pager {
 	    display: none;
 	}	
@@ -12,20 +15,8 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
-	.update{
-		font-size: 15px;
-		width: 170px;
-		height: 45px;
-		position: absolute; 
-		left: 550px;
-	}
-	.delete{
-		font-size: 15px;
-		background-color: #d32f2f ;
-		width: 170px;
-		height: 45px;
-		position: absolute; 
-		right: 350px;
+	hr.style2 {
+		border-top: 3px double #8c8b8b;
 	}	
 </style>
 <div class="animated">
@@ -39,7 +30,7 @@
   <thead>
     <tr style="cursor: default;">
       <th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
-      <th width ="30%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+      <th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
       <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
       <th width ="12.50%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
       <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> RENTED</center></th>
@@ -57,13 +48,6 @@
 </table>
 </div>
 
-<div id="buttonSet">
-<center>
-<button id="" class="waves-effect waves-light btn-large update" ng-click="update()"><span style="position: relative; bottom:5px"><i class="material-icons">update</i> UPDATE </span></button>
-<button id="" class="waves-effect waves-light btn-large delete" ng-click="delConfirm()" style="background-color: #d32f2f ;"><span style="position: relative; bottom:5px"><i class="material-icons">delete_forever</i> DELETE </span></button>
-</center>
-</div>
-
 <div id="delConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
 		<center><h4>ARE YOU SURE YOU WANT TO DELETE <b>{{item.name}}</b> ?</h4></center>
@@ -73,41 +57,60 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	$(document).ready(function(){
+<div id="stockViewModal" class="modal bottom-sheet" style="overflow-y: scroll;">
+	<div id="contentsModal" class="modal-content" style="height: 230px;">
+		<h3>STOCK DETAILS</h3>
+		<div style="font-size: 17px">
+			<span style="position: absolute; top: 55px; left:25px;"><i class="fa fa-barcode" style="font-size: 20px"></i> {{item.barCode}}</span>
+			<span style="position: absolute; top: 55px; left:300px;"><i class="fa fa-cube" style="font-size: 23px"></i> {{item.name}}</span>
+			<span style="position: absolute; top: 55px; left:675px;"><i class="fa fa-inr" style="font-size: 23px"></i> <span style="position: relative ; bottom : 5px">{{item.price}}</span></span>
+			<span style="position: absolute; top: 55px; left:1000px;"><i class="fa fa-stack-overflow" style="position: relative; bottom: 5px; font-size: 28px"></i><span style="position: relative ; bottom : 5px"> {{item.totalStock}}</span></span>
+			<span style="position: absolute; top: 55px; left:1100px;"><i class="fa fa-inr" style="font-size: 23px"></i> <span style="position: relative ; bottom : 5px">{{item.rentedStock}}</span></span>
+			<span style="position: absolute; top: 55px; left:1200px;"><i class="fa fa-check" style="font-size: 23px"></i> <span style="position: relative ; bottom : 5px">{{item.availableStock}}</span></span>
+		</div>
+		<br><br>
+		<h4><b>STOCK POSSESSION DETAILS</b></h4>
+		<hr class="style2" style="position: relative; float:left; bottom: 15px; width: 255px"/>
+		<br>
+		<div style="position: absolute; margin-left: 50px; font-size: 18px">
+			<i class="fa fa-cubes"></i> IN GODOWN <span style="position: relative; float: right; left:150px">{{item.availableStock}}</span> 
+			<br>
+			<i class="fa fa-users"></i> RENTED TO CUSTOMERS <span style="position: relative; float: right; left:150px">{{item.rentedStock}}</span> 
+			<br><br>
+		</div>
 
-		$('.modal').modal({
-		}) ;
+		<div ng-show="item.rentedStock > 0" style="position: absolute; margin-left: 50px; font-size: 18px">
+				<br><br><br><br>
+			<h4><b>RENTED STOCK POSSESSION DETAILS</b></h4>
+			<hr class="style2" style="position: relative; float:left; bottom: 15px; width: 335px"/>	
+			<table class="table table-hover table-responsive list" style="font-size: 15px">
+				<thead>
+					<th width ="20%"><i class="fa fa-user-o" style="font-size: 12px"></i> NAME</th>
+					<th width ="30%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT</th>
+					<th width ="16%"><center><i class="fa fa-truck" style="font-size: 15px"></i> PICKED UP</center></th>
+					<th width ="16%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> WILL RETURN</center></th>
+					<th width ="16%"><center> QUANTITY <i class="fa fa-cube" style="font-size: 15px"></i></center></th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="pos in posDetails" height="48">
+						<td width="20%" style="position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 20%"> {{pos.custName}} </td>
+						<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{pos.custContact}} </td>
+						<td width="16%"><center>{{pos.pickupDate | date:"dd MMMM, yyyy"}}</center> </td>
+						<td width="16%"><center>{{pos.returnDate | date:"dd MMMM, yyyy"}}</center> </td>
+						<td width="16%"><center>{{pos.qty}}</center> </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+      <!-- </div> -->
 
-		$('#buttonSet').hide(); 
 
-    $('.table').click(function(event){
-			var $target = $(event.target);
-			var ele = $target.closest("tr").attr("id");
-			var idNew = $target.closest("td").attr("id")
-			if ( ele != undefined ){
-				var posTop = $target.closest("tr").position().top ;
-				$('#buttonSet').fadeOut()
-				if ( $('#'+ele).hasClass('tableRow') ){
-					$('.tableRow').animate({'height':48})
-					$('tr').removeClass('tableRow')
-				}
-				else{
-					$('#'+ele).animate({'height' : 100})
-					$('.tableRow').animate({'height':48})
-					$('tr').removeClass('tableRow')
-					$('#'+ele).addClass('tableRow')
-					$('#buttonSet').fadeIn()
-					$('.update').css('top' , posTop+40 )
-					$('.delete').css('top' , posTop+40 )
-					$('.update').attr('id',idNew)
-					$('.delete').attr('id',idNew)
-				}
-			}else{
-					$('#buttonSet').fadeOut()
-					$('.tableRow').animate({'height':48})
-			}
+	</div>
 
-    })
-	})
-</script>
+	<div class="modal-footer">
+		<span style="position:absolute; float:right; right:75px">
+		<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="update()"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-refresh"></i> UPDATE </span></button>
+		<button id="" class="waves-effect waves-light btn-large" ng-click="delConfirm()" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-trash"></i> DELETE </span></button>
+		</span>
+	</div>
+</div>
