@@ -5,11 +5,13 @@ var orderSchema = mongoose.Schema({
 	issueDate : { type : Date } ,
 	pickupDate : { type : Date } ,
 	returnDate : { type : Date } ,			
-	customer : { type : String , default : "NOT ASSIGNED"},
-	name : { type : String , default : "NOT ASSIGNED"},
+	customer : { type : String , default : "NOT ASSIGNED" },
+	name : { type : String , default : "NOT ASSIGNED" },
 	items : { type : Array , default : [] },
-	billId : {type : String , default: "PC0"},
-	status : { type : String , default : "NOT PICKED UP"}
+	billId : {type : String , default: "PC0" },
+	status : { type : String , default : "NOT PICKED UP" },
+	eveLoxn : { type : String , default : "" },
+	evePurpose : { type : String , default : "" }
 })
 
 module.exports = mongoose.model('order',orderSchema)

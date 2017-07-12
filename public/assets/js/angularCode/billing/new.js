@@ -121,7 +121,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				customer : $scope.customerData.contact ,
 				name : $scope.customerData.name,
 				orderId :  $scope.orderId ,
-				billAmount : $scope.orderTotal 
+				billAmount : Math.round($scope.orderTotal)
 			},
 			orderSchema : {
 				orderId : $scope.orderId,
@@ -132,6 +132,8 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				name : $scope.customerData.name,
 				items : list ,
 				billId : $scope.billNo,
+				eveLoxn : $scope.eventData.eveLoxn, 
+				evePurpose : $scope.eventData.evePurpose
 			},
 			customerSchema : {
 				customer : $scope.customerData.contact , 

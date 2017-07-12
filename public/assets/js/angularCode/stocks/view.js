@@ -143,10 +143,14 @@ angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
 			$('#stockViewModal').modal('open');
 			var resLength = res.length
 			var newHeight = 0 
-			if ( resLength == 1 )
+			if ( resLength >= 1 )
+				newHeight = 440 + ( 60 * ( resLength - 1 ) )
+			else 
+				newHeight = 230 
+/*			if ( resLength == 1 )
 				newHeight = 440
 			else 
-				newHeight = 440 + ( 60 * ( resLength-1 ) )
+				newHeight = 440 + ( 60 * ( resLength-1 ) )*/
 			$('#contentsModal').css('height' , newHeight )
 			console.log(res)
 			$scope.posDetails = res ;

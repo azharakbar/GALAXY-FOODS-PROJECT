@@ -63,9 +63,12 @@
 
 
 
-<div id="orderDetails" class="modal bottom-sheet">
+<div id="orderDetails" class="modal bottom-sheet" style="overflow-y: scroll;">
 	<div class="modal-content">
 		<h3>ORDER DETAILS</h3>
+		<span style="font-size: 15px " ng-show="selectedOrder.evePurpose != ''"><i class="fa fa-connectdevelop"></i> EVENT PURPOSE &nbsp;: </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.evePurpose}}
+		<br>
+		<span style="font-size: 15px " ng-show="selectedOrder.eveLoxn != ''">&nbsp;<i class="fa fa-map-marker"></i> &nbsp;EVENT LOCATION : </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.eveLoxn}}
       	<table class="table">
       		<thead>
 				<th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>

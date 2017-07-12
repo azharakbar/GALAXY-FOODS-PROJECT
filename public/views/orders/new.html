@@ -72,12 +72,12 @@
 			<span class="card-title">ORDER DETAILS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code"></i>&nbsp;&nbsp;{{orderId}} </span>
 				<span style="position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 22%"><i class="fa fa-user-o" style="font-size: 15px"></i> {{customer.name}}</span>
 				<span style="position: absolute; right:700px;"><i class="fa fa-phone" style="font-size: 15px"></i> {{customer.contact}}</span>
-				<span style="position: absolute; right:550px;"><i class="fa fa-cube" style="font-size: 15px"></i> {{customer.credit}}</span>
-				<span style="position: absolute; right:450px;"><i class="fa fa-inr" style="font-size: 15px"></i> {{customer.orders}}</span>
-				<span style="position: absolute; top:35px; right:270px;" ng-show="showDetails"><i class="fa fa-truck" style="font-size: 15px"></i> {{formattedPickupDate}}</span>	
+<!-- 				<span style="position: absolute; right:550px;"><i class="fa fa-cube" style="font-size: 15px"></i> {{customer.orders}}</span>
+				<span style="position: absolute; right:450px;"><i class="fa fa-inr" style="font-size: 15px"></i> {{customer.credit}}</span> -->
+				<span style="position: absolute; float:left; top:35px; left:720px;" ng-show="showDetails"><i class="fa fa-truck" style="font-size: 15px"></i> {{formattedPickupDate}}</span>	
 				<span style="position: absolute; right:270px;" ng-show="showDetails"><i class="fa fa-calendar" style="font-size: 15px"></i> {{formattedReturnDate}}</span>	
-				<span style="position: absolute; top:35px; right:211px" ng-show="showDetails && evePurpose != ''"><i class="fa fa-connectdevelop" style="font-size: 15px"></i> {{evePurpose}}</span>
-				<span style="position: relative; left:825px;" ng-show="showDetails && eveLoxn != ''"><i class="fa fa-map-marker" style="font-size: 15px"></i> {{eveLoxn}}</span>						
+				<span style="position: absolute; float:left; top:35px; left:844px" ng-show="showDetails && evePurpose != ''"><i class="fa fa-connectdevelop" style="font-size: 15px"></i> {{evePurpose}}</span>
+				<span style="position: relative; left:825px;" ng-show="showDetails && eveLoxn != ''"><i class="fa fa-map-marker" style="font-size: 15px"></i> {{eveLoxn}}</span>	
 				<br>
 		</div>
 	</div>
@@ -95,7 +95,7 @@
 			<i class="fa fa-calendar"></i>&nbsp;&nbsp;&nbsp; RETURN ON &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" class="datepicker" pick-a-date="returnDate" id="returnDate" name="returnDate" style="width: 250px" required>
 		</div>
 		<div class="input-field">
-    		<i class="fa fa-connectdevelop"></i>&nbsp;&nbsp; EVENT PURPOSE &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" ng-model="evePurpose" ng-keyup="toUpper('evePurpose')" ng-init="" id="evePurpose" style="width: 250px; font-size: 19px">
+    		<i class="fa fa-connectdevelop"></i>&nbsp;&nbsp; EVENT PURPOSE &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" maxlength="22" ng-model="evePurpose" ng-keyup="toUpper('evePurpose')" ng-init="" id="evePurpose" style="width: 250px; font-size: 19px">
 		</div>
 		<div class="input-field">
     		<i class="fa fa-map-marker"></i>&nbsp;&nbsp;&nbsp;&nbsp; EVENT LOCATION&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" maxlength="22" ng-model="eveLoxn" ng-keyup="toUpper('eveLoxn')" ng-init="" id="evePurpose" style="width: 250px; font-size: 19px">
@@ -129,7 +129,6 @@
       <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
       <th width ="12.50%"><center><i class="fa fa-cubes" style="font-size: 20px"></i> QUANTITY</center></th>
       <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> TOTAL</center></th>
-      <!-- <th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> AVAILABLE ON {{formattedDate}}</center></th> -->
   <!-- </tr> -->
   </thead>
   <tbody>
@@ -158,8 +157,8 @@
       <th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
       <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
       <th width ="12.50%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
-      <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
-      <th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> AVAILABLE ON {{formattedReturnDate}}</center></th>
+      <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE NOW</center></th>
+      <th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> AVAILABLE ON {{formattedPickupDate}}</center></th>
   <!-- </tr> -->
   </thead>
   <tbody>
@@ -169,7 +168,7 @@
     <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price | currency:""}} ₹</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center> !!! </center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center> {{daysAvailibity[$index]}} </center> </td>
   	</tr>
   </tbody>
 </table>

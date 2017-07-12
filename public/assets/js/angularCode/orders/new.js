@@ -68,11 +68,13 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
 				},
-				data : "token="+user.getToken()
+				data : "pickupDate="+$scope.pickupDate+"&token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
+					console.log(response.data.result)
 					resolve(response.data)
+				}
 				else{
 					toast.setMsg("** ERROR IN GETTING ITEM LIST **")
 					reject("ERROR1")
@@ -227,7 +229,8 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 		getItemList()
 		.then(function(response){
-			$scope.itemList = response.result
+			$scope.itemList = response.result.items
+			$scope.daysAvailibity = response.result.daysAvailability
 			$scope.$apply()
 		},function(err){
 			showToast("error")
@@ -275,7 +278,13 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 			$('#nextContentForm').addClass('fadeOut');
 			setTimeout( function(){ $('#nextContentForm').hide(); itemStep(); }, 500);
 		} else  {
-			toast.setMsg("** RETURN DATE HAS TO BE ON OR AFTER TODAY **")
+			if ( $rootScope.returnDate >= $rootScope.todayDate ){
+				toast.setMsg("** RETURN DATE HAS TO BE ON OR AFTER TODAY **")
+			} else if ( $rootScope.pickupDate >= $rootScope.todayDate ) {
+				toast.setMsg("** PICKUP DATE HAS TO BE ON OR AFTER TODAY **")
+			} else {
+				toast.setMsg("** RETURN DATE HAS TO BE ON OR AFTER PICKUP DATE **")
+			}
 			showToast("error")
 		}
 	}	

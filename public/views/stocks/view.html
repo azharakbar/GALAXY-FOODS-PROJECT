@@ -85,16 +85,16 @@
 			<hr class="style2" style="position: relative; float:left; bottom: 15px; width: 335px"/>	
 			<table class="table table-hover table-responsive list" style="font-size: 15px">
 				<thead>
-					<th width ="20%"><i class="fa fa-user-o" style="font-size: 12px"></i> NAME</th>
-					<th width ="30%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT</th>
+					<th width ="35%"><i class="fa fa-user-o" style="font-size: 12px"></i> NAME</th>
+					<th width ="15%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT</th>
 					<th width ="16%"><center><i class="fa fa-truck" style="font-size: 15px"></i> PICKED UP</center></th>
 					<th width ="16%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> WILL RETURN</center></th>
 					<th width ="16%"><center> QUANTITY <i class="fa fa-cube" style="font-size: 15px"></i></center></th>
 				</thead>
 				<tbody>
 					<tr ng-repeat="pos in posDetails" height="48">
-						<td width="20%" style="position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 20%"> {{pos.custName}} </td>
-						<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{pos.custContact}} </td>
+						<td width="35%" style="position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 20%"> {{pos.custName}} </td>
+						<td width="15%">  &nbsp;&nbsp;&nbsp;&nbsp;{{pos.custContact}} </td>
 						<td width="16%"><center>{{pos.pickupDate | date:"dd MMMM, yyyy"}}</center> </td>
 						<td width="16%"><center>{{pos.returnDate | date:"dd MMMM, yyyy"}}</center> </td>
 						<td width="16%"><center>{{pos.qty}}</center> </td>

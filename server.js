@@ -162,8 +162,8 @@ app.post('/newItem',isLoggedIn,function(req,res){
 	})
 })
 
-// app.post('/totalItems',isLoggedIn,function(req,res){
-app.post('/totalItems',function(req,res){
+// app.post('/totalItems',function(req,res){
+app.post('/totalItems',isLoggedIn,function(req,res){
 	Item.count()
 	.then(function(num){
 		res.json({status : 'SXS' , count : num})
@@ -172,8 +172,8 @@ app.post('/totalItems',function(req,res){
 	})
 })
 
-// app.post('/allItems',isLoggedIn,function(req,res){
-app.post('/allItems',function(req,res){
+// app.post('/allItems',function(req,res){
+app.post('/allItems',isLoggedIn,function(req,res){
 	Item.find({})
 	.then(function(users){
 		res.json({status : 'SXS' , result : users})
@@ -316,9 +316,64 @@ app.post('/testAPI/:name?',isLoggedIn,function(req,res){
 })
 
 app.post('/allItemsNew',isLoggedIn,function(req,res){
+	// var retDate = req.body.returnDate.toISOString() ;
+	// console.log(req.body.returnDate)
+	// console.log(`getDate : ${new Date(new Date(req.body.returnDate).getTime())}`)
+	// var x = new Date(req.body.returnDate).toISOString()
+	// var y = new Date(x.getTime() - 24*60*60*1000 )
+	
+	// console.log(y)
+	var resObj = {} ;
+	var resArray = [] ;
+
+	var x = req.body.pickupDate
+	console.log(x)
+	// console.log(x.getDate())
 	Item.find({})
 	.then(function(items){
-		res.json({status : 'SXS' , result : items})
+		// Order.find( { returnDate : { $lt : x } } , 'items pickupDate returnDate -_id'  )
+		// var obj = items 
+		resArray.length = items.length ;
+		resArray.fill(0)
+		console.log ( resArray )
+/*		for ( var i = 0 ; i < items.length ; ++i ){
+			items[i]['dayAvailability'] = 0 ;
+		}*/
+		// console.log(obj);
+
+		// Order.find( { $or : [ { returnDate : { $gt : x  } }  ,  { $and : [ { returnDate : { $lt : x  }  } , { status : { $in : ["PICKED UP" , "NOT PICKED UP"]} } ]}]} , 'orderId items pickupDate returnDate -_id')
+		Order.find( { $or : [ { returnDate : { $gt : x  } }  ]} , 'orderId items pickupDate returnDate -_id')
+		.then(function(orders){
+			console.log(orders)
+
+			for  (var i = 0 ; i < orders.length ; ++i ){
+				console.log(`NOW CONSIDERING ORDERid : ${orders[i].orderId}`)
+				for ( var j = 0 ; j < orders[i].items.length ; ++j ){
+					console.log(`ITEM LIST : `)
+					console.log(orders[i].items)
+					for ( var k = 0 ; k < items.length ; ++k ){
+						console.log(`NOW CONSIDERING mainITEM with BC=${items[k].barCode}`)
+						if( orders[i].items[j].barCode === items[k].barCode ){
+							console.log(`FOUND EQUAL`)
+							console.log(`BEFORE VAL= ${resArray[k]}`)
+							console.log(`QTY TO BE ADDED = ${orders[i].items[j].qty}`)
+							resArray[k] += orders[i].items[j].qty
+							console.log(`AFTER VAL= ${resArray[k]}`)
+							// items[k].dayAvailability += orders[i].items[j].qty ;
+						}
+					}
+				}
+			}
+			console.log ( resArray ) ;
+			for ( var i = 0 ; i < items.length ; ++i )
+				resArray[i] = items[i].totalStock - resArray[i] 
+
+			res.json({status : 'SXS' , result : {items: items , daysAvailability : resArray} })
+		},function(err){
+			console.log(err)
+			res.json({status : 'ERROR'})	
+		})
+		// return Order.find({ $and : [ { status : { $eq : 'PICKED UP'} } , { returnDate : { $eq : x }  }] })
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
@@ -367,6 +422,8 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 	order.items = dataForOrderSchema.items
 	order.billId = dataForOrderSchema.billId
 	order.name = dataForOrderSchema.name
+	order.eveLoxn = dataForOrderSchema.eveLoxn
+	order.evePurpose = dataForOrderSchema.evePurpose
 
 	var custContact = dataForCustomerSchema.customer
 	var cr = parseFloat(dataForBillSchema.billAmount)
@@ -554,8 +611,8 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 	
 })
 
-// app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
-app.post('/stockDetails/:itemId',function(req,res){
+// app.post('/stockDetails/:itemId',function(req,res){
+app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
 	console.log(req.params.itemId)
 	var resObj = [] ;
 	var x = {} ;

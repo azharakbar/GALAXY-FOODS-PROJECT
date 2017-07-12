@@ -119,6 +119,10 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 					$scope.price = "" 
 					$scope.stockInHand = "" 
 					$scope.totalStock = "" 
+					$rootScope.same = false ;
+					$rootScope.valid = true ;
+					$rootScope.temp = '' ;
+					$('#itemBarCode').focus()
 					resolve("SUCCESS")
 				} else {
 					if (response.data.status === "REDUNDANT") {
