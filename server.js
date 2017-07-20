@@ -461,6 +461,78 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 
 })
 
+app.post('/saveLostBill' , isLoggedIn , function(req,res){
+	var finalObj = JSON.parse(req.body.finalObj)
+	var dataForBillSchema = finalObj.billSchema ;
+	var dataForCustomerSchema = finalObj.customerSchema ;
+	var items = finalObj.lostItems 
+
+	var updateItemsForStock = [] ;
+	updateItemsForStock.length = items.length
+
+	var bill = new Bill() ;
+
+	bill.billId = dataForBillSchema.billId
+	bill.billDate = dataForBillSchema.billDate
+	bill.customer = dataForBillSchema.customer
+	bill.orderId = dataForBillSchema.orderId
+	bill.billAmount = dataForBillSchema.billAmount
+	bill.remAmount = bill.billAmount
+	bill.name = dataForBillSchema.name
+
+	var custContact = dataForCustomerSchema.customer
+	var cr = parseFloat(dataForBillSchema.billAmount)
+
+	var cnt = 0 ;
+	for ( var i = 0 ; i < items.length ; ++i ){
+		updateItemsForStock[i] = 
+		Item.findOne({ barCode : items[i].barCode })
+		.then(function(item){
+			var v = items[cnt++].qty ;
+			item.totalStock = item.totalStock - v
+			item.availableStock = item.availableStock - v
+			item.save()
+			.then(function(){
+				console.log(`UPDATED STOCK ${item.name}`)
+			},function(err){
+			})
+		},function(err){
+			reject(err)
+		})
+	}
+	Promise.all( updateItemsForStock )
+	.then ( function(response){
+		Customer.findOne( { contact:custContact } )
+		.then( function(cust){
+			cust.orders += 1 ;
+			cust.credit += cr
+
+			cust.save()
+			.then(function(response){
+				bill.save()
+				.then(function(response){
+					console.log({status : 'SXS'})
+					res.json({status : 'SXS'})
+				},function(err){
+					console.log({status : 'ERROR IN ADDING BILL'})		
+					res.json({status : 'ERROR IN ADDING BILL'})		
+				})
+			},function(err){
+				console.log({status : 'ERROR IN UPDATING CUSTOMER'})	
+				res.json({status : 'ERROR IN UPDATING CUSTOMER'})	
+			})
+
+		},function(err){
+			console.log({status : 'ERROR IN CUSTOMER SCHEMA'})
+			res.json({status : 'ERROR IN CUSTOMER SCHEMA'})
+		})
+	},function(err){
+		console.log({status : 'ERROR IN ITEMS SCHEMA'})
+		res.json({status : 'ERROR IN ITEMS SCHEMA'})
+	})
+
+})
+
 app.post('/allBills',isLoggedIn,function(req,res){
 	Bill.find({})
 	.then(function(bills){

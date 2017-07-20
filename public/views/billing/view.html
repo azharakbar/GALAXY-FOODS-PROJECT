@@ -16,6 +16,14 @@
 	.redTextOnly{
 		color : red;
 	}
+	.test{
+		background-color: #ff5252;
+		color:  white ;
+	}
+	.test tr:hover{
+		background-color: #ff5252;
+		color:  white ;		
+	}
 </style>
 <div class="animated" ng-click="t=false">
 	<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">BILLING CENTRAL </h2>
@@ -35,7 +43,7 @@
 			<th width ="12.50%"><center><i class="fa fa-chevron-down" style="font-size: 15px"></i> PAY NOW</center></th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="bill in billList | filter : search" ng-click="set(bill)" id="row{{$index}}" ng-class="{'danger': bill.status === 'NOT PAID' , 'success' : bill.status === 'PAID' , 'warning' : bill.status === 'ADVANCE PAYMENT'}" height="48">
+			<tr ng-repeat="bill in billList | filter : search" ng-click="set(bill)" id="row{{$index}}" ng-class="{'test': bill.status === 'NOT PAID' , 'success' : bill.status === 'PAID' , 'warning' : bill.status === 'ADVANCE PAYMENT'}" height="48">
 			<td width="20%"> {{bill.billId}} </td>
 			<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{bill.name}} </td>
 			<td width="12.50%"><center>{{bill.billDate | date:"dd MMMM, yyyy"}}</center> </td>

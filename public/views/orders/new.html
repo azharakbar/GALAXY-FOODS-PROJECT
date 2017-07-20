@@ -72,8 +72,6 @@
 			<span class="card-title">ORDER DETAILS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code"></i>&nbsp;&nbsp;{{orderId}} </span>
 				<span style="position: absolute; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 22%"><i class="fa fa-user-o" style="font-size: 15px"></i> {{customer.name}}</span>
 				<span style="position: absolute; right:700px;"><i class="fa fa-phone" style="font-size: 15px"></i> {{customer.contact}}</span>
-<!-- 				<span style="position: absolute; right:550px;"><i class="fa fa-cube" style="font-size: 15px"></i> {{customer.orders}}</span>
-				<span style="position: absolute; right:450px;"><i class="fa fa-inr" style="font-size: 15px"></i> {{customer.credit}}</span> -->
 				<span style="position: absolute; float:left; top:35px; left:720px;" ng-show="showDetails"><i class="fa fa-truck" style="font-size: 15px"></i> {{formattedPickupDate}}</span>	
 				<span style="position: absolute; right:270px;" ng-show="showDetails"><i class="fa fa-calendar" style="font-size: 15px"></i> {{formattedReturnDate}}</span>	
 				<span style="position: absolute; float:left; top:35px; left:844px" ng-show="showDetails && evePurpose != ''"><i class="fa fa-connectdevelop" style="font-size: 15px"></i> {{evePurpose}}</span>
@@ -118,8 +116,6 @@
 <span ng-show="orderedList.length == 0">NO ITEMS ORDERED YET
 <br><br>
 </span>
-<!-- <ul ng-repeat="orderedItem in orderedList"> -->
-<!-- <li class="animated fadeIn">{{orderedItem}}</li> -->
 
 <table class="table table-hover table-responsive list animated" id="orderedItemList" ng-show="orderedList.length > 0">
   <thead>
@@ -180,7 +176,7 @@
   		&nbsp;&nbsp;<div class="input-field animated" id="quantity" style="display: inline-block;">
     		<input type="number" ng-model="qty" ng-keydown="tap(enrollItem())" id="qtySearch" ng-init="qty=1" min="1" max="{{item.availableStock}}" style="font-size: 20px; width: 50px">
   		</div> 
-  		<div id="maxVal" style="display: inline-block;">(MAX : {{item.availableStock}} )</div>
+  		<div id="maxVal" style="display: inline-block;">(MAX : {{item.totalStock}} )</div>
   		<form style="display: inline-block;">
 		<button class="btn waves-effect waves-light" style="background-color: #388E3C" type="submit" name="sbm" ng-click="enrollItem()"><i class="fa fa-check"></i></button>
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -189,10 +185,3 @@
 		</h4></center>
 	</div>
 </div>
-
-
-<script type="text/javascript">
-	$(document).ready(function(){
-
-	})
-</script>

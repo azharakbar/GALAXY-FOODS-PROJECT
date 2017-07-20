@@ -130,7 +130,7 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 	$scope.enrollItem = function(){
 		console.log("I AM HERE" + $scope.qty + ' ' + $rootScope.item.availableStock )
-		if ( $scope.qty > $rootScope.item.availableStock || $scope.qty === undefined ){
+		if ( $scope.qty > $rootScope.item.totalStock || $scope.qty === undefined ){
 			console.log("I AM INSEIDE IF")
 			$('#maxVal').removeClass('shake')
 			$('#maxVal').addClass('shake')
