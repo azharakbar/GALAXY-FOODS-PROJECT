@@ -49,6 +49,14 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 			} else if ( valid && $scope.price.length >= 1 && $scope.price != undefined ){
 				$rootScope.temp = $scope.price ;
 			}
+		} else if ( modelName === "costPrice"){
+			if ( !valid ){
+				$scope.costPrice = $rootScope.temp ;
+			} else if ( valid && $scope.costPrice == undefined ){
+				$rootScope.temp = '' ;
+			} else if ( valid && $scope.costPrice.length >= 1 && $scope.costPrice != undefined ){
+				$rootScope.temp = $scope.costPrice ;
+			}
 		}
 	}
 	$scope.rst = function(val){
@@ -62,8 +70,8 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 
 	$scope.submit = function(){
 		if(!checkEquality()){
-			if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != '' ){
-				if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price >= 1 ){
+			if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != '' && $scope.costPrice != '' ){
+				if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price >= 1 && $scope.costPrice >= 1 ){
 					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
 						if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
 							if ( $scope.totalStock < $scope.stockInHand ){
@@ -79,7 +87,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 					}
 					toast.setMsg("LOADING")
 					showLoading();
-					var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price
+					var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price + "&costPrice=" + $scope.costPrice
 					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
 						data += "&stockInHand="+$scope.stockInHand ;
 					if ( $scope.totalStock != undefined && $scope.totalStock != '' )
@@ -116,8 +124,9 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 				$stateParams.item.barCode == $scope.itemBarCode &&
 				$stateParams.item.name == $scope.itemName && 
 				$stateParams.item.price == $scope.price && 
+				$stateParams.item.costPrice == $scope.costPrice &&
 				$stateParams.item.availableStock == $scope.stockInHand &&
-				$stateParams.item.totalStock == $scope.totalStock  
+				$stateParams.item.totalStock == $scope.totalStock 
 			) return true ;
 		else  return false ;
 	}

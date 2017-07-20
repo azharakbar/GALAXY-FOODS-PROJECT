@@ -193,7 +193,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		} else {
 			lostItem.barCode = $rootScope.item.barCode
 			lostItem.name = $rootScope.item.name
-			lostItem.price = $rootScope.item.price 
+			lostItem.costPrice = $rootScope.item.costPrice 
 			lostItem.qty = $scope.qty 
 
 			var flag = 0 ;
@@ -238,7 +238,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	$scope.generate = function(){
 		var orderTotal = 0 ; 
 		for ( var i = 0 ; i < $scope.lostList.length ; ++i ){
-			orderTotal += ( $scope.lostList[i].price * $scope.lostList[i].qty )
+			orderTotal += ( $scope.lostList[i].costPrice * $scope.lostList[i].qty )
 		}
 
 		var lostObj = {
@@ -371,7 +371,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		for ( var i = 0 ; i < $scope.orderData.length ; ++i ){
 			x = {} ;
 			x.barCode = $scope.orderData[i].barCode ;
-			x.price = $scope.orderData[i].price ;
+			x.costPrice = $scope.orderData[i].costPrice ;
 			x.qty = $scope.orderData[i].qty ;
 			x.name = $scope.orderData[i].name ;
 			list.push(x) ;
@@ -386,18 +386,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				billAmount : Math.round($scope.orderTotal)
 			},
 			lostItems : list ,
-/*			orderSchema : {
-				// orderId : $scope.orderId,
-				// issueDate : $scope.dateData.issueDate,
-				// pickupDate : $scope.dateData.pickupDate,
-				// returnDate : $scope.returnDate,
-				// customer : $scope.customerData.contact,
-				// name : $scope.customerData.name,
-				items : list ,
-				// billId : $scope.billNo,
-				// eveLoxn : $scope.eventData.eveLoxn, 
-				// evePurpose : $scope.eventData.evePurpose
-			},*/
 			customerSchema : {
 				customer : $scope.customerData.contact , 
 				totalAmount	: $scope.grandTotal

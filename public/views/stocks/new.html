@@ -20,9 +20,14 @@
   <br><br>
   <div class="input-group input-group-lg">
   <span class="input-group-addon" style="width:55px"><i class="fa fa-inr"></i></span>
-    <input type="" class="form-control" style="width:100px;height:52px" placeholder="Price" ng-model="price" ng-keyup="checkNumber('price')" ng-blur="rst('valid');rst('temp')" id="price" required>
+    <input type="" class="form-control" style="width:100px;height:52px" placeholder="Rent" ng-model="price" ng-keyup="checkNumber('price')" ng-blur="rst('valid');rst('temp')" id="price" required>
   </div>
-<br>
+
+  <div class="input-group input-group-lg" style="margin-left: 476px;">
+  <span class="input-group-addon" style="width:55px"><i class="fa fa-inr"></i></span>
+    <input type="" class="form-control" style="width:100px;height:52px" placeholder="Cost" ng-model="costPrice" ng-keyup="checkNumber('costPrice')" ng-blur="rst('valid');rst('temp')" id="costPrice" required>
+  </div>  
+<br><br>
 <button class="waves-effect waves-light btn-large" id="addBtn" ng-model="addBtn" type="submit" style="margin-left: 710px" ng-click="submit()" ><font size="4" >ADD ITEM</font></button>
 
 </form>

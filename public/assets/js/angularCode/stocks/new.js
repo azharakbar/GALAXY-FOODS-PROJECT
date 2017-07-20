@@ -47,6 +47,14 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 			} else if ( valid && $scope.price.length >= 1 && $scope.price != undefined ){
 				$rootScope.temp = $scope.price ;
 			}
+		} else if ( modelName === "costPrice"){
+			if ( !valid ){
+				$scope.costPrice = $rootScope.temp ;
+			} else if ( valid && $scope.costPrice == undefined ){
+				$rootScope.temp = '' ;
+			} else if ( valid && $scope.costPrice.length >= 1 && $scope.costPrice != undefined ){
+				$rootScope.temp = $scope.costPrice ;
+			}
 		}
 	}
 	$scope.rst = function(val){
@@ -59,8 +67,8 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 	}
 
 	$scope.submit = function(){
-		if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != undefined ){
-			if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price.length >= 1 ){
+		if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != undefined && $scope.costPrice != undefined ){
+			if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price.length >= 1 && $scope.costPrice.length >= 1){
 				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
 					if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
 						if ( $scope.totalStock < $scope.stockInHand ){
@@ -76,7 +84,7 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 				}
 				toast.setMsg("LOADING")
 				showLoading();
-				var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price
+				var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price + "&costPrice=" + $scope.costPrice
 				if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
 					data += "&stockInHand="+$scope.stockInHand ;
 				if ( $scope.totalStock != undefined && $scope.totalStock != '' )

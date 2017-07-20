@@ -45,7 +45,8 @@
     <div class="card-tabs">
       <ul class="tabs tabs-fixed-width">
         <li class="tab"><a ng-class="{'active':content === 1}" ng-click="set(1)"><i class="fa fa-file"></i> VIEW BILL</a></li>
-        <li class="tab"><a ng-class="{'active':content === 2}" ng-click="set(2)"><i class="fa fa-eye"></i> VIEW ORDERS</a></li>
+        <li class="tab" ng-show="loss != 1"><a ng-class="{'active':content === 2}" ng-click="set(2)"><i class="fa fa-eye"></i> VIEW ORDERS</a></li>
+        <li class="tab" ng-show="loss == 1"><a ng-class="{'active':content === 2}" ng-click="set(2)"><i class="fa fa-eye"></i> VIEW LOST ITEMS</a></li>
       </ul>
     </div>
     <div class="card-content ">
@@ -104,9 +105,11 @@
 				<tr ng-repeat="orderedItem in orderData" height="48" id="item{{$index}}">
 					<td width="20%" title = "CODE"> {{orderedItem.barCode}} </td>
 					<td width="30%" title = "NAME" style="position:relative; left:10px">  {{orderedItem.name}} </td>
-					<td width="12.50%" title = "PRICE"> <center>{{orderedItem.price | currency :""}} ₹</center> </td>
+					<td width="12.50%" title = "PRICE" ng-show="loss != 1"> <center>{{orderedItem.price | currency :""}} ₹</center> </td>
+					<td width="12.50%" title = "PRICE" ng-show="loss == 1"> <center>{{orderedItem.costPrice | currency :""}} ₹</center> </td>
 					<td width="12.50%" title = "TOTAL STOCK"> <center>{{orderedItem.qty}}</center> </td>
-					<td width="12.50%" title = "AVAILABLE"> <center>{{orderedItem.price*orderedItem.qty | currency :""}} ₹</center> </td>
+					<td width="12.50%" title = "AVAILABLE" ng-show="loss != 1"> <center>{{orderedItem.price*orderedItem.qty | currency :""}} ₹</center> </td>
+					<td width="12.50%" title = "AVAILABLE" ng-show="loss == 1"> <center>{{orderedItem.costPrice*orderedItem.qty | currency :""}} ₹</center> </td>
 				</tr>      			
       		</tbody>
       	</table>
@@ -232,7 +235,7 @@
 		    <td width="30%" title = "NAME" style="position:relative; left:10px">  {{lostItem.name}} </td>
 		    <td width="12.50%" title = "PRICE"> <center>{{lostItem.price | currency:""}} ₹</center> </td>
 		    <td width="12.50%" title = "LOST STOCK"> <center>{{lostItem.qty}}</center> </td>
-		    <td width="12.50%" title = "AVAILABLE"> <center>{{lostItem.price*lostItem.qty | currency:""}} ₹</center> </td>
+		    <td width="12.50%" title = "AVAILABLE"> <center>{{lostItem.costPrice*lostItem.qty | currency:""}} ₹</center> </td>
 		    <td width="12.50%" title = "AVAILABLE"> <center><button class="btn waves-effect waves-light" style="background-color: #d32f2f; position: relative; bottom: 2px" ng-click="delThisItem($index)"><i class="fa fa-trash-o"></i></button></center> </td>
 		  	</tr>
 		  </tbody>
@@ -258,7 +261,7 @@
 		    <tr ng-repeat="item in itemList | filter : search" ng-click="setItem(item,$index)" id="row2{{$index}}" height="48">
 		    <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
 		    <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
-		    <td width="25%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price | currency:""}} ₹</center> </td>
+		    <td width="25%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.costPrice | currency:""}} ₹</center> </td>
 		    <td width="25%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
 		  	</tr>
 		  </tbody>

@@ -143,6 +143,7 @@ app.post('/newItem',isLoggedIn,function(req,res){
 			item.barCode = req.body.barcode 
 			item.name = req.body.name 
 			item.price = req.body.price
+			item.costPrice = req.body.costPrice
 			if ( req.body.totalStock != undefined ){
 				item.totalStock = req.body.totalStock
 				if ( req.body.stockInHand != undefined ){
@@ -189,6 +190,7 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 				item.barCode = req.body.barcode 
 				item.name = req.body.name 
 				item.price = req.body.price
+				item.costPrice = req.body.costPrice
 				if ( req.body.totalStock != undefined ){
 					item.totalStock = req.body.totalStock
 					if ( req.body.stockInHand != undefined ){
@@ -216,8 +218,9 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 							res.json({status : 'REDUNDANT'})
 						} else {
 							item.barCode = req.body.barcode 
-							item.name = req.body.name 
+							item.name = req.body.name
 							item.price = req.body.price
+							item.costPrice = req.body.costPrice
 							if ( req.body.totalStock != undefined ){
 								item.totalStock = req.body.totalStock
 								if ( req.body.stockInHand != undefined ){
