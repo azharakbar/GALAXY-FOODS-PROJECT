@@ -31,7 +31,7 @@
 			<th width ="15%"><i class="fa fa-code" style="font-size: 12px"></i> NUMBER</th>
 			<th width ="20%"><i class="fa fa-user-o" style="font-size: 15px"></i> CUSTOMER</th>
 			<th width ="13%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> ISSUE DATE</center></th>
-			<th width ="13%"><center><i class="fa fa-truck" style="font-size: 15px"></i> PICKUP DATE</center></th>
+			<th width ="13%"><center><i class="fa fa-truck" style="font-size: 15px"></i> DELIVERY DATE</center></th>
 			<th width ="13%"><center><i class="fa fa-exchange" style="font-size: 15px"></i> RETURN DATE </center></th>
 			<th width ="13%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
 			<th width ="13%"><center> ACTIONS <i class="fa fa-chevron-down" style="font-size: 15px"></i></center></th>
@@ -47,7 +47,7 @@
 			<td width="13%">
 			<center>
 				<span ng-show="order.status=='NOT PICKED UP'">
-					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,1)" style="position: relative; bottom: 2px; width:150px; height: 35px"> PICKUP ORDER </button>
+					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,1)" style="position: relative; bottom: 2px; width:150px; height: 35px"> DELIVER ORDER </button>
 				</span>
 				<span ng-show="order.status=='PICKED UP'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,2)" style="position: relative; bottom: 2px; width:150px; height: 35px"> RETURN ORDER </button>

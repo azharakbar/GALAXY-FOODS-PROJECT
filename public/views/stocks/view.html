@@ -8,6 +8,9 @@
 	#contentsModal table :hover{
 		cursor: default;
 	}
+	#contentsModal h3{
+		font-family: 'Artifika', serif;
+	}
 	.ng-table-pager {
 	    display: none;
 	}	
@@ -68,6 +71,8 @@
 			<span style="position: absolute; top: 55px; left:1000px;"><i class="fa fa-stack-overflow" style="position: relative; bottom: 5px; font-size: 28px"></i><span style="position: relative ; bottom : 5px"> {{item.totalStock}}</span></span>
 			<span style="position: absolute; top: 55px; left:1100px;"><i class="fa fa-inr" style="font-size: 23px"></i> <span style="position: relative ; bottom : 5px">{{item.rentedStock}}</span></span>
 			<span style="position: absolute; top: 55px; left:1200px;"><i class="fa fa-check" style="font-size: 23px"></i> <span style="position: relative ; bottom : 5px">{{item.availableStock}}</span></span>
+			<br>
+			<span style="position: absolute; top: 85px; left:25px;"><i class="fa fa-eercast" style="font-size: 22px"></i> TIMES ORDERED : {{item.timesOrdered}}</span>			
 		</div>
 		<br><br>
 		<h4><b>STOCK POSSESSION DETAILS</b></h4>
@@ -76,7 +81,7 @@
 		<div style="position: absolute; margin-left: 50px; font-size: 18px">
 			<i class="fa fa-cubes"></i> IN GODOWN <span style="position: relative; float: right; left:150px">{{item.availableStock}}</span> 
 			<br>
-			<i class="fa fa-users"></i> RENTED TO CUSTOMERS <span style="position: relative; float: right; left:150px">{{item.rentedStock}}</span> 
+			<i class="fa fa-users"></i> RENTED TO CUSTOMERS <span style="position: relative; float: right; left:150px">{{item.rentedStock}}</span>  			
 			<br><br>
 		</div>
 

@@ -68,7 +68,7 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
 				},
-				data : "pickupDate="+$scope.pickupDate+"&token="+user.getToken()
+				data : "pickupDate="+$scope.pickupDate+"&returnDate="+$scope.returnDate+"&token="+user.getToken()
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
