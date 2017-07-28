@@ -1,5 +1,5 @@
 angular.module('serviceModule', [])
-	.service( 'user' , function($rootScope){
+	.service( 'user' , function($rootScope,$http){
 	    var username ;
 	    var token ;
 	    var loggedIn = false ;
@@ -15,14 +15,23 @@ angular.module('serviceModule', [])
 	    	return role ;
 	    }
 	    this.isLoggedIn = function(){
-	        if ( localStorage.getItem('login') ){
-	            loggedIn = true ;
-	            $rootScope.loggedIn = true ;
-	            var data = JSON.parse(localStorage.getItem('login')) ;
-	            username = data.username ;
-	            token = data.token ;
-	            role = data.role ;
-	        }
+	    	if ( sessionStorage.getItem ('login')){
+				var data = JSON.parse(sessionStorage.getItem('login')) ;
+				if ( data.time+900000 <= Date.now() ){
+					this.clear()
+					loggedIn = false 
+				}else{
+					loggedIn = true ;
+					$rootScope.loggedIn = true ;
+					username = data.username ;
+					token = data.token ;
+					role = data.role ;
+					data.time = Date.now()
+					sessionStorage.setItem('login',JSON.stringify(data))
+				}
+	    	} else {
+	    		loggedIn = false 
+	    	}
 	        return loggedIn ;
 	    }
 	    this.saveData = function(data){
@@ -31,10 +40,11 @@ angular.module('serviceModule', [])
 	        role = data.role ;
 	        loggedIn = true ;
 	        $rootScope.loggedIn = true ;
-	        localStorage.setItem('login',JSON.stringify({
+	        sessionStorage.setItem('login',JSON.stringify({
 	            username : username ,
 	            token : token ,
-	            role : role
+	            role : role , 
+	            time : Date.now()
 	        }))
 	    }
 	    this.clear = function(){
@@ -42,7 +52,7 @@ angular.module('serviceModule', [])
 	        token = ''; 
 	        loggedIn = false ;
 	        $rootScope.loggedIn = false ;
-	        localStorage.removeItem('login');
+	        sessionStorage.removeItem('login');
 	    }
 	})
 

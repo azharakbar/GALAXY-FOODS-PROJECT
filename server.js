@@ -511,7 +511,6 @@
 		.then ( function(response){
 			Customer.findOne( { contact:custContact } )
 			.then( function(cust){
-				cust.orders += 1 ;
 				cust.credit += cr
 
 				cust.save()
@@ -585,7 +584,7 @@
 
 	// app.post('/allOrders',function(req,res){
 	app.post('/allOrders',isLoggedIn,function(req,res){
-		Order.find({})
+		Order.find({} , null , { sort : { status : 1 } })
 		.then(function(bills){
 			res.json({status : 'SXS' , result : bills})
 		},function(err){
