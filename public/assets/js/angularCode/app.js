@@ -1,406 +1,400 @@
-var app = angular.module('pcApp',['ui.router','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
+var app = angular.module('pcApp',['ui.router','cfp.hotkeys','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
 	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
-	'serviceModule2','newOrderModule','newBillModule','viewBillModule','viewOrderModule']) ;
+	'serviceModule2','newOrderModule','newBillModule','viewBillModule','viewOrderModule','reportModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
-    $urlRouterProvider.otherwise('/error') ;
+	$urlRouterProvider.otherwise('/error') ;
 
-    $stateProvider
-    .state('login',{
-        url : "/",
-        resolve : {
-            check : function(user,$state){
-                if ( user.isLoggedIn() )
-                    $state.go('dashboard')
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/loginPage.html",
-                controller : "loginCtrl"
-            }
-        }
-    })
-    .state('dashboard',{
-        url : "/dashboard" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/dashPage.html" ,
-                controller : 'dashCtrl'
-            }
-        }
-    })
-    .state('logout',{
-        url : "/logout" ,
-        views : {
-            'v1' : {
-                controller : 'logoutCtrl'
-            }
-        }
+	$stateProvider
+	.state('login',{
+		url : "/",
+		resolve : {
+			check : function(user,$state,$location){
+				if ( user.isLoggedIn() )
+					$state.go('dashboard')
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/loginPage.html",
+				controller : "loginCtrl"
+			}
+		}
+	})
+	.state('dashboard',{
+		url : "/dashboard" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/dashPage.html" ,
+				controller : 'dashCtrl'
+			}
+		}
+	})
+	.state('logout',{
+		url : "/logout" ,
+		views : {
+			'v1' : {
+				controller : 'logoutCtrl'
+			}
+		}
 
-    })
-    .state('new_customer',{
-        url: "/new_customer" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/customers/new.html" ,
-                controller : 'newCustCtrl'
-            }
-        }
-    })
-    .state('view_customer',{
-        url: "/view_customer" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        params : {
-        	showLoading : { value : true }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/customers/view.html" ,
-                controller : 'viewCustCtrl'
-            }
-        }
-    })
-    .state('search_customer',{
-        url: "/search_customer" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/customers/search.html" ,
-                controller : ''
-            }
-        }
-    })
-    .state('update_customer',{
-        url: "/update_customer" ,
-        params : {
-        	customer : { value : {name:'NAME NOT DEFINED'} }
-        },
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/customers/update.html" ,
-                controller : 'updateCustomer'       
-            }
-        }
-    })
-    .state('new_item',{
-        url: "/new_item" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/stocks/new.html" ,
-                controller : 'newItemCtrl'
-            }
-        }
-    })
-    .state('view_stock',{
-        url: "/view_stock" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        params : {
-        	showLoading : { value : true }
-        },        
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/stocks/view.html" ,
-                controller : 'viewItemCtrl'
-            }
-        }
-    })
-    .state('search_stock',{
-        url: "/search_stock" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/stocks/search.html" ,
-                controller : ''
-            }
-        }
-    })
-    .state('update_stock',{
-        url: "/update_stock",
-        params : {
-        	item : { value : {barCode:'BARCODE NOT DEFINED'} }
-        },
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/stocks/update.html" ,
-                controller : 'updateItem'
-            }
-        }
-    })
-    .state('new_bill',{
-        url: "/new_bill" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        params : {
-        	orderDetails : { value : { orderId : "NOT DEFINED"} }
-        },        
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/billing/new.html" ,
-                controller : 'newBillCtrl'
-            }
-        }
-    })
-    .state('pay_bill',{
-        url: "/pay_bill" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/billing/pay.html" ,
-                controller : ''
-            }
-        }
-    })
-    .state('view_bill',{
-        url: "/view_bill" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        params : {
-        	showLoading : { value : true }
-        },        
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/billing/view.html" ,
-                controller : 'viewBillCtrl'
-            }
-        }
-    })
-    .state('new_order',{
-        url: "/new_order" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/orders/new.html" ,
-                controller : 'newOrderCtrl'
-            }
-        }
-    })
-    .state('view_order',{
-        url: "/view_order" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        params : {
-        	showLoading : { value : true }
-        },        
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/orders/view.html" ,
-                controller : 'viewOrderCtrl'
-            }
-        }
-    })
-    .state('search_order',{
-        url: "/search_order" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/orders/search.html" ,
-                controller : ''
-            }
-        }
-    })
-    .state('update_order',{
-        url: "/update_order" ,
-        resolve : {
-            check : function($rootScope,$state,user){
-                if(!user.isLoggedIn()){
-                    $rootScope.error = "U R NOT LOGGED IN" ;
-                    $state.go('login')
-                }
-            }
-        },
-        views : {
-            'v1' : {
-                templateUrl : "./views/navBar.html" ,
-                controller : 'sideNavCtrl'
-            },
-            'v2' : {
-                templateUrl : "./views/orders/update.html" ,
-                controller : ''
-            }
-        }
-    })
+	})
+	.state('new_customer',{
+		url: "/new_customer" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/customers/new.html" ,
+				controller : 'newCustCtrl'
+			}
+		}
+	})
+	.state('view_customer',{
+		url: "/view_customer" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		params : {
+			showLoading : { value : true }
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/customers/view.html" ,
+				controller : 'viewCustCtrl'
+			}
+		}
+	})
+	.state('update_customer',{
+		url: "/update_customer" ,
+		params : {
+			customer : { value : {name:'NAME NOT DEFINED'} }
+		},
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/customers/update.html" ,
+				controller : 'updateCustomer'       
+			}
+		}
+	})
+	.state('new_item',{
+		url: "/new_item" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/stocks/new.html" ,
+				controller : 'newItemCtrl'
+			}
+		}
+	})
+	.state('view_stock',{
+		url: "/view_stock" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		params : {
+			showLoading : { value : true }
+		},        
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/stocks/view.html" ,
+				controller : 'viewItemCtrl'
+			}
+		}
+	})
+	.state('update_stock',{
+		url: "/update_stock",
+		params : {
+			item : { value : {barCode:'BARCODE NOT DEFINED'} }
+		},
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/stocks/update.html" ,
+				controller : 'updateItem'
+			}
+		}
+	})
+	.state('new_bill',{
+		url: "/new_bill" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		params : {
+			orderDetails : { value : { orderId : "NOT DEFINED"} }
+		},        
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/billing/new.html" ,
+				controller : 'newBillCtrl'
+			}
+		}
+	})
+	.state('pay_bill',{
+		url: "/pay_bill" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/billing/pay.html" ,
+				controller : ''
+			}
+		}
+	})
+	.state('view_bill',{
+		url: "/view_bill" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		params : {
+			showLoading : { value : true }
+		},        
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/billing/view.html" ,
+				controller : 'viewBillCtrl'
+			}
+		}
+	})
+	.state('new_order',{
+		url: "/new_order" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/orders/new.html" ,
+				controller : 'newOrderCtrl'
+			}
+		}
+	})
+	.state('view_order',{
+		url: "/view_order" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		params : {
+			showLoading : { value : true }
+		},        
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/orders/view.html" ,
+				controller : 'viewOrderCtrl'
+			}
+		}
+	})
+	.state('update_order',{
+		url: "/update_order" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/orders/update.html" ,
+				controller : ''
+			}
+		}
+	})
 
-    .state('notfound',{
-        url : "/error",
-        views : {
-            'v1' : {
-                templateUrl : "./views/404.html"
-            }
-        }
-    })
+	.state('report_central',{
+		url: "/report_central" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn()){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('login')
+				}
+			}
+		},
+		views : {
+			'v1' : {
+				templateUrl : "./views/navBar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/reports/view.html" ,
+				controller : 'reportCtrl'
+			}
+		}
+	})
 
-    $locationProvider.html5Mode(true).hashPrefix('!');
+	.state('notfound',{
+		url : "/error",
+		views : {
+			'v1' : {
+				templateUrl : "./views/404.html"
+			}
+		}
+	})
+
+	$locationProvider.html5Mode(true).hashPrefix('!');
 })
 
-app.controller('indexCtrl',function($scope,$rootScope,toast){
+app.controller('indexCtrl',function($scope,$rootScope,$state,toast,hotkeys){
+	hotkeys.add({
+		combo: 'ctrl+alt+c',
+		description: 'CUSTOMERS CENTRAL',
+		callback: function() {
+			$state.go('view_customer')
+		}
+	})
+	hotkeys.add({
+		combo: 'ctrl+alt+s',
+		description: 'STOCKS CENTRAL',
+		callback: function() {
+			$state.go('view_stock')
+		}
+	})
+	hotkeys.add({
+		combo: 'ctrl+alt+b',
+		description: 'BILLING CENTRAL',
+		callback: function() {
+			$state.go('view_bill')
+		}
+	})
+	hotkeys.add({
+		combo: 'ctrl+alt+o',
+		description: 'ORDERS CENTRAL',
+		callback: function() {
+			$state.go('view_order')
+		}
+	})
+	hotkeys.add({
+		combo: 'ctrl+alt+r',
+		description: 'REPORTS CENTRAL',
+		callback: function() {
+			$state.go('report_central')
+		}
+	})
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){
 			if(oldVal === "LOADING")

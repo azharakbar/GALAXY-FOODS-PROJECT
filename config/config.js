@@ -5,7 +5,8 @@ var localStrategy = require('passport-local').Strategy,
 var genConfig = {
 	TZ : 'Asia/Kolkata' ,
 	secret : 'galaxygalaxy'	,
-	port : '2016'
+	port : '2016',
+	debug : 1
 }
 
 var dbConfig = {

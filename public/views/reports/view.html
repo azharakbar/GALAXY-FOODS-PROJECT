@@ -1,0 +1,56 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	.doubleUnderline{
+		position: relative;
+		bottom:15px;
+		border-top: 3px double #8c8b8b;
+		width : 300px;
+	}
+</style>
+
+<div class="animated">
+	<h2 style="margin-top: 50px">REPORTS CENTRAL </h2>
+
+		<h4>GENERATE REPORT ON ACCOUNT OF :</h4>
+		<br>
+		<span>
+			<input name="purpose" type="radio" id="opt1" ng-model="reportOpt" value="stkReport" />
+			<label for="opt1"><font size="4" color="brown"> STOCK REPORT </font></label>
+		</span>
+		<span style="position: absolute; right:250px">
+			<input name="purpose" type="radio" id="opt2" ng-model="reportOpt" value="trxReport" />
+			<label for="opt2"><font size="4" color="brown"> TRANSACTION REPORT </font></label>
+		</span>
+
+		<div ng-show="reportOpt">
+
+			<div ng-show="reportOpt=='stkReport'">
+				<center><h3> STOCK REPORT </h3></center>
+				<hr class="doubleUnderline">
+			</div>
+
+			<div ng-show="reportOpt=='trxReport'">
+				<center><h3> TRANSACTION REPORT </h3></center>
+				<hr class="doubleUnderline">
+			</div>
+
+			<div style="font-size: 19px">
+				<center>
+					<div class="input-field">
+						<i class="fa fa-calendar"></i> START DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" class="datepicker" pick-a-date="startDate" id="startDate" name="startDate" style="width: 200px" required>
+					</div>
+					<div class="input-field">
+						<i class="fa fa-calendar" style="position: relative; right:-2px"></i>&nbsp; END DATE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" class="datepicker" pick-a-date="endDate" id="endDate" name="endDate" style="width: 200px" required>
+					</div>
+					<br>
+				</center>
+			</div>
+			<span style="float: right; position: relative; right:50px">
+				<!-- <button class="waves-effect waves-light btn-large" type="submit" id="proceedBtn" ng-model="proceedBtn" ng-click="generate()" ng-disabled="startDate == null || endDate == null"><font size="4" > GENERATE REPORT <i class="fa fa-chevron-right"></i> </font></button> -->
+				<button class="waves-effect waves-light btn-large" type="submit" id="proceedBtn" ng-model="proceedBtn" ng-click="generate()"><font size="4" > GENERATE REPORT <i class="fa fa-chevron-right"></i> </font></button>
+			</span>			
+
+		</div>
+</div>

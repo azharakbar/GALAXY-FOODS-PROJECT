@@ -33,7 +33,7 @@
 <h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL CUSTOMERS REGISTERED : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
   <div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
   <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
-    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" id="search" style="width: 0px">
+    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-keyup="searchBlur()" id="search" style="width: 0px">
   </div> 
 	<table ng-table="custTable" class="table table-hover table-responsive list">
   <thead>

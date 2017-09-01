@@ -1,6 +1,28 @@
-angular.module('viewCustModule',['ngTable','serviceModule','serviceModule'])
-.controller('viewCustCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
+angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','serviceModule'])
+.controller('viewCustCtrl',function($scope,$rootScope,hotkeys,$http,$state,$stateParams,$location,user,toast,NgTableParams){
 	$rootScope.delAllowed = false ;
+	hotkeys.bindTo($scope)
+	.add({
+		combo : 'n' ,
+		description : 'NEW CUSTOMER' ,
+		callback : function(){
+			$state.go('new_customer')
+		}
+	})
+	.add({
+		combo : 'alt+s' ,
+		description : 'SEARCH' ,
+		callback : function(){
+			$scope.expandSearch()
+		}		
+	})	
+	
+	$scope.searchBlur = function(){
+		if ( event.keyCode === 27 ){
+			$('#search').blur()
+		}
+	}
+
 	var getCount = function( showLoad ){
 		if ( showLoad || $stateParams.showLoading ){
 			toast.setMsg("LOADING")

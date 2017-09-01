@@ -15,6 +15,7 @@
   <div class="nav-wrapper" id="header">
     <a href="#"><i class="material-icons" id="reorderBtn">reorder</i></a><a class="brand-logo"><img src="./assets/imgs/logo.png" id="qLogo"></a><span id="tt" style="position: relative; left:180px;">RENTALS &amp; DECORATIONS</span>
     <ul class="right hide-on-med-and-down">   
+      <li id="refreshBtn"><a ng-click="ref()"><i class="material-icons">update</i></a></li>
       <li id="logoutBtn"><a ui-sref="logout"><i class="material-icons">input</i></a></li>
     </ul>
   </div>
@@ -41,6 +42,9 @@
 
   <li><a ui-sref="" class="dropdown-button" data-activates='orderDropDown'><i class="material-icons">receipt</i>ORDERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>
+
+  <li><a ui-sref="" class="dropdown-button" data-activates='reportDropDown'><i class="fa fa-line-chart" style="position: relative; left:5px; font-size:20px"></i>REPORTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <i class="material-icons" id="arrow">keyboard_arrow_down</i></a></li>  
 </ul>
 
   <ul id='custDropDown' class='dropdown-content'>
@@ -61,7 +65,11 @@
   <ul id='orderDropDown' class='dropdown-content'>
     <li><a ui-sref="new_order"><i class="material-icons">add_shopping_cart</i>New Order</a></li>
     <li><a ui-sref="view_order"><i class="fa fa-shopping-bag" style="position: relative; left:4px; font-size: 20px"></i>Orders Central</a></li>
-  </ul>      
+  </ul> 
+
+  <ul id='reportDropDown' class='dropdown-content'>
+    <li><a ui-sref="report_central"><i class="fa fa-file-code-o" style="position: relative; left:4px; font-size: 20px"></i>Reports Central</a></li>
+  </ul> 
 
 </div>
 

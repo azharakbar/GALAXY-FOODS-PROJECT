@@ -1,9 +1,31 @@
-angular.module('viewItemModule',['ngTable','serviceModule','serviceModule2'])
-.controller('viewItemCtrl',function($scope,$rootScope,$http,$state,$stateParams,$location,user,toast,NgTableParams){
+angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','serviceModule2'])
+.controller('viewItemCtrl',function($scope,$rootScope,hotkeys,$http,$state,$stateParams,$location,user,toast,NgTableParams){
 	$('.modal').modal({}) ;
 	$('#buttonSet').hide(); 	
 
 	$rootScope.delAllowed = false ;
+
+	hotkeys.bindTo($scope)
+	.add({
+		combo : 'n' ,
+		description : 'NEW ITEM' ,
+		callback : function(){
+			$state.go('new_item')
+		}
+	})
+	.add({
+		combo : 'alt+s' ,
+		description : 'SEARCH' ,
+		callback : function(){
+			$scope.expandSearch()
+		}		
+	})	
+	
+	$scope.searchBlur = function(){
+		if ( event.keyCode === 27 ){
+			$('#search').blur()
+		}
+	}	
 
 	var getCount = function( showLoad ){
 		if ( showLoad || $stateParams.showLoading ){

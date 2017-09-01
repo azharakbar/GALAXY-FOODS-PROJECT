@@ -134,10 +134,13 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 					resolve("SUCCESS")
 				} else {
 					if (response.data.status === "REDUNDANT") {
-						toast.setMsg("ITEM ALREADY EXISTS")
+						toast.setMsg("ITEM WITH NEW BARCODE ALREADY EXISTS")
+					} else if ( response.data.status === "STOCK VALUE ERROR" ){
+						toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 					} else {
 						toast.setMsg("!! ERROR ADDING ITEM !!")
 					}
+					reject ("ERROR1") 
 					reject ("ERROR1") 
 				}
 			},function(err){

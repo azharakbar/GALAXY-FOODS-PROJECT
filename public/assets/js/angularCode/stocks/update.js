@@ -74,7 +74,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 				if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price >= 1 && $scope.costPrice >= 1 ){
 					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
 						if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
-							if ( $scope.totalStock < $scope.stockInHand ){
+							if ( parseFloat($scope.totalStock) < parseFloat($scope.stockInHand) ){
 								toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 								showToast("error")
 								return ;
@@ -148,6 +148,8 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 				} else {
 					if (response.data.status === "REDUNDANT") {
 						toast.setMsg("ITEM WITH NEW BARCODE ALREADY EXISTS")
+					} else if ( response.data.status === "STOCK VALUE ERROR" ){
+						toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 					} else {
 						toast.setMsg("!! ERROR ADDING ITEM !!")
 					}

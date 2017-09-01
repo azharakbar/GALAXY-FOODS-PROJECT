@@ -1,6 +1,28 @@
-angular.module('viewBillModule',['serviceModule','serviceModule2'])
-.controller('viewBillCtrl',function( $rootScope,$scope,$http,$state,user,toast ){
+angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2'])
+.controller('viewBillCtrl',function( $rootScope,$scope,hotkeys,$http,$state,user,toast ){
 	$('.modal').modal();
+
+	hotkeys.bindTo($scope)
+	.add({
+		combo : 'n' ,
+		description : 'NEW BILL' ,
+		callback : function(){
+			$state.go('new_bill')
+		}
+	})
+	.add({
+		combo : 'alt+s' ,
+		description : 'SEARCH' ,
+		callback : function(){
+			$scope.expandSearch()
+		}		
+	})	
+	
+	$scope.searchBlur = function(){
+		if ( event.keyCode === 27 ){
+			$('#search').blur()
+		}
+	}
 
 	var getBillList = function( showLoad ){
 		return new Promise(function(resolve,reject){

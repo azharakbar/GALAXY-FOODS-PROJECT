@@ -1,8 +1,24 @@
-angular.module('viewOrderModule',['serviceModule','serviceModule2'])
-.controller('viewOrderCtrl',function( $rootScope, $scope, $http, $state, $stateParams, user, toast){
+angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'])
+.controller('viewOrderCtrl',function( $rootScope, $scope, hotkeys, $http, $state, $stateParams, user, toast){
 
 	$('.modal').modal({})
 	$rootScope.today = new Date();
+
+	hotkeys.bindTo($scope)
+	.add({
+		combo : 'n' ,
+		description : 'NEW ORDER' ,
+		callback : function(){
+			$state.go('new_order')
+		}
+	})
+	.add({
+		combo : 'alt+s' ,
+		description : 'SEARCH' ,
+		callback : function(){
+			$scope.expandSearch()
+		}		
+	})	
 
 	var getOrderList = function( showLoad ){
 		return new Promise(function(resolve,reject){
@@ -111,6 +127,12 @@ angular.module('viewOrderModule',['serviceModule','serviceModule2'])
 
 	$scope.searchFocus = function(){
 		$('#buttonSet').fadeOut()
+	}
+
+	$scope.searchBlur = function(){
+		if ( event.keyCode === 27 ){
+			$('#search').blur()
+		}
 	}
 
 	$scope.set= function(inComing,idx){
