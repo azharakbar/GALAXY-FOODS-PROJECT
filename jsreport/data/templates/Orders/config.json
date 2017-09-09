@@ -1,0 +1,17 @@
+{
+    "phantom": {
+        "waitForJS": true
+    },
+    "recipe": "phantom-pdf",
+    "engine": "handlebars",
+    "scripts": [
+        {
+            "shortid": "BJX1Jw82ce"
+        }
+    ],
+    "shortid": "HJH11D83ce",
+    "modificationDate": {
+        "$$date": 1502015193035
+    },
+    "_id": "g7AbC4wbimwl2xWE"
+}

@@ -1,0 +1,149 @@
+<html>
+    <head>
+        <title>REPORT</title>
+    </head>
+    
+    <style>
+    body{
+        font-family : 'Trebuchet MS'
+    }
+        hr.style13 {
+        width: 100%;
+    	height: 10px;
+    	border: 0;
+    	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+        }
+        
+th, td { padding: 15px; 
+    
+}
+
+/* cellspacing */
+table { border-collapse: separate; border-spacing: 5px; } /* cellspacing="5" */
+
+/* valign */
+th, td { vertical-align: top; }
+
+/* align (center) */
+table { margin: 0 auto; }        
+        
+    </style>    
+    
+    <body>
+     
+    <span style="position:relative;float:left">
+        <font face="Trebuchet MS">
+            <h1> PC DECORATIONS </h1>
+            <h2 style="position:relative; bottom:15px"> EVENT MANAGEMENT RENTALS </h2>
+        </font>
+    </span>
+    <span style="position:relative;float:right">
+        <font face="Trebuchet MS">
+            <h3> CONTACT : +91-8714452213
+            <br>
+            <span style="float:right">+91-7012690872 </span> </h3>
+            
+        </font>        
+    </span>
+    <hr class="style13" style="position:relative; bottom:15px">
+        <center>
+        <h1> STOCK REPORT </h1>
+        <h3><span style="float:left"> {{:startDate}} </span>  <span style="float:right">{{:endDate}}</span> </h3>
+        </center>
+        <br>
+        <hr>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">DATE</th>
+                    <th width="14%">BAR CODE</th>
+                    <th width="20%">ITEM NAME</th>
+                    <th width="25%">ACTIVITY</th>
+                    <th width="10%">ORDER NUMBER</th>
+                    <th width="6%">QUANTITY</th>
+                    <th width="15%">STOCK STATUS</th>                    
+                </tr>
+            </thead>
+            {{for stkItems}}
+            {{if details.type !== "ITEM UPDATE"}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%"><center>{{:details.type}}</center></td>
+                <td width="10%"><center>{{:details.orderId}}</center></td>
+                <td width="6%"><center>{{:details.qty}}</center></td>
+                <td width="15%"><center>{{:details.status}}</center></td>
+            </tr>
+            {{else details.rentedStock}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">RENTED STOCK UPDATE FROM {{:details.rentedStock.old}} TO {{:details.rentedStock.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>            
+            {{else details.availableStock}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">AVAILBALE STOCK UPDATE FROM {{:details.availableStock.old}} TO {{:details.availableStock.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>            
+            {{else details.totalStock}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">TOTAL STOCK UPDATE FROM {{:details.totalStock.old}} TO {{:details.totalStock.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>            
+            {{else details.price}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">PRICE UPDATE FROM {{:details.price.old}} TO {{:details.price.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>            
+            {{else details.name}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name.new}}</td>
+                <td width="25%">NAME UPDATE FROM {{:details.name.old}} TO {{:details.name.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>
+            {{else details.costPrice}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">COST PRICE UPDATE FROM {{:details.costPrice.old}} TO {{:details.costPrice.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>                                                
+            {{else details.barCode}}
+            <tr>
+                <td width="10%">{{:readableDate}}</td>
+                <td width="14%">{{:details.barCode.new}}</td>
+                <td width="20%">{{:details.name}}</td>
+                <td width="25%">BARCODE UPDATE FROM {{:details.barCode.old}} TO {{:details.barCode.new}}</td>
+                <td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>
+                <td width="15%">{{:details.status}}</td>
+            </tr>
+            {{/if}}
+            {{/for}}
+        </table>
+        {{!--<h2>{{:~convertDate("2017-09-01T12:22:11.729Z")}}</h2>--}}
+        {{!--<h3>{{>~convertDate("2017-09-01T12:22:11.729Z")}}</h3>--}}
+        
+    </body>
+</html>

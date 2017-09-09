@@ -65,6 +65,7 @@ app.post('/login', function(req, res, next) {
         token : md5(uniqid()) 
     }
     req.session.token = obj.token ;	
+    console.log("SUPER HERE")
 	var objToSave = {
 		category : 'AUTHENTICATION' ,
 		details : {
@@ -266,7 +267,11 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 								new : rslt[keyList[x]]
 							}
 						}
-					}					
+					}
+					if ( !( 'barCode' in logObjToSave.details ) )
+						logObjToSave.details.barCode = item.barCode
+					if ( !( 'name' in logObjToSave.details ) )
+						logObjToSave.details.name = item.name
 					logSave ( logObjToSave )
 					res.json({status : 'SXS'})
 				},function(err){
@@ -313,7 +318,11 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 											new : rslt[keyList[x]]
 										}
 									}
-								}					
+								}		
+								if ( !( 'barCode' in logObjToSave.details ) )
+									logObjToSave.details.barCode = item.barCode
+								if ( !( 'name' in logObjToSave.details ) )
+									logObjToSave.details.name = item.name											
 								logSave ( logObjToSave )								
 								res.json({status : 'SXS'})
 							},function(err){
@@ -347,13 +356,34 @@ app.delete('/deleteItem/:barCode',isLoggedIn,function(req,res){
 })
 
 app.put('/updateCustomer/:contact',isLoggedIn,function(req,res){
+	var logObjToSave = {
+		category : 'CUSTOMER' ,
+		details : {
+			type : 'CUSTOMER UPDATE',
+		}
+	}
 	Customer.findOne({contact:req.params.contact})
 	.then(function(customer){
+			var customerForLog = {}
+			var arr = [ 'name' , 'contact' ]
+			for ( var x in arr ){
+				customerForLog[arr[x]] = customer[arr[x]]
+			}
 			if ( req.body.contact === req.params.contact ){
 				customer.name = req.body.name 
 				customer.contact = req.body.contact 
 				customer.save()
-				.then(function(){
+				.then(function(rslt){
+					var keyList = Object.keys(customerForLog)
+					for ( var x in keyList ){
+						if ( rslt[keyList[x]] !== customerForLog[keyList[x]] ){
+							logObjToSave.details[keyList[x]] = {
+								old : customerForLog[keyList[x]] ,
+								new : rslt[keyList[x]]
+							}
+						}
+					}					
+					logSave ( logObjToSave )					
 					res.json({status : 'SXS'})
 				},function(err){
 					res.json({status : 'ERROR'})
@@ -367,7 +397,17 @@ app.put('/updateCustomer/:contact',isLoggedIn,function(req,res){
 						customer.name = req.body.name 
 						customer.contact = req.body.contact 					
 						customer.save()
-						.then(function(){
+						.then(function(rslt){
+							var keyList = Object.keys(customerForLog)
+							for ( var x in keyList ){
+								if ( rslt[keyList[x]] !== customerForLog[keyList[x]] ){
+									logObjToSave.details[keyList[x]] = {
+										old : customerForLog[keyList[x]] ,
+										new : rslt[keyList[x]]
+									}
+								}
+							}					
+							logSave ( logObjToSave )							
 							res.json({status : 'SXS'})
 						},function(err){
 							res.json({status : 'ERROR'})
@@ -866,7 +906,7 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 						    category : "ORDER",
 						    details : {
 						      type : "ORDER RETURN",
-						      number : orderResponse.orderId,
+						      orderId : orderResponse.orderId,
 						      itemCount : orderResponse.items.length,
 						      name : custResponse.name,
 						      contact : custResponse.contact
@@ -923,23 +963,52 @@ app.get('/report' , isLoggedIn , function(req,res){
 	var mnth = ['January' , 'February' , 'March' , 'April' , 'May' , 'June' , 'July' , 'August' , 'September' , 'October' , 'November' , 'December' ] ;
 	var shortid = req.query.shortid ;
 	var incData = JSON.parse( req.query.data ) ;
+	var dataObj = {
+		template : { shortid : shortid },
+		// data : incData ,
+		options : {
+			preview : true
+		}
+	}	
+	var options = {
+		uri : "http://127.0.0.1:1802/api/report" ,
+		method : 'POST'
+		// json : data 
+	}	
 	if ( req.query.type == 1 ){
 		console.log ( 'BEFORE CONVERTING')
 		console.log ( incData ) ;
 		var x = new Date( incData.startDate )
+		// var t1 = incData.startDate
 		incData.startDate = x.getDate() 
 		incData.startDate += ' '
 		incData.startDate += mnth[x.getMonth()]
 		incData.startDate += ' '
 		incData.startDate += x.getFullYear()
 		var y = new Date( incData.endDate )
+		// var t2 = incData.endDate
 		incData.endDate = y.getDate() 
 		incData.endDate += ' '
 		incData.endDate += mnth[y.getMonth()]
 		incData.endDate += ' '
 		incData.endDate += y.getFullYear()	
-		console.log( 'AFTER CONVERTING ') 
-		console.log( incData )
+	x.setHours(0)
+	x.setMinutes(0)
+	x.setSeconds(0)
+	y.setHours(0)
+	y.setMinutes(0)
+	y.setSeconds(0)			
+	console.log(`x = ${x}`)
+	console.log(`y = ${y}`)
+		Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
+		.then(function(rslt){
+			incData.stkItems = rslt
+			dataObj.data = incData
+			options.json = dataObj
+			request(options).pipe(res)			
+			},function(err){
+				incData.stkItems = { status : "ERROR" }
+			})
 	} else if ( req.query.type == 2 ){
 		incData = {} ;
 		incData.a = "Azhar" ;
@@ -947,19 +1016,6 @@ app.get('/report' , isLoggedIn , function(req,res){
 		console.log( 'AFTER CONVERTING ') 
 		console.log( incData )
 	}
-	var data = {
-		template : { shortid : shortid },
-		data : incData ,
-		options : {
-			preview : true
-		}
-	}
-	var options = {
-		uri : "http://127.0.0.1:1802/api/report" ,
-		method : 'POST' ,
-		json : data 
-	}
-	request(options).pipe(res)
 })	
 
 app.get('/logs',function(req,res){
@@ -1002,11 +1058,25 @@ var logSave = ( logObjToSave ) => {
 	var logObj = new Log() 
 	logObj.category = logObjToSave.category
 	logObj.details = logObjToSave.details
-
+	logObj.readableDate = readableDateFunc(new Date())
 	logObj.save()
 	.then(()=>{
 		console.log("LOGGED")
 	},()=>{
 		console.log("ERROR IN LOGGING")
 	})
+}
+
+var readableDateFunc = function(string){
+	var convertedDate = ''
+	if ( string.getDate() >= 1 && string.getDate() <= 9 )
+		convertedDate = '0' 
+	convertedDate += string.getDate() 
+	convertedDate += '.'
+	if ( string.getMonth() >= 0 && string.getMonth() <= 8 )
+		convertedDate += '0'	
+	convertedDate += (string.getMonth()+1)
+	convertedDate += '.'
+	convertedDate += string.getFullYear()		
+	return convertedDate 	
 }
