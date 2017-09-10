@@ -256,18 +256,30 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 						category : 'STOCK' ,
 						details : {
 							type : 'ITEM UPDATE',
+							changes : [],
 							status : rslt.availableStock + " / " + rslt.totalStock
 						}
 					}
 					var keyList = Object.keys(itemForLog)
-					for ( var x in keyList ){
+/*					for ( var x in keyList ){
 						if ( rslt[keyList[x]] !== itemForLog[keyList[x]] ){
 							logObjToSave.details[keyList[x]] = {
 								old : itemForLog[keyList[x]] ,
 								new : rslt[keyList[x]]
 							}
 						}
+					}*/
+
+					for ( var x in keyList ){
+						if ( rslt[keyList[x]] !== itemForLog[keyList[x]] ){
+							logObjToSave.details.changes.push({
+								param : keyList[x] ,
+								old : itemForLog[keyList[x]] ,
+								new : rslt[keyList[x]]
+							})
+						}
 					}
+
 					if ( !( 'barCode' in logObjToSave.details ) )
 						logObjToSave.details.barCode = item.barCode
 					if ( !( 'name' in logObjToSave.details ) )
@@ -307,18 +319,29 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 									category : 'STOCK' ,
 									details : {
 										type : 'ITEM UPDATE',
+										changes : [],
 										status : rslt.availableStock + " / " + rslt.totalStock
 									}
 								}
 								var keyList = Object.keys(itemForLog)
-								for ( var x in keyList ){
+/*								for ( var x in keyList ){
 									if ( rslt[keyList[x]] !== itemForLog[keyList[x]] ){
 										logObjToSave.details[keyList[x]] = {
 											old : itemForLog[keyList[x]] ,
 											new : rslt[keyList[x]]
 										}
 									}
-								}		
+								}	*/
+
+								for ( var x in keyList ){
+									if ( rslt[keyList[x]] !== itemForLog[keyList[x]] ){
+										logObjToSave.details.changes.push({
+											param : keyList[x] ,
+											old : itemForLog[keyList[x]] ,
+											new : rslt[keyList[x]]
+										})
+									}
+								}
 								if ( !( 'barCode' in logObjToSave.details ) )
 									logObjToSave.details.barCode = item.barCode
 								if ( !( 'name' in logObjToSave.details ) )
@@ -975,9 +998,9 @@ app.get('/report' , isLoggedIn , function(req,res){
 		method : 'POST'
 		// json : data 
 	}	
-	if ( req.query.type == 1 ){
-		console.log ( 'BEFORE CONVERTING')
-		console.log ( incData ) ;
+
+		// console.log ( 'BEFORE CONVERTING')
+		// console.log ( incData ) ;
 		var x = new Date( incData.startDate )
 		// var t1 = incData.startDate
 		incData.startDate = x.getDate() 
@@ -992,30 +1015,39 @@ app.get('/report' , isLoggedIn , function(req,res){
 		incData.endDate += mnth[y.getMonth()]
 		incData.endDate += ' '
 		incData.endDate += y.getFullYear()	
-	x.setHours(0)
-	x.setMinutes(0)
-	x.setSeconds(0)
-	y.setHours(0)
-	y.setMinutes(0)
-	y.setSeconds(0)			
-	console.log(`x = ${x}`)
-	console.log(`y = ${y}`)
-		Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
-		.then(function(rslt){
-			incData.stkItems = rslt
-			dataObj.data = incData
-			options.json = dataObj
-			request(options).pipe(res)			
-			},function(err){
-				incData.stkItems = { status : "ERROR" }
-			})
-	} else if ( req.query.type == 2 ){
-		incData = {} ;
-		incData.a = "Azhar" ;
-		incData.b = "Akbar" ;
-		console.log( 'AFTER CONVERTING ') 
-		console.log( incData )
-	}
+		x.setHours(0)
+		x.setMinutes(0)
+		x.setSeconds(0)
+		y.setHours(0)
+		y.setMinutes(0)
+		y.setSeconds(0)			
+		// console.log(`x = ${x}`)
+		// console.log(`y = ${y}`)
+		if ( req.query.type === '1' ){	
+			console.log("i am in 1")
+			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
+			.then(function(rslt){
+				incData.stkItems = rslt
+				dataObj.data = incData
+				options.json = dataObj
+				request(options).pipe(res)			
+				},function(err){
+					incData.stkItems = { status : "ERROR" }
+				})
+		} else if ( req.query.type === '2' ){
+			console.log("i am in 2")
+			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "TRANSACTION" } }]})
+			.then(function(rslt){
+				incData.stkItems = rslt
+				dataObj.data = incData
+				options.json = dataObj
+				request(options).pipe(res)			
+				},function(err){
+					incData.stkItems = { status : "ERROR" }
+				})
+		}
+
+
 })	
 
 app.get('/logs',function(req,res){

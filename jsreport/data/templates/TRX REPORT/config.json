@@ -1,10 +1,12 @@
 {
     "shortid": "H1e0jWYdZ",
     "recipe": "phantom-pdf",
-    "engine": "handlebars",
+    "engine": "jsrender",
     "modificationDate": {
-        "$$date": 1504282993103
+        "$$date": 1505030081243
     },
     "_id": "EP2T43DkTbrXzz3J",
-    "data": null
+    "data": {
+        "shortid": "ryTBJOfc-"
+    }
 }
