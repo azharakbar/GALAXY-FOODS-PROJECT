@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>REPORT</title>
+        <link rel="stylesheet" href="../../assets/font-awesome.min.css/content.css">
     </head>
     
     <style>
@@ -14,6 +15,9 @@
     	box-shadow: 0 10px 10px -10px #8c8b8b inset;
         }
         
+    amount{
+        float : left;
+    }    
 th, td { padding: 15px; 
     
 }
@@ -26,7 +30,7 @@ th, td { vertical-align: top; }
 
 /* align (center) */
 table { margin: 0 auto; }        
-        
+        /*{#asset font-awesome.min.css @encoding=utf8}*/
     </style>    
     
     <body>
@@ -47,7 +51,7 @@ table { margin: 0 auto; }
     </span>
     <hr class="style13" style="position:relative; bottom:15px">
         <center>
-        <h1> STOCK REPORT </h1>
+        <h1> TRANSACTION REPORT </h1>
         <h3><span style="float:left"> {{:startDate}} </span>  <span style="float:right">{{:endDate}}</span> </h3>
         </center>
         <br>
@@ -57,55 +61,43 @@ table { margin: 0 auto; }
             <thead>
                 <tr>
                     <th width="10%"><center>DATE</center></th>
-                    <th width="14%"><center>BAR CODE</center></th>
-                    <th width="20%"><center>ITEM NAME</center></th>
-                    <th width="25%"><center>ACTIVITY</center></th>
-                    <th width="10%"><center>ORDER NUMBER</center></th>
-                    <th width="6%"><center>QUANTITY</center></th>
-                    <th width="15%"><center>STOCK STATUS</center></th>                 
+                    <th width="25%"><center>CUSTOMER</center></th>
+                    <th width="10%"><center>BILL NUMBER</center></th>
+                    <th width="6%"><center>TYPE</center></th>
+                    <th width="14%"><center>AMOUNT</center></th>
+                    {{!--<th width="25%"><center>ACTIVITY</center></th>--}}
+                    
+                    <th width="14%"><center>PENDING AMOUNT</center></th>
+                    
+                    <th width="15%"><center>STATUS</center></th>                 
                 </tr>
             </thead>
             {{for stkItems}}
-                {{if details.type !== "ITEM UPDATE"}}
-                    <tr>
-                        <td width="10%">{{:readableDate}}</td>
-                        <td width="14%">{{:details.barCode}}</td>
-                        <td width="20%">{{:details.name}}</td>
-                        <td width="25%"><center>{{:details.type}}</center></td>
-                        <td width="10%"><center>{{:details.orderId}}</center></td>
-                        <td width="6%"><center>{{:details.qty}}</center></td>
-                        <td width="15%"><center>{{:details.status}}</center></td>
-                    </tr>
-                {{else}}
-                    {{for details.changes ~readableDate=readableDate ~barCode=details.barCode ~name=details.name ~status=details.status}}
-                        {{if param!="rentedStock"}}
-                            <tr>
-                                <td width="10%">{{:~readableDate}}</td>
-                                <td width="14%">{{:~barCode}}</td>
-                                <td width="20%">{{:~name}}</td>
-                                {{if param=="price"}}
-                                    <td width="41%" colspan="3">PRICE UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{else param=="name"}}
-                                    <td width="41%" colspan="3">NAME UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{else param=="barCode"}}
-                                    <td width="41%" colspan="3">BARCODE UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{else param=="costPrice"}}
-                                    <td width="41%" colspan="3">COST PRICE UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{else param=="availableStock"}}
-                                    <td width="41%" colspan="3">STOCK IN HAND UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{else param=="totalStock"}}
-                                    <td width="41%" colspan="3">TOTAL STOCK UPDATE FROM {{:old}} TO {{:new}}</td>
-                                {{/if}}
-                                {{!--<td width="16%" colspan="2"><center>-- NOT APPLICABLE --</center></td>--}}
-                                <td width="15%"><center>{{:~status}}</center></td>
-                            </tr>
-                        {{/if}}
-                    {{/for}}
-                {{/if}}
+                <tr>
+                    <td width="10%">{{:readableDate}}</td>
+                    <td width="25%">{{:details.name}}</td>
+                    <td width="10%"><center>{{:details.id}}</center></td>
+                    <td width="6%"><center>{{:details.type}}</center></td>
+                    {{if details.type=="CREDIT"}}
+                        <td width="14%"><span class="amount">{{:details.amount}}</span></td>
+                        {{:~incCredit(details.amount)}}
+                    {{else details.type=="CNL"}}
+                        <td width="14%"><span class="amount">{{:details.amount}}</span></td>
+                        {{:~incCredit(details.amount)}}                        
+                    {{else details.type=="DEBIT"}}
+                        <td width="14%"><span class="amount">{{:details.paid}}</span></td>
+                        {{:~incDebit(details.paid)}}
+                    {{/if}}
+                    <td width="15%"><center>{{:details.totalCredit}}</center></td>
+                    <td width="15%"><center>{{:details.status}}</center></td>
+                </tr>
             {{/for}}
         </table>
         {{!--<h2>{{:~convertDate("2017-09-01T12:22:11.729Z")}}</h2>--}}
         {{!--<h3>{{>~convertDate("2017-09-01T12:22:11.729Z")}}</h3>--}}
-        
+        <hr>
+        <h3> TOTAL CREDIT : {{:~getCredit()}} </h3>
+        <h3> TOTAL DEBIT : {{:~getDebit()}} </h3>
+        <i class="fa fa-inr" style="font-size: 25px"></i>
     </body>
 </html>

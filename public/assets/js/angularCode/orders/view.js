@@ -21,11 +21,13 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	})	
 
 	var getOrderList = function( showLoad ){
+		console.log("here in getOrderList")
+		console.log ( $stateParams )
+		if ( $stateParams.showLoading ){
+			toast.setMsg("LOADING")
+			showLoading();
+		}
 		return new Promise(function(resolve,reject){
-			if ( showLoad || $stateParams.showLoading ){
-				toast.setMsg("LOADING")
-				showLoading();
-			}
 			$http({
 				url : "/allOrders",
 				method : 'POST',
@@ -36,19 +38,19 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 					resolve(response.data.result)
 				} else {
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}					
 					toast.setMsg("!! ERROR GETTING ORDER LIST !!")
 					reject ("ERROR1") 
 				}
 			},function(err){
-				if( showLoad || $stateParams.showLoading ){
+				if( $stateParams.showLoading ){
 					hideLoading();
 				}				
 				toast.setMsg("!! ERROR GETTING ORDER LIST !!")
@@ -81,6 +83,31 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 			})
 	})		
 	}
+
+	var postCancel = function( ){
+		return new Promise(function(resolve,reject){
+			$http({
+				url : "/cancelOrder",
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : "orderId="+$rootScope.selectedOrder.orderId+"&token="+user.getToken()
+			})
+			.then(function(response){
+				if ( response.data.status === "SXS" ){
+					toast.setMsg("!! ORDER CANCELLED SUCCESSFULLY !!")
+					resolve(response.data.status)
+				} else {			
+					toast.setMsg("!! ERROR IN CANCELLING ORDER !!")
+					reject ("ERROR1") 
+				}
+			},function(err){
+				toast.setMsg("!! ERROR IN CANCELLING ORDER !!")
+				reject ("ERROR2") 
+			})
+	})		
+	}	
 
 
 	var postReturn = function( dataObj ){
@@ -154,7 +181,26 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	}
 
 	$scope.no = function(){
-		$('.modal').modal('close')
+		// $('.modal').modal('close')
+		// $('#cancelConfirm #pickUpConfirm #returnConfirm #orderDetails').modal('close')
+		$('#orderDetails').modal('close')
+		$('#pickUpConfirm').modal('close')
+		$('#returnConfirm').modal('close')
+		$('#cancelConfirm').modal('close')
+	}
+
+	$scope.cancelOrder = function( step ){
+		if ( !step ){
+			$('#cancelConfirm').modal('open')
+		} else { 
+			$scope.no()
+			postCancel()
+			.then(function(res){
+				showToast("success")
+				$state.go( $state.current ,{ showLoading : false } )
+				// setTimeout(function(){ $state.reload(); } , 750 )
+			})
+		}
 	}
 
 	$scope.pickUp = function(){
@@ -167,11 +213,11 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 			x.qty = $rootScope.selectedOrder.items[i].qty 
 			t.push(x)
 		}
-		
 		postPickup(t)
 		.then(function(res){
 			showToast("success")
-			setTimeout(function(){ $state.reload(); } , 750);
+			$state.go( $state.current ,{ showLoading : false } )
+			// setTimeout(function(){ $state.reload(); } , 750);
 		},function(err){
 			showToast("error")
 		})
@@ -192,7 +238,8 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 		postReturn(t)
 		.then(function(res){
 			showToast("success")
-			setTimeout(function(){ $state.reload(); } , 750);
+			$state.go( $state.current ,{ showLoading : false } )
+			// setTimeout(function(){ $state.reload(); } , 750);
 		},function(err){
 			showToast("error")
 		})		

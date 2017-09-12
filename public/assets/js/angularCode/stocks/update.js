@@ -97,7 +97,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 					update(data)
 					.then(function(res){
 						showToast("success");
-						$state.go('view_stock') ;
+						$state.go('view_stock' , { showLoading : false }) ;
 						// setTimeout(function() { $state.go('view_stock') ; }, 500);
 					},function(err){
 						console.log("from main err= "+err)

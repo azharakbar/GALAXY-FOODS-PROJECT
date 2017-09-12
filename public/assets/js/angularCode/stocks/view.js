@@ -28,7 +28,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}	
 
 	var getCount = function( showLoad ){
-		if ( showLoad || $stateParams.showLoading ){
+		if ( $stateParams.showLoading ){
 			toast.setMsg("LOADING")
 			showLoading();
 		}		
@@ -54,7 +54,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 				.then(function(response){
 					console.log(response.data);
 					$scope.itemTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 				},function(err){
@@ -126,11 +126,13 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}
 
 	$scope.delConfirm = function(){
-		$('.modal').modal('close')
+		// $('.modal').modal('close')
 		if($rootScope.item.rentedStock === 0){
 			$rootScope.delAllowed = true ;
+			$('#stockViewModal').modal('close')
 			$('#delConfirm').modal('open');
 		} else {
+			$('#stockViewModal').modal('close')
 			$rootScope.delAllowed = false ;
 			console.log("U R NOT ALLOWED TO DELETE")
 			toast.setMsg("!! ITEMS WITH RENTED STOCK CANT BE DELETED !!")
@@ -185,6 +187,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	$scope.noDel = function(){
 		$rootScope.delAllowed = false ;
 		$('#delConfirm').modal('close');
+		$('#stockViewModal').modal('open');
 	}
 
 	$scope.$watch('total',function(newVal,oldVal){

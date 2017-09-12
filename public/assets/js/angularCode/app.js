@@ -395,6 +395,13 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,toast,hotkeys){
 			$state.go('report_central')
 		}
 	})
+	hotkeys.add({
+		combo: 'alt+r',
+		description: 'RELOAD',
+		callback: function() {
+			$state.reload()
+		}
+	})	
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){
 			if(oldVal === "LOADING")

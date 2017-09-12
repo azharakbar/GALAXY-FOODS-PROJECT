@@ -37,7 +37,7 @@
 			<th width ="13%"><center> ACTIONS <i class="fa fa-chevron-down" style="font-size: 15px"></i></center></th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order,$index)" id="row{{$index}}" ng-class="{'warning' : order.status=='NOT PICKED UP' , 'success' : order.status=='ORDER RETURNED' , 'danger' : order.status=='PICKED UP' && today > order.returnDate, 'info' : order.status=='PICKED UP' && today < order.returnDate }" height="48">
+			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order,$index)" id="row{{$index}}" ng-class="{'warning' : order.status=='NOT PICKED UP' , 'success' : order.status=='ORDER RETURNED' , 'blue' : order.status=='ORDER CANCELLED' , 'danger' : order.status=='PICKED UP' && today > order.returnDate, 'info' : order.status=='PICKED UP' && today < order.returnDate }" height="48">
 			<td width="15%"> {{order.orderId}} </td>
 			<td width="20%">  &nbsp;&nbsp;&nbsp;&nbsp;{{order.name}} </td>
 			<td width="13%"><center>{{order.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
@@ -55,6 +55,9 @@
 				<span ng-show="order.status=='ORDER RETURNED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" style="position: relative; bottom: 2px; width:150px; height: 35px" ng-disabled="true"> RETURNED </button>
 				</span>
+				<span ng-show="order.status=='ORDER CANCELLED'">
+					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" style="position: relative; bottom: 2px; width:150px; height: 35px" ng-disabled="true"> CANCELLED </button>
+				</span>				
 			</center> </td>
 			</tr>
 		</tbody>
@@ -65,7 +68,7 @@
 
 <div id="orderDetails" class="modal bottom-sheet" style="overflow-y: scroll;">
 	<div class="modal-content">
-		<h3>ORDER DETAILS</h3>
+		<h3>ORDER DETAILS <span style="position: relative; left:50px">#{{selectedOrder.orderId}}</span></h3>
 		<span style="font-size: 15px " ng-show="selectedOrder.evePurpose != ''"><i class="fa fa-connectdevelop"></i> EVENT PURPOSE &nbsp;: </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.evePurpose}}
 		<br>
 		<span style="font-size: 15px " ng-show="selectedOrder.eveLoxn != ''">&nbsp;<i class="fa fa-map-marker"></i> &nbsp;EVENT LOCATION : </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.eveLoxn}}
@@ -88,6 +91,12 @@
       		</tbody>
       	</table>
 	</div>
+	<div class="modal-footer">
+		<span style="position:absolute; float:right; right:75px">
+		<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="update()" ng-disabled="true"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-refresh"></i> UPDATE </span></button>
+		<button id="" class="waves-effect waves-light btn-large" ng-click="cancelOrder(0)" ng-disabled="selectedOrder.status != 'NOT PICKED UP'" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"> CANCEL ORDER <i class="fa fa-trash"></i></span></button>
+		</span>
+	</div>	
 </div>
 
 <div id="pickUpConfirm" class="modal bottom-sheet">
@@ -103,6 +112,15 @@
 	<div class="modal-content">
 		<center><h4>ARE YOU SURE THAT THE ORDERED ITEMS ARE RETURNED BY <b>{{selectedOrder.name}}</b> ?</h4></center>
 		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="return()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
+	</div>
+</div>
+
+<div id="cancelConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE TO CANCEL THIS ORDER PLACED BY <b>{{selectedOrder.name}}</b> ?</h4></center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="cancelOrder(1)"> YES </button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
 	</div>

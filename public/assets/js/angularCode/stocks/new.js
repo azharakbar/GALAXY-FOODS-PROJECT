@@ -3,7 +3,15 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 	$rootScope.same = false ;
 	$rootScope.valid = true ;
 	$rootScope.temp = '' ;
+	var first = 1 
+	$('#itemBarCode').focus()
+	first = 1
 	$scope.toUpper = function(modelName){
+		if ( first == 1 ){
+			$scope.itemBarCode = "" 
+			first = 0
+			return ;
+		}		
 		if ( modelName === "itemBarCode"){
 			$scope.itemBarCode = $scope.itemBarCode.toUpperCase() ;
 		} else if ( modelName === "itemName" ){
@@ -17,6 +25,11 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 		}
 	}
 	$scope.checkNumber = function(modelName){
+		if ( first == 1 ){
+			$scope.itemBarCode = "" 
+			first = 0
+			return ;
+		}		
 		var key = event.keyCode ;
 		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105) || key == 110 || key == 190 )
 			valid = true ;
@@ -127,6 +140,7 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 					$scope.price = "" 
 					$scope.stockInHand = "" 
 					$scope.totalStock = "" 
+					$scope.costPrice = ""
 					$rootScope.same = false ;
 					$rootScope.valid = true ;
 					$rootScope.temp = '' ;

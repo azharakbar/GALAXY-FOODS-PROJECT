@@ -618,10 +618,10 @@ app.post('/saveBill' , isLoggedIn , function(req,res){
 					category : 'TRANSACTION' ,
 					details : {
 						type : 'CREDIT',
-						billNumber : billResponse.billId ,
+						id : billResponse.billId ,
 						amount : billResponse.billAmount ,
 						totalCredit : custResponse.credit ,
-						customer : billResponse.name ,
+						name : billResponse.name ,
 						contact : billResponse.customer
 					}
 				}
@@ -684,11 +684,15 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 	var cr = parseFloat(dataForBillSchema.billAmount)
 
 	var cnt = 0 ;
+	var v = 0 ;
 	for ( var i = 0 ; i < items.length ; ++i ){
 		updateItemsForStock[i] = 
 		Item.findOne({ barCode : items[i].barCode })
 		.then(function(item){
-			var v = items[cnt++].qty ;
+			// var v = items[cnt++].qty ;
+			for ( var j = 0 ; j < items.length ; ++j )
+				if ( items[j].barCode == item.barCode )
+					v = items[j].qty 			
 			item.totalStock = item.totalStock - v
 			item.availableStock = item.availableStock - v
 			item.save()
@@ -745,13 +749,14 @@ app.post('/payBill',isLoggedIn,function(req,res){
 	var logObjToSave  = {
 			category : "TRANSACTION",
 			details : {
-				category : "DEBIT" ,
+				type : "DEBIT" ,
 				id : req.body.billId ,
 				paid : parseFloat(req.body.paid)
 			}
 	} 
 	Bill.findOne({billId : req.body.billId})
 	.then(function(bill){
+		bill.totalPaid += Math.round( parseInt(req.body.paid) )
 		bill.remAmount -= Math.round( parseInt(req.body.paid) )
 		if ( bill.remAmount < 1 ){
 			bill.remAmount = 0 ;
@@ -776,6 +781,7 @@ app.post('/payBill',isLoggedIn,function(req,res){
 				.then(function( custResponse ){
 					logObjToSave.details.name = custResponse.name 
 					logObjToSave.details.contact = custResponse.contact
+					logObjToSave.details.totalCredit = custResponse.credit ,
 					logSave(logObjToSave)
 					res.json({status : 'SXS'})
 				},function(err){
@@ -806,13 +812,18 @@ app.post('/pickUpOrder',isLoggedIn,function(req,res){
 	var updateItemsForPickup = [] ;
 	updateItemsForPickup.length = list.length
 	var cnt = 0 ;
+	var v = 0 ;
 	for ( var i = 0 ; i < list.length ; ++i ){
 		updateItemsForPickup[i] = 
 		Item.findOne({ barCode : list[i].barCode })
 		.then(function(item){
-			var v = list[cnt++].qty ;
+			// var v = list[cnt++].qty ;
+			for ( var j = 0 ; j < list.length ; ++j )
+				if ( list[j].barCode == item.barCode )
+					v = list[j].qty
 			item.availableStock = item.availableStock - v
 			item.rentedStock = item.rentedStock + v
+			item.lastVal = v 
 			item.timesOrdered = item.timesOrdered + 1
 			item.save()
 			.then(function(rslt){
@@ -823,15 +834,17 @@ app.post('/pickUpOrder',isLoggedIn,function(req,res){
 						orderId : req.body.orderId ,
 						barCode : rslt.barCode ,
 						name : rslt.name ,
-						qty : v ,
+						qty : rslt.lastVal ,
 						status : rslt.availableStock + " / " + rslt.totalStock 
 					}
-				}
-				logSave( objToSave )					
+				}		
+				logSave( objToSave )
 				console.log(`PICKED UP ${item.name}`)
 			},function(err){
+				console.log("error in item save")
 			})
 		},function(err){
+			console.log("error in item findOne")
 			reject(err)
 		})
 	}
@@ -870,15 +883,21 @@ app.post('/pickUpOrder',isLoggedIn,function(req,res){
 
 app.post('/returnOrder',isLoggedIn,function(req,res){
 	console.log("IN RETURN API")	
+	console.log(`DataObj = ${req.body.dataObj}`)
 	var list = JSON.parse(req.body.dataObj)
+	console.log(`List = ${list}`)
 	var updateItemsForReturn = [] ;
 	updateItemsForReturn.length = list.length
 	var cnt = 0 ;
+	var v = 0 ;
 	for ( var i = 0 ; i < list.length ; ++i ){
 		updateItemsForReturn[i] = 
 		Item.findOne({ barCode : list[i].barCode })
 		.then(function(item){
-			var v = list[cnt++].qty ;
+			// var v = list[cnt++].qty ;
+			for ( var j = 0 ; j < list.length ; ++j )
+				if ( list[j].barCode == item.barCode )
+					v = list[j].qty 
 			console.log(`SELECTED ${item.name}
 				VALUE TO BE DEALT WITH v = ${v}
 				BEFORE VALUES:
@@ -886,6 +905,7 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 				RENTED STOCK = ${item.rentedStock}`)
 			item.availableStock = item.availableStock + v
 			item.rentedStock = item.rentedStock - v
+			item.lastVal = v
 			console.log(`
 				AFTER VALUES:
 				AVAILABLE STOCK = ${item.availableStock}
@@ -899,10 +919,10 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 						orderId : req.body.orderId ,
 						barCode : rslt.barCode ,
 						name : rslt.name ,
-						qty : v ,
+						qty : rslt.lastVal ,
 						status : rslt.availableStock + " / " + rslt.totalStock 
 					}
-				}
+				}	
 				logSave( objToSave )								
 				console.log(`REURNED ${item.name}`)
 			},function(err){
@@ -954,6 +974,102 @@ app.post('/returnOrder',isLoggedIn,function(req,res){
 	})
 	
 })
+
+app.post('/cancelOrder' , isLoggedIn , function(req,res){
+	console.log(`CANCEL ORDER API ... orderId = ${req.body.orderId}`)
+	var amt = 0 ;
+	var refundAmt = 0;
+	Order.findOne({orderId : req.body.orderId})
+	.then(function(order){
+		if ( order !== null ){
+			order.status = "ORDER CANCELLED"
+			order.save()
+			.then(function(orderResponse){
+				var objToSave = {
+					category : 'ORDER' ,
+					details : {
+						type : 'ORDER CANCELLATION',
+						number : orderResponse.orderId,
+						name : orderResponse.name,
+						contact : orderResponse.customer
+					}
+				}
+				logSave( objToSave )
+				Bill.findOne({ billId : orderResponse.billId })
+				.then(function(bill){
+					if ( bill !== null )
+						console.log(`FOUND BILL ${orderResponse.billId}`)
+					else
+						console.log(`NOT FOUND BILL ${orderResponse.billId}`)
+					amt = bill.billAmount
+					refundAmt = bill.remAmount - bill.billAmount
+					console.log(`BILL DETAILS : ${bill.billId}   ${bill.billAmount}    ${bill.totalPaid}`)
+					if ( refundAmt )
+						bill.status = "ORDER CANCELLED & REFUNDED"
+					else
+						bill.status = "ORDER CANCELLED"
+					bill.save()
+					.then(function(billResponse){
+						var objToSave = {
+							category : 'BILL' ,
+							details : {
+								type : 'BILL CANCELLATION',
+								number : billResponse.billId,
+								name : orderResponse.name,
+								contact : orderResponse.customer
+							}
+						}
+						logSave( objToSave )						
+						Customer.findOne({ contact : billResponse.customer })
+						.then(function(customer){
+								if ( customer !== null )
+									console.log(`FOUND CUSTOMER ${billResponse.customer}`)
+								else
+									console.log(`NOT FOUND CUSTOMER ${billResponse.customer}`)
+								console.log(`CUSTOMER DETAILS B4 : ${customer.orders}   ${customer.credit}`)							
+							customer.orders -= 1 ;
+							customer.credit -= amt 
+							console.log(`CUSTOMER DETAILS A4 : ${customer.orders}   ${customer.credit}`)							
+							customer.save()
+							.then(function(custResponse){
+								if ( refundAmt ){
+									var objToSave = {
+										category : 'TRANSACTION' ,
+										details : {
+											type : 'CNL',
+											id : billResponse.billId,
+											amount : -amt,
+											totalCredit : custResponse.credit,
+											name : custResponse.name,
+											contact : orderResponse.customer
+										}
+									}
+									logSave( objToSave )	
+								}	
+								res.json({status : 'SXS'})			
+							},function(err){
+								res.json({status : 'ERROR'})
+							})
+						},function(err){
+							res.json({status : 'ERROR'})
+						})
+					},function(err){
+						res.json({status : 'ERROR'})
+					})
+				},function(err){
+					res.json({status : 'ERROR'})
+				})
+			},function(err){
+				res.json({status : 'ERROR'})
+			})
+		} else {
+			res.json({status : 'NO ORDER FOUND'})
+		}
+	},function(err){
+		res.json({status : 'ERROR'})
+	})
+})
+
 
 app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
 	console.log(req.params.itemId)
@@ -1024,7 +1140,6 @@ app.get('/report' , isLoggedIn , function(req,res){
 		// console.log(`x = ${x}`)
 		// console.log(`y = ${y}`)
 		if ( req.query.type === '1' ){	
-			console.log("i am in 1")
 			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
 			.then(function(rslt){
 				incData.stkItems = rslt
@@ -1035,7 +1150,6 @@ app.get('/report' , isLoggedIn , function(req,res){
 					incData.stkItems = { status : "ERROR" }
 				})
 		} else if ( req.query.type === '2' ){
-			console.log("i am in 2")
 			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "TRANSACTION" } }]})
 			.then(function(rslt){
 				incData.stkItems = rslt

@@ -24,7 +24,7 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}
 
 	var getCount = function( showLoad ){
-		if ( showLoad || $stateParams.showLoading ){
+		if ( $stateParams.showLoading ){
 			toast.setMsg("LOADING")
 			showLoading();
 		}
@@ -50,7 +50,7 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 				.then(function(response){
 					console.log(response.data);
 					$scope.custTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 				},function(err){

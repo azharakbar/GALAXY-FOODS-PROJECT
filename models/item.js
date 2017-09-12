@@ -8,7 +8,8 @@ var itemSchema = mongoose.Schema({
 	rentedStock : { type: Number , default: 0 } ,
 	price : Number ,
 	costPrice : Number ,
-	timesOrdered : { type : Number , default : 0 }
+	timesOrdered : { type : Number , default : 0 } ,
+	lastVal : Number 
 })
 
 module.exports = mongoose.model('item',itemSchema)

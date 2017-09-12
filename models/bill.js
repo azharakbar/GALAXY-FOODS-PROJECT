@@ -7,7 +7,7 @@ var billSchema = mongoose.Schema({
 	name : { type : String , default : "NOT ASSIGNED"},
 	orderId : { type : String , default : "NOT ASSIGNED"},
 	billAmount : { type : Number , default : 0 } ,
-	totalAmount : { type : Number , default : 0 } ,
+	totalPaid : { type : Number , default : 0 } ,
 	remAmount : { type : Number , default : 0 } ,
 	lastPaidDate : { type : Date , default : null },
 	status : { type : String , default : "NOT PAID"}

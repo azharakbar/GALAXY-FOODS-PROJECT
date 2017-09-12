@@ -2,12 +2,25 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 .controller('newCustCtrl',function($scope,$rootScope,$http,$location,user,toast){
 	var valid = true ;
 	$rootScope.temp = ''
-
+	var first = 1 
+	$('#custName').focus()
+	first = 1
+	$scope.custName = "" 
 	$scope.toUpper = function(){
+		if ( first == 1 ){
+			$scope.custName = "" 
+			first = 0
+			return ;
+		}
 		if(event.which != 8)
 			$scope.custName=$scope.custName.toUpperCase();	
 	}
 	$scope.checkNumber = function(){
+		if ( first == 1 ){
+			$scope.custName = "" 
+			first = 0
+			return ;
+		}		
 		var key = event.keyCode ;
 		if ( (key >= 48 && key <= 57) || key == 8 || (key >= 96 && key <= 105) || key == 110 || key == 190)
 			valid = true ;

@@ -1,5 +1,5 @@
 angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2'])
-.controller('viewBillCtrl',function( $rootScope,$scope,hotkeys,$http,$state,user,toast ){
+.controller('viewBillCtrl',function( $rootScope,$scope,hotkeys,$http,$state,$stateParams,user,toast ){
 	$('.modal').modal();
 
 	hotkeys.bindTo($scope)
@@ -24,9 +24,11 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		}
 	}
 
-	var getBillList = function( showLoad ){
+	var getBillList = function(){
+		console.log("i am here")
+		console.log($stateParams)
 		return new Promise(function(resolve,reject){
-			if ( showLoad || $stateParams.showLoading ){
+			if ( $stateParams.showLoading ){
 				toast.setMsg("LOADING")
 				showLoading();
 			}
@@ -40,19 +42,19 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 					resolve(response.data.result)
 				} else {
-					if( showLoad || $stateParams.showLoading ){
+					if( $stateParams.showLoading ){
 						hideLoading();
 					}					
 					toast.setMsg("!! ERROR GETTING BILL LIST !!")
 					reject ("ERROR1") 
 				}
 			},function(err){
-				if( showLoad || $stateParams.showLoading ){
+				if( $stateParams.showLoading ){
 					hideLoading();
 				}				
 				toast.setMsg("!! ERROR GETTING BILL LIST !!")
@@ -61,9 +63,9 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 	})		
 	}
 
-	var payBillNow = function( showLoad = false ){
+	var payBillNow = function( ){
 		return new Promise(function(resolve,reject){
-			if ( showLoad ){
+			if ( $stateParams.showLoading ){
 				toast.setMsg("LOADING")
 				showLoading();
 			}
@@ -77,20 +79,20 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					if( showLoad ){
+					if(  $stateParams.showLoading  ){
 						hideLoading();
 					}
 					toast.setMsg("!! PAYMENT DETAILS UPDATED SUCCESSFULLY !!")
 					resolve("SXS")
 				} else {
-					if( showLoad ){
+					if(  $stateParams.showLoading  ){
 						hideLoading();
 					}					
 					toast.setMsg("!! ERROR UPDATING PAYMENT DETAILS !!")
 					reject ("ERROR1") 
 				}
 			},function(err){
-				if( showLoad ){
+				if(  $stateParams.showLoading  ){
 					hideLoading();
 				}				
 				toast.setMsg("!! ERROR UPDATING PAYMENT DETAILS !!")
@@ -99,7 +101,7 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 	})		
 	}	
 
-	getBillList( true )
+	getBillList()
 	.then(function(res){
 		$scope.billList = res ;
 		$scope.$apply() ;
@@ -141,7 +143,8 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		payBillNow()
 		.then(function(res){
 			showToast("success")
-			setTimeout(function() {$state.reload();}, 1500);
+			// setTimeout(function() {$state.reload();}, 1500);
+			$state.go ( $state.current , { showLoading : false } )
 			
 		},function(err){	
 			showToast("error")
