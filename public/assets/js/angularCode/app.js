@@ -27,7 +27,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -57,7 +57,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -78,7 +78,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -105,7 +105,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -126,7 +126,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -147,7 +147,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -174,7 +174,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -195,7 +195,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -219,7 +219,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -240,7 +240,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -264,7 +264,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -285,7 +285,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -309,7 +309,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},
@@ -331,7 +331,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			check : function($rootScope,$state,user){
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
-					$state.go('login')
+					$state.go('logout')
 				}
 			}
 		},

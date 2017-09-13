@@ -8,6 +8,7 @@ angular.module('logoutModule',['ui.router','serviceModule','serviceModule2'])
 		}
 	})
 	.then(function(response){
+		console.log("IN LOGOUT")
 		console.log(response.data)
 		user.clear() ;
 		// $rootScope.error = "LOGGED OUT" ;

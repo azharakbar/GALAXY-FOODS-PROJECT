@@ -1,5 +1,5 @@
-angular.module('serviceModule', [])
-	.service( 'user' , function($rootScope,$http){
+angular.module('serviceModule', ['ui.router'])
+	.service( 'user' , function($rootScope,$state,$http){
 	    var username ;
 	    var token ;
 	    var loggedIn = false ;
@@ -19,7 +19,8 @@ angular.module('serviceModule', [])
 				var data = JSON.parse(sessionStorage.getItem('login')) ;
 				if ( data.time+900000 <= Date.now() ){
 					this.clear()
-					loggedIn = false 
+					loggedIn = false
+					$state.go('logout') 
 				}else{
 					loggedIn = true ;
 					$rootScope.loggedIn = true ;
