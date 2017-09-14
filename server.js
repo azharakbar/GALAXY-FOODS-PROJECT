@@ -695,8 +695,21 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 					v = items[j].qty 			
 			item.totalStock = item.totalStock - v
 			item.availableStock = item.availableStock - v
+			item.lastVal = v
 			item.save()
-			.then(function(){
+			.then(function(rslt){
+				var objToSave = {
+					category : 'STOCK' ,
+					details : {
+						type : 'LOST',
+						// orderId : req.body.orderId ,
+						barCode : rslt.barCode ,
+						name : rslt.name ,
+						qty : rslt.lastVal ,
+						status : rslt.availableStock + " / " + rslt.totalStock 
+					}
+				}		
+				logSave( objToSave )				
 				console.log(`UPDATED STOCK ${item.name}`)
 			},function(err){
 			})
@@ -711,9 +724,21 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 			cust.credit += cr
 
 			cust.save()
-			.then(function(response){
+			.then(function(custResponse){
 				bill.save()
-				.then(function(response){
+				.then(function(billResponse){
+					objToSave = {
+						category : 'TRANSACTION' ,
+						details : {
+							type : 'CREDIT',
+							id : billResponse.billId ,
+							amount : billResponse.billAmount ,
+							totalCredit : custResponse.credit ,
+							name : billResponse.name ,
+							contact : billResponse.customer
+						}
+					}
+					logSave( objToSave )					
 					console.log({status : 'SXS'})
 					res.json({status : 'SXS'})
 				},function(err){
@@ -1005,9 +1030,10 @@ app.post('/cancelOrder' , isLoggedIn , function(req,res){
 					refundAmt = bill.remAmount - bill.billAmount
 					console.log(`BILL DETAILS : ${bill.billId}   ${bill.billAmount}    ${bill.totalPaid}`)
 					if ( refundAmt )
-						bill.status = "ORDER CANCELLED & REFUNDED"
+						bill.status = "BILL CANCELLED & REFUNDED"
 					else
-						bill.status = "ORDER CANCELLED"
+						bill.status = "BILL CANCELLED"
+					bill.lastPaidDate = new Date()
 					bill.save()
 					.then(function(billResponse){
 						var objToSave = {

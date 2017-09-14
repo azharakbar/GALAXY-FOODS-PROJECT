@@ -233,9 +233,9 @@
 		    <tr ng-repeat="lostItem in lostList" class="animated fadeInLeft" height="48" id="item{{$index}}">
 		    <td width="20%" title = "CODE"> {{lostItem.barCode}} </td>
 		    <td width="30%" title = "NAME" style="position:relative; left:10px">  {{lostItem.name}} </td>
-		    <!-- <td width="12.50%" title = "PRICE"> <center>{{lostItem.price | currency:""}} ₹</center> </td> -->
-		    <td width="12.50%" title = "AVAILABLE"> <center>{{lostItem.costPrice*lostItem.qty | currency:""}} ₹</center> </td>
+		    <td width="12.50%" title = "PRICE"> <center>{{lostItem.costPrice | currency:""}} ₹</center> </td>
 		    <td width="12.50%" title = "LOST STOCK"> <center>{{lostItem.qty}}</center> </td>
+		    <td width="12.50%" title = "AVAILABLE"> <center>{{lostItem.costPrice*lostItem.qty | currency:""}} ₹</center> </td>
 		    <td width="12.50%" title = "AVAILABLE"> <center><button class="btn waves-effect waves-light" style="background-color: #d32f2f; position: relative; bottom: 2px" ng-click="delThisItem($index)"><i class="fa fa-trash-o"></i></button></center> </td>
 		  	</tr>
 		  </tbody>
