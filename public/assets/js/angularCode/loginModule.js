@@ -1,5 +1,5 @@
 angular.module('loginModule', ['serviceModule','serviceModule2'])
-    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , user , toast){
+    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , $timeout ,  user , toast){
         $scope.login = function(){
             var username = $scope.username ;
             var password = $scope.password ;
@@ -24,8 +24,13 @@ angular.module('loginModule', ['serviceModule','serviceModule2'])
                         $scope.error = $rootScope.error
                         $rootScope.error = undefined ;
                     }
-                    else
+                    else{
+                        $('#loginError').addClass('shake')
                         $scope.error = "INVALID LOGIN CREDENTIALS"
+                          $timeout(function(){
+                            $('#loginError').removeClass('shake')
+                          },1000);
+                    }
                 }
             })
         }

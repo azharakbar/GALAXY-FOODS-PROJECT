@@ -1,9 +1,18 @@
-angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
-.controller('newOrderCtrl',function( $rootScope , $scope , $state , $http , user , toast ){
+angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serviceModule2'])
+.controller('newOrderCtrl',function( $rootScope , $scope , hotkeys , $state , $http , user , toast ){
 
 	$('.modal').modal();
 	$('.datepicker').css('font-size','19px')
 	
+	hotkeys.bindTo($scope)
+	.add({
+		combo : 'alt+s' ,
+		description : 'SEARCH' ,
+		callback : function(){
+			$scope.expandSearch()
+		}		
+	})
+
 	var monthNames = ["January", "February", "March", "April", "May", "June",
 	  "July", "August", "September", "October", "November", "December"];
 	var orderedItem = {} ;
@@ -100,6 +109,12 @@ angular.module('newOrderModule',['pickadate','serviceModule','serviceModule2'])
 
 	$scope.compressSearch = function(){
 		$('#search').animate( { width:"0px" } )
+	}
+
+	$scope.searchBlur = function(){
+		if ( event.keyCode === 27 && ($scope.search == "" || $scope.search == undefined ) ){
+			$('#search').blur()
+		}
 	}
 
 	$scope.searchFocus = function(){

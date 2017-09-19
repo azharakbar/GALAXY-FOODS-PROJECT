@@ -135,6 +135,24 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	})		
 	}	
 
+
+	$scope.deliverNote = function(){
+		var loxn = "http://localhost:2016/report?type=3&orderId="+$rootScope.selectedOrder.orderId ;
+		console.log(loxn)
+/*		var dataObj = {
+			startDate : $scope.startDate
+		};*/
+
+/*		if ( $scope.reportOpt == "stkReport" ){
+			loxn += "shortid=B1yDqRVwW&type=1&data=" ;
+		}
+		else{
+			loxn += "shortid=H1e0jWYdZ&type=2&data=" ;
+		}
+		loxn += JSON.stringify(dataObj) ;*/
+		// var win = window.open(loxn);
+	}	
+
 	getOrderList( true )
 	.then(function(res){
 		$scope.orderList = res ;
@@ -157,7 +175,7 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	}
 
 	$scope.searchBlur = function(){
-		if ( event.keyCode === 27 ){
+		if ( event.keyCode === 27 && ($scope.search == "" || $scope.search == undefined ) ){
 			$('#search').blur()
 		}
 	}

@@ -92,6 +92,9 @@
       	</table>
 	</div>
 	<div class="modal-footer">
+		<span style="float:left;">
+			<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="deliverNote()" ng-disabled="selectedOrder.status == 'RETURNED' || selectedOrder.status == 'NOT PICKED UP' || selectedOrder.status == 'ORDER CANCELLED'"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-print"></i> DELIVERY NOTE </span></button>
+		</span>
 		<span style="position:absolute; float:right; right:75px">
 		<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="update()" ng-disabled="true"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-refresh"></i> UPDATE </span></button>
 		<button id="" class="waves-effect waves-light btn-large" ng-click="cancelOrder(0)" ng-disabled="selectedOrder.status != 'NOT PICKED UP'" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"> CANCEL ORDER <i class="fa fa-trash"></i></span></button>

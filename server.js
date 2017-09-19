@@ -1127,7 +1127,9 @@ app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
 app.get('/report' , isLoggedIn , function(req,res){
 	var mnth = ['January' , 'February' , 'March' , 'April' , 'May' , 'June' , 'July' , 'August' , 'September' , 'October' , 'November' , 'December' ] ;
 	var shortid = req.query.shortid ;
-	var incData = JSON.parse( req.query.data ) ;
+	var incData = {} ;
+	if ( req.query.data !== undefined )
+		incData = JSON.parse( req.query.data ) ;
 	var dataObj = {
 		template : { shortid : shortid },
 		// data : incData ,
@@ -1143,32 +1145,35 @@ app.get('/report' , isLoggedIn , function(req,res){
 
 		// console.log ( 'BEFORE CONVERTING')
 		// console.log ( incData ) ;
-		var x = new Date( incData.startDate )
-		// var t1 = incData.startDate
-		incData.startDate = x.getDate() 
-		incData.startDate += ' '
-		incData.startDate += mnth[x.getMonth()]
-		incData.startDate += ' '
-		incData.startDate += x.getFullYear()
-		var y = new Date( incData.endDate )
-		// var t2 = incData.endDate
-		incData.endDate = y.getDate() 
-		incData.endDate += ' '
-		incData.endDate += mnth[y.getMonth()]
-		incData.endDate += ' '
-		incData.endDate += y.getFullYear()	
-		x.setHours(0)
-		x.setMinutes(0)
-		x.setSeconds(0)
-		y.setHours(0)
-		y.setMinutes(0)
-		y.setSeconds(0)			
+		if ( req.query.type === '1' || req.query.type === '2'){
+			var x = new Date( incData.startDate )
+			// var t1 = incData.startDate
+			incData.startDate = x.getDate() 
+			incData.startDate += ' '
+			incData.startDate += mnth[x.getMonth()]
+			incData.startDate += ' '
+			incData.startDate += x.getFullYear()
+			var y = new Date( incData.endDate )
+			// var t2 = incData.endDate
+			incData.endDate = y.getDate() 
+			incData.endDate += ' '
+			incData.endDate += mnth[y.getMonth()]
+			incData.endDate += ' '
+			incData.endDate += y.getFullYear()	
+			x.setHours(0)
+			x.setMinutes(0)
+			x.setSeconds(0)
+			y.setHours(0)
+			y.setMinutes(0)
+			y.setSeconds(0)			
+		}
 		// console.log(`x = ${x}`)
 		// console.log(`y = ${y}`)
 		if ( req.query.type === '1' ){	
 			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
 			.then(function(rslt){
 				incData.stkItems = rslt
+				dataObj.template.shortid = "B1yDqRVwW"
 				dataObj.data = incData
 				options.json = dataObj
 				request(options).pipe(res)			
@@ -1179,15 +1184,35 @@ app.get('/report' , isLoggedIn , function(req,res){
 			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "TRANSACTION" } }]})
 			.then(function(rslt){
 				incData.stkItems = rslt
+				dataObj.template.shortid = "H1e0jWYdZ"
 				dataObj.data = incData
 				options.json = dataObj
 				request(options).pipe(res)			
 				},function(err){
 					incData.stkItems = { status : "ERROR" }
 				})
+		} else if ( req.query.type === '3' ){
+			Order.findOne({ orderId : req.query.orderId })
+			.then(function(rslt){
+				incData.orderId = rslt.orderId
+				incData.name = rslt.name
+				incData.contact = rslt.customer
+				incData.dateOfIssue = rslt.issueDate
+				incData.dateOfDelivery = rslt.pickupDate
+				incData.dateOfReturn = rslt.returnDate
+				incData.stkItems = rslt.items
+				console.log(`incData = ${incData}`)
+				console.log(rslt)
+				console.log(rslt.orderId)
+				dataObj.data = incData
+				dataObj.template.shortid = "Hkx4iKs9b"
+				options.json = dataObj
+				request(options).pipe(res)			
+				},function(err){
+					incData.stkItems = { status : "ERROR" }
+				})
 		}
-
-
+		console.log("here in report")
 })	
 
 app.get('/logs',function(req,res){
@@ -1217,6 +1242,9 @@ function isLoggedIn(req, res, next) {
     	console.log(`${req.isAuthenticated()}     token: ${req.session.token}`)
     else
     	console.log("** IN DEBUG MODE **")
+
+    console.log(`INCOMING IP : ${req.ip}`)
+
     if ( config.genConfig.debug || (req.isAuthenticated() && (req.session.token == req.body.token)))
         return next();
     console.log("ERROR IN AUTHENTICATION")

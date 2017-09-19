@@ -19,7 +19,7 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 	})	
 	
 	$scope.searchBlur = function(){
-		if ( event.keyCode === 27 ){
+		if ( event.keyCode === 27 && ($scope.search == "" || $scope.search == undefined ) ){
 			$('#search').blur()
 		}
 	}

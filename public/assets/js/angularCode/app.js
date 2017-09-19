@@ -401,7 +401,15 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,toast,hotkeys){
 		callback: function() {
 			$state.reload()
 		}
-	})	
+	})
+	hotkeys.add({
+		combo: 'alt+l',
+		description: 'LOGOUT',
+		callback: function() {
+			if ( $state.current.name != 'login')
+				$state.go('logout')	
+		}
+	})		
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){
 			if(oldVal === "LOADING")

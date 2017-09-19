@@ -1,40 +1,52 @@
 <html>
-    <head>
-        <title>REPORT</title>
-        <link rel="stylesheet" href="../../assets/font-awesome.min.css/content.css">
-    </head>
-    
-    <style>
-    body{
-        font-family : 'Trebuchet MS'
+
+<head>
+    <title>REPORT</title>
+    <link rel="stylesheet" href="../../assets/font-awesome.min.css/content.css">
+</head>
+
+<style>
+    body {
+        font-family: 'Trebuchet MS'
     }
-        hr.style13 {
+    
+    hr.style13 {
         width: 100%;
-    	height: 10px;
-    	border: 0;
-    	box-shadow: 0 10px 10px -10px #8c8b8b inset;
-        }
-        
-    amount{
-        float : left;
-    }    
-th, td { padding: 15px; 
+        height: 10px;
+        border: 0;
+        box-shadow: 0 10px 10px -10px #8c8b8b inset;
+    }
     
-}
-
-/* cellspacing */
-table { border-collapse: separate; border-spacing: 5px; } /* cellspacing="5" */
-
-/* valign */
-th, td { vertical-align: top; }
-
-/* align (center) */
-table { margin: 0 auto; }        
-        /*{#asset font-awesome.min.css @encoding=utf8}*/
-    </style>    
+    amount {
+        float: left;
+    }
     
-    <body>
-     
+    th,
+    td {
+        padding: 15px;
+    }
+    /* cellspacing */
+    
+    table {
+        border-collapse: separate;
+        border-spacing: 5px;
+    }
+    /* cellspacing="5" */
+    /* valign */
+    
+    th,
+    td {
+        vertical-align: top;
+    }
+    /* align (center) */
+    
+    table {
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+
     <span style="position:relative;float:left">
         <font face="Trebuchet MS">
             <h1> PC DECORATIONS </h1>
@@ -44,60 +56,95 @@ table { margin: 0 auto; }
     <span style="position:relative;float:right">
         <font face="Trebuchet MS">
             <h3> CONTACT : +91-8714452213
-            <br>
-            <span style="float:right">+91-7012690872 </span> </h3>
-            
-        </font>        
+                <br>
+                <span style="float:right">+91-7012690872 </span>
+            </h3>
+
+        </font>
     </span>
     <hr class="style13" style="position:relative; bottom:15px">
-        <center>
+    <center>
         <h1> TRANSACTION REPORT </h1>
-        <h3><span style="float:left"> {{:startDate}} </span>  <span style="float:right">{{:endDate}}</span> </h3>
-        </center>
-        <br>
-        <hr>
-        <br>
-        <table>
-            <thead>
-                <tr>
-                    <th width="10%"><center>DATE</center></th>
-                    <th width="25%"><center>CUSTOMER</center></th>
-                    <th width="10%"><center>BILL NUMBER</center></th>
-                    <th width="6%"><center>TYPE</center></th>
-                    <th width="14%"><center>AMOUNT</center></th>
-                    {{!--<th width="25%"><center>ACTIVITY</center></th>--}}
-                    
-                    <th width="14%"><center>PENDING AMOUNT</center></th>
-                    
-                    <th width="15%"><center>STATUS</center></th>                 
-                </tr>
-            </thead>
-            {{for stkItems}}
-                <tr>
-                    <td width="10%">{{:readableDate}}</td>
-                    <td width="25%">{{:details.name}}</td>
-                    <td width="10%"><center>{{:details.id}}</center></td>
-                    <td width="6%"><center>{{:details.type}}</center></td>
-                    {{if details.type=="CREDIT"}}
-                        <td width="14%"><span class="amount">{{:details.amount}}</span></td>
-                        {{:~incCredit(details.amount)}}
-                    {{else details.type=="CNL"}}
-                        <td width="14%"><span class="amount">{{:details.amount}}</span></td>
-                        {{:~incCredit(details.amount)}}                        
-                    {{else details.type=="DEBIT"}}
-                        <td width="14%"><span class="amount">{{:details.paid}}</span></td>
-                        {{:~incDebit(details.paid)}}
-                    {{/if}}
-                    <td width="15%"><center>{{:details.totalCredit}}</center></td>
-                    <td width="15%"><center>{{:details.status}}</center></td>
-                </tr>
-            {{/for}}
-        </table>
-        {{!--<h2>{{:~convertDate("2017-09-01T12:22:11.729Z")}}</h2>--}}
-        {{!--<h3>{{>~convertDate("2017-09-01T12:22:11.729Z")}}</h3>--}}
-        <hr>
-        <h3> TOTAL CREDIT : {{:~getCredit()}} </h3>
-        <h3> TOTAL DEBIT : {{:~getDebit()}} </h3>
-        <i class="fa fa-inr" style="font-size: 25px"></i>
-    </body>
+        <h3>
+            <span style="float:left"> {{:startDate}} </span>
+            <span style="float:right">{{:endDate}}</span>
+        </h3>
+    </center>
+    <br>
+    <hr>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th width="10%">
+                    <center>DATE</center>
+                </th>
+                <th width="25%">
+                    <center>CUSTOMER</center>
+                </th>
+                <th width="10%">
+                    <center>BILL NUMBER</center>
+                </th>
+                <th width="6%">
+                    <center>TYPE</center>
+                </th>
+                <th width="14%">
+                    <center>AMOUNT</center>
+                </th>
+                {{!--
+                <th width="25%">
+                    <center>ACTIVITY</center>
+                </th>--}}
+
+                <th width="14%">
+                    <center>PENDING AMOUNT</center>
+                </th>
+
+                <th width="15%">
+                    <center>STATUS</center>
+                </th>
+            </tr>
+        </thead>
+        {{for stkItems}}
+        <tr>
+            <td width="10%">{{:readableDate}}</td>
+            <td width="25%">{{:details.name}}</td>
+            <td width="10%">
+                <center>{{:details.id}}</center>
+            </td>
+            <td width="6%">
+                <center>{{:details.type}}</center>
+            </td>
+            {{if details.type=="CREDIT"}}
+            <td width="14%">
+                <span class="amount">{{:details.amount}}</span>
+            </td>
+            {{:~incCredit(details.amount)}} {{else details.type=="CNL"}}
+            <td width="14%">
+                <span class="amount">{{:details.amount}}</span>
+            </td>
+            {{:~incCredit(details.amount)}} {{else details.type=="DEBIT"}}
+            <td width="14%">
+                <span class="amount">{{:details.paid}}</span>
+            </td>
+            {{:~incDebit(details.paid)}} {{/if}}
+            <td width="15%">
+                <center>{{:details.totalCredit}}</center>
+            </td>
+            <td width="15%">
+                <center>{{:details.status}}</center>
+            </td>
+        </tr>
+        {{/for}}
+    </table>
+    {{!--
+    <h2>{{:~convertDate("2017-09-01T12:22:11.729Z")}}</h2>--}} {{!--
+    <h3>{{>~convertDate("2017-09-01T12:22:11.729Z")}}</h3>--}}
+    <hr>
+    <h3> TOTAL CREDIT : {{:~getCredit()}} </h3>
+    <h3> TOTAL DEBIT : {{:~getDebit()}} </h3>
+    {{!--
+    <i class="fa fa-inr" style="font-size: 25px"></i>--}}
+</body>
+
 </html>

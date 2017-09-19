@@ -22,7 +22,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	})	
 	
 	$scope.searchBlur = function(){
-		if ( event.keyCode === 27 ){
+		if ( event.keyCode === 27 && ($scope.search == "" || $scope.search == undefined ) ){
 			$('#search').blur()
 		}
 	}	

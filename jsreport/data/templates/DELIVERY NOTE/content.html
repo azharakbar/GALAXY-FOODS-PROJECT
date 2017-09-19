@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>REPORT</title>
+    </head>
+    
+    <style>
+    body{
+        font-family : 'Trebuchet MS'
+    }
+        hr.style13 {
+        width: 100%;
+    	height: 10px;
+    	border: 0;
+    	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+        }
+
+hr.style8 {
+	border-top: 1px solid #8c8b8b;
+	border-bottom: 1px solid #fff;
+}
+        
+th, td { padding: 15px; 
+    
+}
+
+/* cellspacing */
+table { border-collapse: separate; border-spacing: 5px; } /* cellspacing="5" */
+
+/* valign */
+th, td { vertical-align: top; }
+
+/* align (center) */
+table { margin: 0 auto; }        
+        
+    </style>    
+    
+    <body>
+     
+    <span style="position:relative;float:left">
+        <font face="Trebuchet MS">
+            <h1> PC DECORATIONS </h1>
+            <h2 style="position:relative; bottom:15px"> EVENT MANAGEMENT RENTALS </h2>
+        </font>
+    </span>
+    <span style="position:relative;float:right">
+        <font face="Trebuchet MS">
+            <h3> CONTACT : +91-8714452213
+            <br>
+            <span style="float:right">+91-7012690872 </span> </h3>
+            
+        </font>        
+    </span>
+    <hr class="style13" style="position:relative; bottom:15px">
+        <center>
+            <h1> DELIVERY NOTE </h1>
+        </center>
+        <h4>
+            <div style="float:left">
+                <b>ORDER ID : </b>{{:orderId}}
+                <br><br>
+                <b>CUSTOMER NAME : </b>{{:name}}
+                <br>
+                <b>CONTACT : </b>{{:contact}}
+            </div>
+            <div style="float:right">
+                <b>DATE OF ORDER : </b>{{:~formatDate(dateOfIssue)}}
+                <br><br>
+                <b>DELIVERY DATE &nbsp;: </b>{{:~formatDate(dateOfDelivery)}}
+                <br>
+                <b>RETURN DATE &nbsp;&nbsp;&nbsp;: </b>{{:~formatDate(dateOfReturn)}}
+            </div>
+        </h4>
+        <br>
+        <hr class="style13" style="position:relative; top:15px">
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th width="15%"><span style="float:left">BAR CODE</span></th>
+                    <th width="25%"><span style="float:left">ITEM NAME</span></th>
+                    <th width="10%"><center>RENT</center></th>
+                    <th width="10%"><center>QUANTITY</center></th>
+                    <th width="15%"><center>RENT TOTAL</center></th>                 
+                </tr>
+            </thead>
+            {{for stkItems}}
+                    <tr>
+                        <td width="15%">{{:barCode}}</td>
+                        <td width="25%">{{:name}}</td>
+                        <td width="10%"><center>{{:price}}</center></td>
+                        <td width="10%"><center>{{:qty}}</center></td>
+                        <td width="15%"><center>{{:~mult(qty,price)}}</center></td>
+                    </tr>
+            {{/for}}
+        </table>
+        <hr class="style13" style="">
+        <span style="float:right">
+            <span style="position:relative; right:85px">
+                <b> CREDITED TOTAL : {{:~getTotal()}} </b>
+            </span>
+        </span>
+ <div id="spacer" style="width: 200px; height: 100px; display:inline-block"></div>
+     <div style="position: absolute; bottom: 0;">
+         <h3>
+        <span style="float:left">
+            PC DECORATIONS
+        </span>
+        <span style="position:relative; right:-550px">
+            {{:name}}
+        </span>
+        </h3>
+         </div>
+        
+    </body>
+</html>
