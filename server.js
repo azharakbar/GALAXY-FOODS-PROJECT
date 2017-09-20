@@ -5,13 +5,13 @@ const 	express = require('express') ,
 		cookieParser = require('cookie-parser'),
 		passport = require('passport') ,
 		logger = require('morgan') ,
-		config = require('./config/config') ,
 		bluebird = require('bluebird'),
 		session = require('express-session'),
 		cors = require('cors'),
-		md5 = require('md5'),
-		uniqid = require('uniqid'),
+
 		request = require('request'),
+		
+		config = require('./config/config') ,
 		Customer = require('./models/customer'),
 		Item = require('./models/item'),
 		Order = require('./models/order'),
@@ -19,6 +19,8 @@ const 	express = require('express') ,
 		Log = require('./models/log')
 
 var app = express() ;
+
+const indexRouter = require('./routes/indexRouter')
 
 app.set('port' , config.genConfig.port )
 // app.use(logger('dev'))	
@@ -42,7 +44,7 @@ mongoose.connect ( config.connURI , function(err){
 		console.log(">> CONNEXN TO DATABASE ESTABLISHED")
 })
 
-config.passportConfig.pass(passport);
+// config.passportConfig.pass(passport);
 
 app.use(session({'secret':config.genConfig.secret , resave:true , saveUninitialized:true}))
 app.use(passport.initialize())
@@ -50,56 +52,9 @@ app.use(passport.session())
 
 app.use('/',express.static(__dirname+'/public'));
 
-app.post('/login', function(req, res, next) {
-  passport.authenticate('login', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return res.redirect('http://127.0.0.1:2016/loginFailure'); }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-    var obj = {
-        status : 'authDone' ,
-        username : 'GALAXY',
-        role : 'ADMINISTRATOR' ,
-        token : md5(uniqid()) 
-    }
-    req.session.token = obj.token ;	
-    console.log("SUPER HERE")
-	var objToSave = {
-		category : 'AUTHENTICATION' ,
-		details : {
-			type : 'LOGIN',
-			username : 'GALAXY' ,
-		}
-	}
-	logSave( objToSave )    
-    return res.json( obj ) ;
-    });
-  })(req, res, next);
-});
 
-app.get('/loginFailure',function(req,res){
-	console.log(`***LOGINFAILURE***`);
-	var obj = {
-		status : 'loginFailed' ,
-	}
-	res.json(obj);
-})
-
-app.post('/logout',function(req,res){
-    console.log(`***LOGOUT***`)
-    var obj = { status : 'logOutSuccess' } ;
-	var objToSave = {
-		category : 'AUTHENTICATION' ,
-		details : {
-			type : 'LOGOUT',
-			username : 'GALAXY' ,
-		}
-	}
-	logSave( objToSave )        
-    req.session.destroy();
-    req.logout() ;
-	res.json( obj ) ;
-})
+app.use ( '/' , indexRouter )
+// app.use('/test', isLoggedIn, indexRouter )
 
 app.get('/check',function(req,res){
     res.json({status:req.isAuthenticated()})
@@ -1223,7 +1178,7 @@ app.get('/logs',function(req,res){
 })
 
 app.get('*'  , function(req,res){
-	var newUrl = "http://localhost:2016/#!"+req.originalUrl ;
+	var newUrl = "http://localhost:2017/#!"+req.originalUrl ;
 	res.redirect ( newUrl ) ;
 })
 
@@ -1252,29 +1207,3 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
-var logSave = ( logObjToSave ) => {
-	var logObj = new Log() 
-	logObj.category = logObjToSave.category
-	logObj.details = logObjToSave.details
-	logObj.readableDate = readableDateFunc(new Date())
-	logObj.save()
-	.then(()=>{
-		console.log("LOGGED")
-	},()=>{
-		console.log("ERROR IN LOGGING")
-	})
-}
-
-var readableDateFunc = function(string){
-	var convertedDate = ''
-	if ( string.getDate() >= 1 && string.getDate() <= 9 )
-		convertedDate = '0' 
-	convertedDate += string.getDate() 
-	convertedDate += '.'
-	if ( string.getMonth() >= 0 && string.getMonth() <= 8 )
-		convertedDate += '0'	
-	convertedDate += (string.getMonth()+1)
-	convertedDate += '.'
-	convertedDate += string.getFullYear()		
-	return convertedDate 	
-}
