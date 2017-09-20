@@ -33,7 +33,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -63,7 +63,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -87,7 +87,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -111,7 +111,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -132,7 +132,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -156,7 +156,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},        
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -180,7 +180,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -204,7 +204,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},        
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -225,7 +225,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -249,7 +249,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},        
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -270,7 +270,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -294,7 +294,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},        
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -315,7 +315,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {
@@ -337,7 +337,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		views : {
 			'v1' : {
-				templateUrl : "./views/navBar.html" ,
+				templateUrl : "./views/navbar.html" ,
 				controller : 'sideNavCtrl'
 			},
 			'v2' : {

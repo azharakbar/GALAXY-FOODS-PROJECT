@@ -1,5 +1,3 @@
-//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING
-//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING//TRIALING
 'use strict'
 const 	express = require('express') ,
 		mongoose = require('mongoose') ,
@@ -80,7 +78,7 @@ app.post('/login', function(req, res, next) {
 });
 
 app.get('/loginFailure',function(req,res){
-	console.log(`In LOGINFAILURE : Content-Type: ${req.headers['Content-Type']}`);
+	console.log(`***LOGINFAILURE***`);
 	var obj = {
 		status : 'loginFailed' ,
 	}
@@ -88,7 +86,7 @@ app.get('/loginFailure',function(req,res){
 })
 
 app.post('/logout',function(req,res){
-    console.log(`IN LOGOUT POST req.isAuthenticated()=${req.isAuthenticated()}`)
+    console.log(`***LOGOUT***`)
     var obj = { status : 'logOutSuccess' } ;
 	var objToSave = {
 		category : 'AUTHENTICATION' ,
