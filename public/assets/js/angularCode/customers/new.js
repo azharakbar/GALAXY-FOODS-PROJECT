@@ -44,7 +44,7 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 				var tkn = user.getToken()
 				console.log("OUTGOINING REQ =="+'name='+$scope.custName+'&contact='+$scope.custContact+'&token='+tkn)
 				$http({
-					url : '/newCustomer' ,
+					url : '/customer/new' ,
 					method : 'POST' ,
 					headers : {
 						'Content-Type' : 'application/x-www-form-urlencoded'

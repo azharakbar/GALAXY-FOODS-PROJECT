@@ -60,7 +60,7 @@ app.get('/check',function(req,res){
     res.json({status:req.isAuthenticated()})
 })
 
-app.post('/newCustomer',isLoggedIn,function(req,res){
+/*app.post('/newCustomer',isLoggedIn,function(req,res){
 	Customer.findOne({contact:req.body.contact})
 	.then(function(cust){
 		if ( cust ){
@@ -90,17 +90,17 @@ app.post('/newCustomer',isLoggedIn,function(req,res){
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
-})
+})*/
 
-app.post('/totalCustomers',isLoggedIn,function(req,res){
+/*app.post('/totalCustomers',isLoggedIn,function(req,res){
 	Customer.count()
 	.then(function(num){
 		res.json({status : 'SXS' , count : num})
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
-})
-
+})*/
+/*
 app.post('/allCustomers',isLoggedIn,function(req,res){
 	Customer.find({},null,{sort : { credit : -1 }})
 	.then(function(users){
@@ -108,7 +108,7 @@ app.post('/allCustomers',isLoggedIn,function(req,res){
 	},function(err){
 		res.json({status : 'ERROR'})
 	})
-})
+})*/
 
 app.post('/newItem',isLoggedIn,function(req,res){
 	if ( parseFloat(req.body.stockInHand) > parseFloat(req.body.totalStock) ){

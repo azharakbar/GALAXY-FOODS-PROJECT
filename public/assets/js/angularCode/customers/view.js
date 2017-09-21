@@ -29,7 +29,7 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			showLoading();
 		}
 		$http({
-			url : "/totalCustomers",
+			url : "/customer/total",
 			method : 'POST',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
@@ -40,7 +40,7 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			if ( response.data.status === "SXS" ){
 				$scope.total = response.data.count 
 				$http({
-					url : "/allCustomers",
+					url : "/customer/list",
 					method : 'POST',
 					headers : {
 						'Content-Type' : 'application/x-www-form-urlencoded'
@@ -137,7 +137,7 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	var deleteCustomer = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/deleteCustomer/"+$rootScope.customer.contact,
+				url : "/customer/delete/"+$rootScope.customer.contact,
 				method : 'DELETE',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
