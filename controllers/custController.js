@@ -1,7 +1,7 @@
 'use strict'
 
 const 	custService = require('../services/custService'),
-		logSave = require('./logger')
+		logger = require('./logger')
 
 var customerExists = function( contact ){
 	return new Promise((resolve,reject)=>{
@@ -26,7 +26,7 @@ var saveCustomer = function( details ){
 					custContact : response.details.contact
 				}
 			}			
-			logSave( objToSave )
+			logger.logSave( objToSave )
 			resolve(response)
 		},(err)=>{
 			reject(err)
@@ -58,18 +58,16 @@ var customerList = function(){
 
 var deleteCustomer = function( contact ){
 	return new Promise((resolve,reject)=>{
-		console.log("in ctrlr")
 		custService.delCustomer( contact )
 		.then((response)=>{
 			let objToSave = {
 				category : 'CUSTOMER' ,
 				details : {
 					type : 'CUSTOMER DELETION',
-					contact : req.params.contact
+					contact : contact
 				}
 			}
-			logSave( objToSave )
-			console.log(`exiting ctrlr ${response}`)
+			logger.logSave( objToSave )
 			resolve(response)
 		},(err)=>{
 			reject(err)
@@ -77,8 +75,50 @@ var deleteCustomer = function( contact ){
 	})	
 }
 
+var updateCustomer = function( customerForUpdate , updateData ){
+	return new Promise((resolve,reject)=>{
+		let objToSave = {
+			category : 'CUSTOMER' ,
+			details : {
+				type : 'CUSTOMER UPDATE',
+				changes : []
+			}
+		}
+		let customerForLog = JSON.parse(JSON.stringify(customerForUpdate))
+		if ( customerForUpdate.contact !== updateData.contact ){
+			customerExists( updateData.contact )
+			.then((response)=>{
+				if ( response.status ){
+					resolve ( { status : !response.status , details : response.details } )
+				} else {
+					custService.updateCustomer( customerForUpdate, updateData )
+					.then((response)=>{
+						objToSave.details.changes = logger.changesForLog ( customerForLog , updateData , ['name','contact'] )
+						logger.logSave( objToSave )
+						resolve(response)
+					},(err)=>{
+						reject(err)
+					})		
+				}			
+			},(err)=>{
+				reject(err)
+			})
+		} else {
+			custService.updateCustomer( customerForUpdate , updateData )			
+			.then((response)=>{
+				objToSave.details.changes = logger.changesForLog ( customerForLog , updateData , ['name','contact'] )
+				logger.logSave( objToSave )
+				resolve(response)
+			},(err)=>{
+				reject(err)
+			})				
+		}			
+	})
+}
+
 module.exports.customerExists = customerExists
 module.exports.saveCustomer = saveCustomer  
 module.exports.totalCustomers = totalCustomers
 module.exports.customerList = customerList
 module.exports.deleteCustomer = deleteCustomer
+module.exports.updateCustomer = updateCustomer

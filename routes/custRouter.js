@@ -1,7 +1,7 @@
 'use strict'
 const 	express = require('express'),
 		custRouter = express.Router(),
-		custController = require('../controllers/customer')
+		custController = require('../controllers/custController')
 
 custRouter.route('/new')
 	.post((req,res)=>{
@@ -61,7 +61,6 @@ custRouter.route('/delete/:contact')
 				console.log(`... CUSTOMER NOT FOUND : ${req.params.contact} ...`)
 				res.json({status : 'ERROR'})
 			} else { 
-				console.log("in router")
 				return custController.deleteCustomer( req.params.contact )
 			}
 		},( err )=>{
@@ -69,13 +68,40 @@ custRouter.route('/delete/:contact')
 			res.json({status : 'ERROR'})
 		})
 		.then(( response )=>{
-			console.log(`exiting router ${response}`)
 			console.log(`... CUSTOMER DELETED SXSFULLY : ${req.params.contact} ...`)
 			res.json({status : 'SXS'})
 		},( err )=>{
 			console.log(`--- ERROR DURING DELETING CUSTOMER ${err.details} ---`)
 			res.json({status : 'ERROR'})
 		})		
+	})
+
+custRouter.route('/update/:contact')
+	.put((req,res)=>{
+		custController.customerExists( req.params.contact )
+		.then(( response )=>{
+			if ( !response.status ){
+				console.log(`... CUSTOMER NOT FOUND : ${req.params.contact} ...`)
+				res.json({status : 'ERROR'})
+			} else { 
+				return custController.updateCustomer( response.details , req.body )
+			}
+		},( err )=>{
+			console.log(`--- ERROR DURING CHECKING FOR CUSTOMER ${err} ---`)
+			res.json({status : 'ERROR'})
+		})
+		.then(( response )=>{
+			if ( response.status ){
+				console.log(`... CUSTOMER UPDATED SXSFULLY ...`)
+				res.json({status : 'SXS'})
+			} else {
+				console.log(`... CUSTOMER REDUNDANCY FOUND WITH NEW DETAIL: ${response.details.contact} --> ${response.details.name} ...`)
+				res.json({status : 'REDUNDANT'})				
+			}
+		},( err )=>{
+			console.log(`--- ERROR DURING UPDATING CUSTOMER ${err} ---`)
+			res.json({status : 'ERROR'})
+		})	
 	})
 
 module.exports = custRouter

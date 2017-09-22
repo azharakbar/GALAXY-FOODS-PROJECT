@@ -60,56 +60,6 @@ app.get('/check',function(req,res){
     res.json({status:req.isAuthenticated()})
 })
 
-/*app.post('/newCustomer',isLoggedIn,function(req,res){
-	Customer.findOne({contact:req.body.contact})
-	.then(function(cust){
-		if ( cust ){
-			res.json({status : 'REDUNDANT'})
-		}
-		else{
-			var customer = new Customer() ;
-			customer.name = req.body.name
-			customer.contact = req.body.contact
-			customer.createdDate = new Date() 
-			customer.save()
-			.then(function(){
-				var objToSave = {
-					category : 'CUSTOMER' ,
-					details : {
-						type : 'NEW CUSTOMER ADDED',
-						custName : req.body.name ,
-						custContact : req.body.contact
-					}
-				}
-				logSave( objToSave )
-				res.json({status : 'SXS'})
-			},function(err){
-				res.json({status : 'ERROR'})
-			})
-		}
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})*/
-
-/*app.post('/totalCustomers',isLoggedIn,function(req,res){
-	Customer.count()
-	.then(function(num){
-		res.json({status : 'SXS' , count : num})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})*/
-/*
-app.post('/allCustomers',isLoggedIn,function(req,res){
-	Customer.find({},null,{sort : { credit : -1 }})
-	.then(function(users){
-		res.json({status : 'SXS' , result : users})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})*/
-
 app.post('/newItem',isLoggedIn,function(req,res){
 	if ( parseFloat(req.body.stockInHand) > parseFloat(req.body.totalStock) ){
 		res.json({status : "STOCK VALUE ERROR"})
@@ -325,88 +275,6 @@ app.delete('/deleteItem/:barCode',isLoggedIn,function(req,res){
 			}
 		}
 		logSave( objToSave )		
-		res.json({status : 'SXS'})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.put('/updateCustomer/:contact',isLoggedIn,function(req,res){
-	var logObjToSave = {
-		category : 'CUSTOMER' ,
-		details : {
-			type : 'CUSTOMER UPDATE',
-		}
-	}
-	Customer.findOne({contact:req.params.contact})
-	.then(function(customer){
-			var customerForLog = {}
-			var arr = [ 'name' , 'contact' ]
-			for ( var x in arr ){
-				customerForLog[arr[x]] = customer[arr[x]]
-			}
-			if ( req.body.contact === req.params.contact ){
-				customer.name = req.body.name 
-				customer.contact = req.body.contact 
-				customer.save()
-				.then(function(rslt){
-					var keyList = Object.keys(customerForLog)
-					for ( var x in keyList ){
-						if ( rslt[keyList[x]] !== customerForLog[keyList[x]] ){
-							logObjToSave.details[keyList[x]] = {
-								old : customerForLog[keyList[x]] ,
-								new : rslt[keyList[x]]
-							}
-						}
-					}					
-					logSave ( logObjToSave )					
-					res.json({status : 'SXS'})
-				},function(err){
-					res.json({status : 'ERROR'})
-				})
-			} else {
-				Customer.findOne({contact:req.body.contact})
-				.then(function(customer2){
-					if ( customer2 ){
-						res.json({status : 'REDUNDANT'})
-					} else {
-						customer.name = req.body.name 
-						customer.contact = req.body.contact 					
-						customer.save()
-						.then(function(rslt){
-							var keyList = Object.keys(customerForLog)
-							for ( var x in keyList ){
-								if ( rslt[keyList[x]] !== customerForLog[keyList[x]] ){
-									logObjToSave.details[keyList[x]] = {
-										old : customerForLog[keyList[x]] ,
-										new : rslt[keyList[x]]
-									}
-								}
-							}					
-							logSave ( logObjToSave )							
-							res.json({status : 'SXS'})
-						},function(err){
-							res.json({status : 'ERROR'})
-						})
-					}
-				},function(err){
-					res.json({status : 'ERROR'})
-				})
-			}
-		})
-})
-
-app.delete('/deleteCustomer/:contact',isLoggedIn,function(req,res){
-	Customer.remove({contact:req.params.contact})
-	.then(function(item){
-		var objToSave = {
-			category : 'CUSTOMER' ,
-			details : {
-				type : 'CUSTOMER DELETION',
-				contact : req.params.contact
-			}
-		}
-		logSave( objToSave )	
 		res.json({status : 'SXS'})
 	},function(err){
 		res.json({status : 'ERROR'})
@@ -1191,12 +1059,12 @@ app.listen ( app.settings.port , function(err){
 
 
 function isLoggedIn(req, res, next) {
-	if ( !config.genConfig.debug )
+/*	if ( !config.genConfig.debug )
     	console.log(`${req.isAuthenticated()}     token: ${req.session.token}`)
     else
-    	console.log("** IN DEBUG MODE **")
+    	console.log("** IN DEBUG MODE **")*/
 
-    console.log(`INCOMING IP : ${req.ip}`)
+    //console.log(`INCOMING IP : ${req.ip}`)
 
     if ( config.genConfig.debug || (req.isAuthenticated() && (req.session.token == req.body.token)))
         return next();

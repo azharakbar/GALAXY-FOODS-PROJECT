@@ -1,6 +1,6 @@
 'use strict'
 
-const 	logSave = require('./logger'),
+const 	logger = require('./logger'),
 		md5 = require('md5'),
 		uniqid = require('uniqid')
 
@@ -12,7 +12,7 @@ let loginCtrl = ()=>{
 			username : 'GALAXY' ,
 		}
 	}
-	logSave( objToSave )
+	logger.logSave( objToSave )
 	
 	let objForResp = {
 		status : 'authDone' ,
@@ -31,7 +31,7 @@ let logoutCtrl = ()=>{
 			username : 'GALAXY' ,
 		}
 	}
-	logSave( objToSave )
+	logger.logSave( objToSave )
 	
 	var objForResp = { 
 		status : 'logOutSuccess' 

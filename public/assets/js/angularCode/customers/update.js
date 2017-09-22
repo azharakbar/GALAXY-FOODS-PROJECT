@@ -82,7 +82,7 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 	var update = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/updateCustomer/"+$stateParams.customer.contact,
+				url : "/customer/update/"+$stateParams.customer.contact,
 				method : 'PUT',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

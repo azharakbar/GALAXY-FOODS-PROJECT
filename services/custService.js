@@ -55,14 +55,25 @@ var getCustomerList = function(){
 
 var delCustomer = function( contactToDelete ){
 	return new Promise((resolve,reject)=>{
-		console.log("in service")
 		Customer.remove( {contact : contactToDelete} )
 		.then(( custDelResponse )=>{
-			console.log(`exiting service ${custDelResponse}`)
 			resolve ( { 'status' : true , 'details' : custDelResponse } )
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})		
+	})
+}
+
+var updateCustomer = function( customerForUpdate , updateData ){
+	return new Promise((resolve,reject)=>{
+		customerForUpdate.name = updateData.name
+		customerForUpdate.contact = updateData.contact
+		customerForUpdate.save()
+		.then(( custResponse )=>{
+			resolve ( { 'status' : true , 'details' : custResponse } )
+		},( err )=>{
+			reject ( { 'status' : false , 'details' : err } )
+		})
 	})
 }
 
@@ -71,3 +82,4 @@ module.exports.insertCustomer = insertCustomer
 module.exports.totalCustomerCount = totalCustomerCount
 module.exports.getCustomerList = getCustomerList
 module.exports.delCustomer = delCustomer
+module.exports.updateCustomer = updateCustomer
