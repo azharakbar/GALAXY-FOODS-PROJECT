@@ -20,8 +20,8 @@ var findCustomer = function( contactToSearch ){
 var insertCustomer = function( detailsForInsert ){
 	return new Promise((resolve,reject)=>{
 		let customer = new Customer()
-		customer.name = detailsForInsert.name
-		customer.contact = detailsForInsert.contact
+		for ( let key in detailsForInsert )
+			customer[key] = detailsForInsert[key]
 		customer.save()
 		.then(( custResponse )=>{
 			resolve ( { 'status' : true , 'details' : custResponse } )

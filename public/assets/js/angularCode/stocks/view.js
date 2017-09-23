@@ -33,7 +33,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			showLoading();
 		}		
 		$http({
-			url : "/totalItems",
+			url : "/item/total",
 			method : 'POST',
 			headers : {
 				'Content-Type' : 'application/x-www-form-urlencoded'
@@ -44,7 +44,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			if ( response.data.status === "SXS" ){
 				$scope.total = response.data.count 
 				$http({
-					url : "/allItems",
+					url : "/item/list",
 					method : 'POST',
 					headers : {
 						'Content-Type' : 'application/x-www-form-urlencoded'
@@ -199,7 +199,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	var deleteItem = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/deleteItem/"+$rootScope.item.barCode,
+				url : "/item/delete/"+$rootScope.item.barCode,
 				method : 'DELETE',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
