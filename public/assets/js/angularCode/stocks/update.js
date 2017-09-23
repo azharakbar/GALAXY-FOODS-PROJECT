@@ -33,13 +33,13 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 			} else if ( valid && $scope.totalStock.length >= 1 && $scope.totalStock != undefined ){
 				$rootScope.temp = $scope.totalStock ;
 			}
-		} else if ( modelName === "stockInHand"){
+		} else if ( modelName === "availableStock"){
 			if ( !valid ){
-				$scope.stockInHand = $rootScope.temp ;
-			} else if ( valid && $scope.stockInHand == undefined ){
+				$scope.availableStock = $rootScope.temp ;
+			} else if ( valid && $scope.availableStock == undefined ){
 				$rootScope.temp = '' ;
-			} else if ( valid && $scope.stockInHand.length >= 1 && $scope.stockInHand != undefined ){
-				$rootScope.temp = $scope.stockInHand ;
+			} else if ( valid && $scope.availableStock.length >= 1 && $scope.availableStock != undefined ){
+				$rootScope.temp = $scope.availableStock ;
 			}
 		} else if ( modelName === "price"){
 			if ( !valid ){
@@ -72,9 +72,9 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 		if(!checkEquality()){
 			if($scope.itemBarCode != undefined && $scope.itemName != undefined && $scope.price != '' && $scope.costPrice != '' ){
 				if($scope.itemBarCode.length >= 2 && $scope.itemName.length >= 2 && $scope.price >= 1 && $scope.costPrice >= 1 ){
-					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' ){
+					if ( $scope.availableStock != undefined && $scope.availableStock != '' ){
 						if ( $scope.totalStock != undefined && $scope.totalStock != '' ){
-							if ( parseFloat($scope.totalStock) < parseFloat($scope.stockInHand) ){
+							if ( parseFloat($scope.totalStock) < parseFloat($scope.availableStock) ){
 								toast.setMsg("!! AVAILABLE STOCK CANT BE MORE THAN TOTAL STOCK !!")
 								showToast("error")
 								return ;
@@ -87,9 +87,9 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 					}
 					toast.setMsg("LOADING")
 					showLoading();
-					var data = "barcode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price + "&costPrice=" + $scope.costPrice
-					if ( $scope.stockInHand != undefined && $scope.stockInHand != '' )
-						data += "&stockInHand="+$scope.stockInHand ;
+					var data = "barCode=" + $scope.itemBarCode + "&name=" + $scope.itemName + "&price=" + $scope.price + "&costPrice=" + $scope.costPrice
+					if ( $scope.availableStock != undefined && $scope.availableStock != '' )
+						data += "&availableStock="+$scope.availableStock ;
 					if ( $scope.totalStock != undefined && $scope.totalStock != '' )
 						data += "&totalStock="+$scope.totalStock ;
 					data += "&token="+user.getToken()
@@ -125,7 +125,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 				$stateParams.item.name == $scope.itemName && 
 				$stateParams.item.price == $scope.price && 
 				$stateParams.item.costPrice == $scope.costPrice &&
-				$stateParams.item.availableStock == $scope.stockInHand &&
+				$stateParams.item.availableStock == $scope.availableStock &&
 				$stateParams.item.totalStock == $scope.totalStock 
 			) return true ;
 		else  return false ;
@@ -134,7 +134,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 	var update = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/updateItem/"+$stateParams.item.barCode,
+				url : "/item/update/"+$stateParams.item.barCode,
 				method : 'PUT',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

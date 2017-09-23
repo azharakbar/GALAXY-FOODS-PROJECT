@@ -60,71 +60,6 @@ app.get('/check',function(req,res){
     res.json({status:req.isAuthenticated()})
 })
 
-app.post('/newItem',isLoggedIn,function(req,res){
-	if ( parseFloat(req.body.stockInHand) > parseFloat(req.body.totalStock) ){
-		res.json({status : "STOCK VALUE ERROR"})
-		return ;
-	}	
-	Item.findOne({barCode:req.body.barcode})
-	.then(function(item){
-		if ( item ){
-			res.json({status : 'REDUNDANT'})
-		}
-		else{
-			var item = new Item() ;
-			item.barCode = req.body.barcode 
-			item.name = req.body.name 
-			item.price = req.body.price
-			item.costPrice = req.body.costPrice
-			if ( req.body.totalStock != undefined ){
-				item.totalStock = req.body.totalStock
-				if ( req.body.stockInHand != undefined ){
-					item.availableStock = req.body.stockInHand 
-					item.rentedStock = parseInt(req.body.totalStock) - parseInt(req.body.stockInHand)
-				}
-			}
-			item.save()
-			.then(function(rslt){
-				var objToSave = {
-					category : 'STOCK' ,
-					details : {
-						type : 'NEW ITEM ADDED',
-						barCode : rslt.barCode ,
-						name : rslt.name ,
-						rentPrice : rslt.price ,
-						costPrice : rslt.costPrice ,
-						status : rslt.availableStock + " / " + rslt.totalStock
-					}
-				}
-				logSave( objToSave )				
-				res.json({status : 'SXS'})
-			},function(err){
-				res.json({status : 'ERROR'})
-			})
-		}
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.post('/totalItems',isLoggedIn,function(req,res){
-	Item.count()
-	.then(function(num){
-		res.json({status : 'SXS' , count : num})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.post('/allItems',isLoggedIn,function(req,res){
-	Item.find({})
-	.then(function(users){
-		res.json({status : 'SXS' , result : users})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
 app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 	if ( parseFloat(req.body.stockInHand) > parseFloat(req.body.totalStock) ){
 		res.json({status : "STOCK VALUE ERROR"})
@@ -259,23 +194,6 @@ app.put('/updateItem/:barCode',isLoggedIn,function(req,res){
 					res.json({status : 'ERROR'})
 				})
 			}
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.delete('/deleteItem/:barCode',isLoggedIn,function(req,res){
-	Item.remove({barCode:req.params.barCode})
-	.then(function(item){
-		var objToSave = {
-			category : 'STOCK' ,
-			details : {
-				type : 'ITEM DELETION',
-				barCode : req.params.barCode
-			}
-		}
-		logSave( objToSave )		
-		res.json({status : 'SXS'})
 	},function(err){
 		res.json({status : 'ERROR'})
 	})

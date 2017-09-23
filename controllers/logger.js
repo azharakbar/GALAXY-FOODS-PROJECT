@@ -1,4 +1,5 @@
-const 	loggerService = require('../services/loggerService')
+'use strict'
+const 	loggerService = require('../services/loggerService'),
 		dateConverter = require('./dateConverter').dateConverter1
 
 var logSave = ( logObjToSave ) => {
