@@ -2,7 +2,7 @@
 
 const Customer = require('../models/customer')
 
-var findCustomer = function( contactToSearch ){ 
+var findCustomer = function( contactToSearch ){
 	return new Promise((resolve,reject)=>{
 		Customer.findOne( {contact : contactToSearch} )
 		.then(( custResponse )=>{
@@ -12,7 +12,7 @@ var findCustomer = function( contactToSearch ){
 				resolve ( { 'status' : false , 'details' : null } )
 			}
 		},( err )=>{
-			reject ( { 'status' : false , 'details' : err } ) 
+			reject ( { 'status' : false , 'details' : err } )
 		})
 	})
 }
@@ -39,7 +39,7 @@ var totalCustomerCount = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var getCustomerList = function(){
@@ -50,7 +50,7 @@ var getCustomerList = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var delCustomer = function( contactToDelete ){
@@ -60,14 +60,14 @@ var delCustomer = function( contactToDelete ){
 			resolve ( { 'status' : true , 'details' : custDelResponse } )
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
-		})		
+		})
 	})
 }
 
 var updateCustomer = function( customerForUpdate , updateData ){
 	return new Promise((resolve,reject)=>{
-		customerForUpdate.name = updateData.name
-		customerForUpdate.contact = updateData.contact
+		for ( let key in updateData )
+			customerForUpdate[key] = updateData[key]
 		customerForUpdate.save()
 		.then(( custResponse )=>{
 			resolve ( { 'status' : true , 'details' : custResponse } )
@@ -77,7 +77,7 @@ var updateCustomer = function( customerForUpdate , updateData ){
 	})
 }
 
-module.exports.findCustomer = findCustomer 
+module.exports.findCustomer = findCustomer
 module.exports.insertCustomer = insertCustomer
 module.exports.totalCustomerCount = totalCustomerCount
 module.exports.getCustomerList = getCustomerList

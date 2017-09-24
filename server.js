@@ -153,15 +153,6 @@ app.post('/totalOrders',isLoggedIn,function(req,res){
 	})
 })
 
-app.post('/totalBills',isLoggedIn,function(req,res){
-	Bill.count()
-	.then(function(num){
-		res.json({status : 'SXS' , count : num+1})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
 app.post('/saveBill' , isLoggedIn , function(req,res){
 	var finalObj = JSON.parse(req.body.finalObj)
 	var dataForBillSchema = finalObj.billSchema ;
@@ -359,68 +350,6 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 		res.json({status : 'ERROR IN ITEMS SCHEMA'})
 	})
 
-})
-
-app.post('/allBills',isLoggedIn,function(req,res){
-	Bill.find({},null,{sort:{ status : 1 }})
-	.then(function(bills){
-		res.json({status : 'SXS' , result : bills})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.post('/payBill',isLoggedIn,function(req,res){
-	var logObjToSave  = {
-			category : "TRANSACTION",
-			details : {
-				type : "DEBIT" ,
-				id : req.body.billId ,
-				paid : parseFloat(req.body.paid)
-			}
-	} 
-	Bill.findOne({billId : req.body.billId})
-	.then(function(bill){
-		bill.totalPaid += Math.round( parseInt(req.body.paid) )
-		bill.remAmount -= Math.round( parseInt(req.body.paid) )
-		if ( bill.remAmount < 1 ){
-			bill.remAmount = 0 ;
-			bill.status = "PAID"
-		}
-		else{
-			bill.status = "ADVANCE PAYMENT"
-		}
-		bill.lastPaidDate = new Date()
-		if ( bill.status === "PAID" )
-			logObjToSave.details.status = "BILL SETTLED"
-		else{
-			logObjToSave.details.status = "PAYMENT REMAINING"
-			logObjToSave.details.remAmount = bill.remAmount
-		}
-		bill.save()
-		.then(function( billResponse ){
-			Customer.findOne({contact : bill.customer})
-			.then(function(cust){
-				cust.credit -= parseInt(req.body.paid)
-				cust.save()
-				.then(function( custResponse ){
-					logObjToSave.details.name = custResponse.name 
-					logObjToSave.details.contact = custResponse.contact
-					logObjToSave.details.totalCredit = custResponse.credit ,
-					logSave(logObjToSave)
-					res.json({status : 'SXS'})
-				},function(err){
-					res.json({status : 'ERROR'})
-				})
-			},function(err){
-				res.json({status : 'ERROR'})
-			})
-		},function(err){
-			res.json({status : 'ERROR'})
-		})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
 })
 
 app.post('/allOrders',isLoggedIn,function(req,res){
@@ -630,9 +559,9 @@ app.post('/cancelOrder' , isLoggedIn , function(req,res){
 					refundAmt = bill.remAmount - bill.billAmount
 					console.log(`BILL DETAILS : ${bill.billId}   ${bill.billAmount}    ${bill.totalPaid}`)
 					if ( refundAmt )
-						bill.status = "BILL CANCELLED & REFUNDED"
+						bill.status = "CANCELLED & REFUNDED"
 					else
-						bill.status = "BILL CANCELLED"
+						bill.status = "CANCELLED"
 					bill.lastPaidDate = new Date()
 					bill.save()
 					.then(function(billResponse){

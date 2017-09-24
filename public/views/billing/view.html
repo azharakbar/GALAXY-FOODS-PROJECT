@@ -43,7 +43,7 @@
 			<th width ="12.50%"><center><i class="fa fa-chevron-down" style="font-size: 15px"></i> PAY NOW</center></th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="bill in billList | filter : search" ng-click="set(bill)" id="row{{$index}}" ng-class="{'danger': bill.status === 'NOT PAID' , 'success' : bill.status === 'PAID' , 'warning' : bill.status === 'ADVANCE PAYMENT' , 'info' : bill.status === 'BILL CANCELLED & REFUNDED' || bill.status === 'BILL CANCELLED' }" height="48">
+			<tr ng-repeat="bill in billList | filter : search" ng-click="set(bill)" id="row{{$index}}" ng-class="{'danger': bill.status === 'NOT PAID' , 'success' : bill.status === 'PAID' , 'warning' : bill.status === 'ADVANCE PAYMENT' , 'info' : bill.status === 'CANCELLED & REFUNDED' || bill.status === 'CANCELLED' }" height="48">
 			<td width="20%"> {{bill.billId}} </td>
 			<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{bill.name}} </td>
 			<td width="12.50%"><center>{{bill.billDate | date:"dd MMMM, yyyy"}}</center> </td>
@@ -81,7 +81,7 @@
 			<b> ORDER ID</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.orderId}}
 			<br><br>
 
-			<span ng-show="bill.remAmount > 0 && bill.status.indexOf('BILL CANCEL') == -1">
+			<span ng-show="bill.remAmount > 0 && bill.status.indexOf('CANCEL') == -1">
 				<span ng-show="bill.remAmount != bill.billAmount">
 				<b> PREVIOUS AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billAmount-bill.remAmount | currency:""}} ₹			
 				<br>
@@ -95,13 +95,13 @@
 				<br>  			
 				<center ng-show="!check()" ng-class="{'animated shake' : !check()}">ENTER A VALID PAYMENT AMOUNT</center>
 			</span>
-			<span ng-show="bill.remAmount == 0 && bill.status.indexOf('BILL CANCEL')==-1">
+			<span ng-show="bill.remAmount == 0 && bill.status.indexOf('CANCEL')==-1">
 				
 				<b> BILL SETTLED ON</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			
 				<br><br>			
 				<center><div id="sxsMsg" class="animated flash"><b> !! PAYMENT COMPLETED !! </b></div></center>
 			</span>
-			<span ng-show="bill.status == 'BILL CANCELLED & REFUNDED'">
+			<span ng-show="bill.status == 'CANCELLED & REFUNDED'">
 				<b> REFUND AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.totalPaid | currency:""}} ₹
 				<br>
 				<b> REFUND SETTLED ON</b> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			
@@ -109,7 +109,7 @@
 				<center><div id="sxsMsg" class="animated flash"><b> !! BILL CANCELLATION &amp; REFUND COMPLETED !! </b></div></center>
 			</span>			
 
-			<span ng-show="bill.status == 'BILL CANCELLED'">
+			<span ng-show="bill.status == 'CANCELLED'">
 				<b> REFUND AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.totalPaid | currency:""}} ₹
 				<br>				
 				<b> BILL CANCELLED ON</b> &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			

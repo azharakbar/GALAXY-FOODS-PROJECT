@@ -25,15 +25,13 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 	}
 
 	var getBillList = function(){
-		console.log("i am here")
-		console.log($stateParams)
 		return new Promise(function(resolve,reject){
 			if ( $stateParams.showLoading ){
 				toast.setMsg("LOADING")
 				showLoading();
 			}
 			$http({
-				url : "/allBills",
+				url : "/bill/list",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -70,7 +68,7 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 				showLoading();
 			}
 			$http({
-				url : "/payBill",
+				url : "/bill/pay",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -143,8 +141,7 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		payBillNow()
 		.then(function(res){
 			showToast("success")
-			// setTimeout(function() {$state.reload();}, 1500);
-			$state.go ( $state.current , { showLoading : false } )
+			$state.go ('view_bill' , {showLoading : false})
 			
 		},function(err){	
 			showToast("error")

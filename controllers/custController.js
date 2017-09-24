@@ -25,7 +25,7 @@ var saveCustomer = function( details ){
 					custName : response.details.name ,
 					custContact : response.details.contact
 				}
-			}			
+			}
 			logger.logSave( objToSave )
 			resolve(response)
 		},(err)=>{
@@ -42,7 +42,7 @@ var totalCustomers = function(){
 		},(err)=>{
 			reject(err)
 		})
-	})	
+	})
 }
 
 var customerList = function(){
@@ -53,7 +53,7 @@ var customerList = function(){
 		},(err)=>{
 			reject(err)
 		})
-	})		
+	})
 }
 
 var deleteCustomer = function( contact ){
@@ -72,7 +72,7 @@ var deleteCustomer = function( contact ){
 		},(err)=>{
 			reject(err)
 		})
-	})	
+	})
 }
 
 var updateCustomer = function( customerForUpdate , updateData ){
@@ -98,27 +98,52 @@ var updateCustomer = function( customerForUpdate , updateData ){
 						resolve(response)
 					},(err)=>{
 						reject(err)
-					})		
-				}			
+					})
+				}
 			},(err)=>{
 				reject(err)
 			})
 		} else {
-			custService.updateCustomer( customerForUpdate , updateData )			
+			custService.updateCustomer( customerForUpdate , updateData )
 			.then((response)=>{
 				objToSave.details.changes = logger.changesForLog ( customerForLog , updateData , ['name','contact'] )
 				logger.logSave( objToSave )
 				resolve(response)
 			},(err)=>{
 				reject(err)
-			})				
-		}			
+			})
+		}
+	})
+}
+
+var reduceCredit = function( paidCustomer , paidAmout , objToSave ){
+	return new Promise((resolve,reject)=>{
+		customerExists( paidCustomer )
+		.then((response)=>{
+			var newCredit = response.details.credit - parseInt( paidAmout )
+			var objForUpdate = {
+				credit : newCredit
+			}
+			custService.updateCustomer( response.details , objForUpdate )
+			.then((response)=>{
+				objToSave.details.name = response.details.name
+				objToSave.details.contact = response.details.contact
+				objToSave.details.totalCredit = response.details.credit
+				logger.logSave( objToSave )
+				resolve(response)
+			},(err)=>{
+				reject(response)
+			})
+		},(err)=>{
+			reject(err)
+		})
 	})
 }
 
 module.exports.customerExists = customerExists
-module.exports.saveCustomer = saveCustomer  
+module.exports.saveCustomer = saveCustomer
 module.exports.totalCustomers = totalCustomers
 module.exports.customerList = customerList
 module.exports.deleteCustomer = deleteCustomer
 module.exports.updateCustomer = updateCustomer
+module.exports.reduceCredit = reduceCredit

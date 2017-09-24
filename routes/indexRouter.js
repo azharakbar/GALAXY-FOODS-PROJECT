@@ -9,5 +9,6 @@ router.use('/loginFailure' , require('./authRouter').authFailureRouter)
 
 router.use('/customer' , isLoggedIn , require('./custRouter'))
 router.use('/item' , isLoggedIn , require('./itemRouter'))
+router.use('/bill' , isLoggedIn , require('./billRouter'))
 
 module.exports = router
