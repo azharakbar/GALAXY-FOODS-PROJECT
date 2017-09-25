@@ -72,8 +72,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 	var getItemList = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/allItemsNew',
-				// url : '/item/list',
+				url : '/item/forecastList',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -246,7 +245,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 		getItemList()
 		.then(function(response){
 			$scope.itemList = response.result.items
-			$scope.daysAvailibity = response.result.daysAvailability
+			$scope.forecastAvailability = response.result.forecastAvailability
 			$scope.$apply()
 		},function(err){
 			showToast("error")

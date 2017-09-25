@@ -27,4 +27,16 @@ orderRouter.route('/list')
 		})
 	})
 
+orderRouter.route('/pickup')
+	.post((req,res)=>{
+		orderController.orderPickUp( req.body.dataObj )
+		.then(( response )=>{
+			console.log(`... ORDER PICKUP COMPLETE --> ${response.details} ...`)
+			res.json({status : "SXS"})
+		},( err )=>{
+			console.log(`--- ERROR DURING ORDER LIST RETRIEVAL ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})	
+	})
+
 module.exports = orderRouter

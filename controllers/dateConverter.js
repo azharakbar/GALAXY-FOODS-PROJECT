@@ -15,4 +15,12 @@ var dateConverter1 = function(string){
 	return convertedDate 	
 }
 
+//RESET DATE TO 12AM
+var dateReset = function(string){
+	string.setHours(0)
+	string.setMinutes(0)
+	string.setSeconds(0)
+}
+
 module.exports.dateConverter1 = dateConverter1
+module.exports.dateReset = dateReset

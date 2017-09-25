@@ -11,8 +11,8 @@ var genConfig = {
 
 var dbConfig = {
 	db : 'galaxy' , 
-	dbUser : 'galaxyadmin',
-	dbPwd : 'map1802',
+	dbUser : encodeURIComponent('galaxyadmin'),
+	dbPwd : encodeURIComponent('map1802'),
 	dbHost : '127.0.0.1',
 	dbPort : '27017',
 	authorizationDatabase : 'galaxy',
@@ -56,6 +56,6 @@ module.exports = {
 	'genConfig' : genConfig ,
 	'dbConfig' : dbConfig ,
 	'passportConfig' : passportConfig ,
-	// 'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authorizationDatabase 
-	 'connURI' : "mongodb://127.0.0.1:27017/galaxy"
+	'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authorizationDatabase 
+	 // 'connURI' : "mongodb://127.0.0.1:27017/galaxy"
 }

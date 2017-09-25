@@ -164,7 +164,7 @@
     <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price | currency:""}} ₹</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
     <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center> {{daysAvailibity[$index]}} </center> </td>
+    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center> {{forecastAvailability[$index]}} </center> </td>
   	</tr>
   </tbody>
 </table>

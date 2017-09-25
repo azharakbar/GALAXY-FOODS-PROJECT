@@ -77,75 +77,6 @@ app.post('/testAPI/:name?',isLoggedIn,function(req,res){
 	
 })
 
-app.post('/allItemsNew',isLoggedIn,function(req,res){
-	var resObj = {} ;
-	var resArray = [] ;
-
-	var pickUpNew = new Date(req.body.pickupDate)
-	var retNew = new Date(req.body.returnDate)
-	pickUpNew.setHours(0)
-	pickUpNew.setMinutes(0)
-	pickUpNew.setSeconds(0)
-	retNew.setHours(0)
-	retNew.setMinutes(0)
-	retNew.setSeconds(0)	
-	console.log(`PickUp New = ${pickUpNew}`)
-	console.log(`Return New = ${retNew}`)
-	Item.find({})
-	.then(function(items){
-		resArray.length = items.length ;
-		resArray.fill(0)
-		Order.find( { $and : [ 
-								{ status : { $in : [ "NOT PICKED UP" , "PICKED UP" ] } } ,
-								{ $or : [
-											{
-												$and : [
-														{ pickupDate : { $gt : pickUpNew} } ,
-														{ pickupDate : { $lt : retNew } }
-													   ]
-											},
-											{
-												$and : [
-														{ returnDate : { $gt : pickUpNew } } ,
-														{ returnDate : { $lt : retNew } }
-													   ]
-											},
-											{
-												$and : [
-														{ pickupDate : { $lt : pickUpNew } } ,
-														{ returnDate : { $gt : retNew } }
-													   ]												
-											}
-								     	] 
-								}
-							 ] 
-					} )
-		.then(function(orders){
-			console.log(orders)
-
-			for  (var i = 0 ; i < orders.length ; ++i ){
-				for ( var j = 0 ; j < orders[i].items.length ; ++j ){
-					for ( var k = 0 ; k < items.length ; ++k ){
-						if( orders[i].items[j].barCode === items[k].barCode ){
-							resArray[k] += orders[i].items[j].qty
-						}
-					}
-				}
-			}
-			console.log (`resArray Before : ${resArray} `) ;
-			for ( var i = 0 ; i < items.length ; ++i )
-				resArray[i] = items[i].totalStock - resArray[i] 
-			console.log (`resArray After : ${resArray} `) ;
-			res.json({status : 'SXS' , result : {items: items , daysAvailability : resArray} })
-		},function(err){
-			console.log(err)
-			res.json({status : 'ERROR'})	
-		})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
 app.post('/saveLostBill' , isLoggedIn , function(req,res){
 	var finalObj = JSON.parse(req.body.finalObj)
 	var dataForBillSchema = finalObj.billSchema ;
@@ -505,34 +436,6 @@ app.post('/cancelOrder' , isLoggedIn , function(req,res){
 		} else {
 			res.json({status : 'NO ORDER FOUND'})
 		}
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-
-app.post('/stockDetails/:itemId',isLoggedIn,function(req,res){
-	console.log(req.params.itemId)
-	var resObj = [] ;
-	var x = {} ;
-	Order.find({status : { $eq: 'PICKED UP' } }, 'name customer items pickupDate returnDate -_id' )
-	.then(function(orders){
-		console.log(orders)
-		var cnt = 0 ;
-		for( var i = 0 ; i < orders.length ; ++i ){
-			for( var j = 0 ; j < orders[i].items.length ; ++j ){
-				if ( orders[i].items[j].barCode === req.params.itemId ){
-					x = {} ;
-					x.custName = orders[i].name ;
-					x.custContact = orders[i].customer ;
-					x.pickupDate = orders[i].pickupDate ;
-					x.returnDate = orders[i].returnDate ;
-					x.qty = orders[i].items[j].qty ;
-					resObj.push(x)
-				}
-			}
-		}
-		res.json({status : "SXS" , result : resObj})
 	},function(err){
 		res.json({status : 'ERROR'})
 	})

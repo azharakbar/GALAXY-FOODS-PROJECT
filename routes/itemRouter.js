@@ -142,4 +142,18 @@ itemRouter.route('/update/:barCode')
 		})	
 	})
 
+itemRouter.route('/forecastList')
+	.post((req,res)=>{
+		var pickupDate = new Date(req.body.pickupDate)
+		var returnDate = new Date(req.body.returnDate)
+		itemController.forecastAvailability( pickupDate , returnDate )
+		.then(( response )=>{
+			console.log(`... RETRIEVED FORECASTED ITEM LIST ...`)
+			res.json({status : 'SXS' , result : response.details})
+		},( err )=>{
+			console.log(`--- ERROR DURING FORECASTING ITEMS ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})
+	})
+
 module.exports = itemRouter

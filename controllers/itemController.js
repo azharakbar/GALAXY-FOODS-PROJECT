@@ -133,6 +133,37 @@ var findDetails = function( barCode ){
 	})
 }
 
+var forecastAvailability = function( pickupDate , returnDate ){
+	return new Promise((resolve,reject)=>{
+		itemService.getItemList()
+		.then((itemListResponse)=>{
+			orderController.findOrdersForecast( pickupDate , returnDate )
+			.then((orderListResponse)=>{
+				var resArray = []
+				resArray.length = itemListResponse.details.length
+				resArray.fill(0)
+				for  (var i = 0 ; i < orderListResponse.details.length ; ++i ){
+					for ( var j = 0 ; j < orderListResponse.details[i].items.length ; ++j ){
+						for ( var k = 0 ; k < itemListResponse.details.length ; ++k ){
+							if( orderListResponse.details[i].items[j].barCode === itemListResponse.details[k].barCode ){
+								resArray[k] += orderListResponse.details[i].items[j].qty
+							}
+						}
+					}
+				}
+				for ( var i = 0 ; i < itemListResponse.details.length ; ++i ){
+					resArray[i] = itemListResponse.details[i].totalStock - resArray[i]
+				}
+				resolve ( { status : true , details : { items : itemListResponse.details , forecastAvailability : resArray } } )
+			},(err)=>{
+				reject(err)
+			})
+		},(err)=>{
+			reject(err)	
+		})
+	})
+}
+
 module.exports.itemExists = itemExists
 module.exports.saveItem = saveItem
 module.exports.totalItems = totalItems
@@ -140,3 +171,4 @@ module.exports.itemList = itemList
 module.exports.deleteItem = deleteItem
 module.exports.updateItem = updateItem
 module.exports.findDetails = findDetails
+module.exports.forecastAvailability = forecastAvailability
