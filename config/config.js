@@ -56,6 +56,6 @@ module.exports = {
 	'genConfig' : genConfig ,
 	'dbConfig' : dbConfig ,
 	'passportConfig' : passportConfig ,
-	'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authorizationDatabase 
-	 // 'connURI' : "mongodb://127.0.0.1:27017/galaxy"
+	// 'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authorizationDatabase 
+	 'connURI' : "mongodb://127.0.0.1:27017/galaxy"
 }

@@ -75,7 +75,7 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 				showLoading();
 			// }
 			$http({
-				url : "/stockDetails/"+$rootScope.item.barCode,
+				url : "/item/details/"+$rootScope.item.barCode,
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

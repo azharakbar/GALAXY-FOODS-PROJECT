@@ -26,7 +26,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 	var getCustomerList = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/allCustomers',
+				url : '/customer/list',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -49,7 +49,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 	var getOrderCount = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/totalOrders',
+				url : '/order/total',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -58,7 +58,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" )
-					resolve(response.data.count)
+					resolve(response.data.count+1)
 				else{
 					toast.setMsg("** ERROR IN GETTING ORDER ID **")
 					reject("ERROR1")
@@ -73,6 +73,7 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 		return new Promise( function( resolve , reject ){
 			$http({
 				url : '/allItemsNew',
+				// url : '/item/list',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

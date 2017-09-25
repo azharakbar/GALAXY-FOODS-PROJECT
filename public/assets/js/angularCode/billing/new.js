@@ -27,7 +27,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	var getBillCount = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/totalBills',
+				url : '/bill/total',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -36,7 +36,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" )
-					resolve(response.data.count)
+					resolve(response.data.count+1)
 				else{
 					toast.setMsg("** ERROR IN GETTING BILL NUMBER **")
 					reject("ERROR1")
@@ -50,7 +50,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	var saveNewBill = function(dataObj){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/saveBill',
+				url : '/bill/save',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -61,13 +61,10 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				if ( response.data.status === "SXS" )
 					resolve(response.data.status)
 				else{
-					console.log("RESPONSE = ")
-					console.log(response)
 					toast.setMsg("** ERROR IN SAVING BILL **")
 					reject("ERROR1")
 				}
 			},function(err){
-				console.log(err)
 				reject(err)
 			})
 		})
@@ -87,13 +84,10 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				if ( response.data.status === "SXS" )
 					resolve(response.data.status)
 				else{
-					console.log("RESPONSE = ")
-					console.log(response)
 					toast.setMsg("** ERROR IN SAVING BILL **")
 					reject("ERROR1")
 				}
 			},function(err){
-				console.log(err)
 				reject(err)
 			})
 		})
@@ -102,7 +96,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	var getCustomerList = function(){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/allCustomers',
+				url : '/customer/list',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -124,9 +118,8 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 
 	var getItemList = function(){
 		return new Promise( function( resolve , reject ){
-			console.log("i am here1")
 			$http({
-				url : '/allItems',
+				url : '/item/list',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -135,8 +128,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					console.log("i am here2")
-					console.log(response.data.result)
 					resolve(response.data)
 				}
 				else{
@@ -181,13 +172,10 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		$rootScope.item = inComing
 		$rootScope.index = index ;
 		$('#lostItemConfirm').modal('open')
-		console.log("INDEX IS :"+$rootScope.index)
 	}
 
 	$scope.enrollItem = function(){
-		console.log("I AM HERE" + $scope.qty + ' ' + $rootScope.item.availableStock )
 		if ( $scope.qty > $rootScope.item.totalStock || $scope.qty === undefined ){
-			console.log("I AM INSEIDE IF")
 			$('#maxVal').removeClass('shake')
 			$('#maxVal').addClass('shake')
 		} else {
@@ -225,7 +213,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	$scope.proceed = function(){
 		getCustomerList()
 		.then(function(response){
-			console.log("SXS RESPONSE")
 			$scope.content = 2 
 			$scope.titleMsg = "PICK CUSTOMER TO GENERATE BILL"
 			$scope.list = response
@@ -250,7 +237,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			orders : $scope.lostList ,
 			orderTotal : orderTotal
 		}	
-		console.log(lostObj)
 		$state.go('new_bill',{ orderDetails : lostObj } )		
 	}
 
@@ -259,7 +245,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		$scope.billNo = pad( response )
 		$scope.$apply()
 	},function(err){
-		console.log(err)
 		showToast("error")
 	})	
 
@@ -358,7 +343,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			showToast("success")
 			$state.go('new_order')
 		},function(err){
-			console.log(err)
 			showToast("error")
 		})	
 	}
@@ -399,7 +383,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			showToast("success")
 			$state.go('dashboard')
 		},function(err){
-			console.log(err)
 			showToast("error")
 		})	
 	}	

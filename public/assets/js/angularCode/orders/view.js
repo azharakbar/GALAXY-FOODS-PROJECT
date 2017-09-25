@@ -29,7 +29,7 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 		}
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/allOrders",
+				url : "/order/list",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

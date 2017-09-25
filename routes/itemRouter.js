@@ -65,6 +65,29 @@ itemRouter.route('/list')
 		})
 	})
 
+itemRouter.route('/details/:barCode')
+	.post((req,res)=>{
+		itemController.itemExists( req.params.barCode )
+		.then(( response )=>{
+			if ( !response.status ){
+				console.log(`... ITEM NOT FOUND : ${req.params.barCode} ...`)
+				res.json({status : 'ERROR'})
+			} else { 
+				return itemController.findDetails( req.params.barCode )
+			}
+		},( err )=>{
+			console.log(`--- ERROR DURING CHECKING FOR ITEM ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})
+		.then(( response )=>{
+			console.log(`... ITEM DETAILS RETRIEVED SXSFULLY : ${req.params.barCode} ...`)
+			res.json({status : 'SXS' , result : response.details })
+		},( err )=>{
+			console.log(`--- ERROR DURING ITEM DETAILS RETRIEVAL ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})		
+	})
+
 itemRouter.route('/delete/:barCode')
 	.delete((req,res)=>{
 		itemController.itemExists( req.params.barCode )

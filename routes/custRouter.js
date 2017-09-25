@@ -9,7 +9,7 @@ custRouter.route('/new')
 		.then(( response )=>{
 			if ( response.status ){
 				console.log(`... CUSTOMER REDUNDANCY : ${response.details.contact} --> ${response.details.name} ...`)
-				res.json({status : 'REDUNDANT'})
+				return res.json({status : 'REDUNDANT'})
 			} else { 
 				let detailsForNewCust = {}
 				detailsForNewCust.name = req.body.name
@@ -24,6 +24,7 @@ custRouter.route('/new')
 			console.log(`... CUSTOMER INSERTED SXSFULLY : ${response.details.name} --> ${response.details.contact} ...`)
 			res.json({status : 'SXS'})
 		},( err )=>{
+			console.log("check2")
 			console.log(`--- ERROR DURING SAVING CUSTOMER ${err.details} ---`)
 			res.json({status : 'ERROR'})
 		})

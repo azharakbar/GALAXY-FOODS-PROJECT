@@ -1,6 +1,7 @@
 'use strict'
 
 const 	itemService = require('../services/itemService'),
+	 	orderController = require('./orderController'),
 		logger = require('./logger')
 
 var itemExists = function( barCode ){
@@ -121,9 +122,21 @@ var updateItem = function( itemForUpdate , updateData ){
 	})
 }
 
+var findDetails = function( barCode ){
+	return new Promise((resolve,reject)=>{
+		orderController.findDetails( barCode )
+		.then((response)=>{
+			resolve(response)
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
 module.exports.itemExists = itemExists
 module.exports.saveItem = saveItem
 module.exports.totalItems = totalItems
 module.exports.itemList = itemList
 module.exports.deleteItem = deleteItem
 module.exports.updateItem = updateItem
+module.exports.findDetails = findDetails

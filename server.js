@@ -37,11 +37,13 @@ console.log(`
 	** SERVER RESTARTED @ ${new Date()} **
 	`)
 
-mongoose.connect ( config.connURI , function(err){
-	if ( err )
-		console.log(err)
-	else
-		console.log(">> CONNEXN TO DATABASE ESTABLISHED")
+mongoose.connect ( config.connURI , {
+	useMongoClient : true
+})
+.then((response)=>{
+	console.log(">> CONNEXN TO DATABASE ESTABLISHED")
+},(err)=>{
+	console.log(err)
 })
 
 // config.passportConfig.pass(passport);
@@ -144,114 +146,6 @@ app.post('/allItemsNew',isLoggedIn,function(req,res){
 	})
 })
 
-app.post('/totalOrders',isLoggedIn,function(req,res){
-	Order.count()
-	.then(function(num){
-		res.json({status : 'SXS' , count : num+1})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
-app.post('/saveBill' , isLoggedIn , function(req,res){
-	var finalObj = JSON.parse(req.body.finalObj)
-	var dataForBillSchema = finalObj.billSchema ;
-	var dataForOrderSchema = finalObj.orderSchema ;
-	var dataForCustomerSchema = finalObj.customerSchema ;
-
-	var bill = new Bill() ;
-	var order = new Order() ;
-
-	bill.billId = dataForBillSchema.billId
-	bill.billDate = dataForBillSchema.billDate
-	bill.customer = dataForBillSchema.customer
-	bill.orderId = dataForBillSchema.orderId
-	bill.billAmount = dataForBillSchema.billAmount
-	bill.remAmount = bill.billAmount
-	bill.name = dataForBillSchema.name
-
-	order.orderId = dataForOrderSchema.orderId
-	order.issueDate = dataForOrderSchema.issueDate
-	order.pickupDate = dataForOrderSchema.pickupDate
-	order.returnDate = dataForOrderSchema.returnDate
-	order.customer = dataForOrderSchema.customer
-	order.items = dataForOrderSchema.items
-	order.billId = dataForOrderSchema.billId
-	order.name = dataForOrderSchema.name
-	order.eveLoxn = dataForOrderSchema.eveLoxn
-	order.evePurpose = dataForOrderSchema.evePurpose
-
-	var custContact = dataForCustomerSchema.customer
-	var cr = parseFloat(dataForBillSchema.billAmount)
-
-	Customer.findOne( { contact:custContact } )
-	.then( function(cust){
-		cust.orders += 1 ;
-		cust.credit += cr
-
-		cust.save()
-		.then(function(custResponse){
-			bill.save()
-			.then(function(billResponse){
-				var objToSave = {
-					category : 'BILL' ,
-					details : {
-						type : 'NEW BILL GENERATION',
-						billId : billResponse.billId,
-						orderId : dataForOrderSchema.orderId ,
-						name :  custResponse.name ,
-						contact : custResponse.contact ,
-						amount : billResponse.billAmount
-					}
-				}
-				logSave( objToSave )
-				objToSave = {
-					category : 'TRANSACTION' ,
-					details : {
-						type : 'CREDIT',
-						id : billResponse.billId ,
-						amount : billResponse.billAmount ,
-						totalCredit : custResponse.credit ,
-						name : billResponse.name ,
-						contact : billResponse.customer
-					}
-				}
-				logSave( objToSave )
-				order.save()
-				.then(function(orderResponse){
-					var objToSave = {
-						category : 'ORDER' ,
-						details : {
-							type : 'NEW ORDER PLACEMENT',
-							number : orderResponse.orderId,
-							itemCount : orderResponse.items.length,
-							name : orderResponse.name,
-							contact : orderResponse.customer
-						}
-					}
-					logSave( objToSave )					
-					console.log({status : 'SXS'})
-					res.json({status : 'SXS'})
-				},function(err){
-					console.log({status : 'ERROR IN ADDING ORDER'})			
-					res.json({status : 'ERROR IN ADDING ORDER'})			
-				})
-			},function(err){
-				console.log({status : 'ERROR IN ADDING BILL'})		
-				res.json({status : 'ERROR IN ADDING BILL'})		
-			})
-		},function(err){
-			console.log({status : 'ERROR IN UPDATING CUSTOMER'})	
-			res.json({status : 'ERROR IN UPDATING CUSTOMER'})	
-		})
-
-	},function(err){
-		console.log({status : 'ERROR IN CUSTOMER SCHEMA'})
-		res.json({status : 'ERROR IN CUSTOMER SCHEMA'})
-	})
-
-})
-
 app.post('/saveLostBill' , isLoggedIn , function(req,res){
 	var finalObj = JSON.parse(req.body.finalObj)
 	var dataForBillSchema = finalObj.billSchema ;
@@ -350,15 +244,6 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 		res.json({status : 'ERROR IN ITEMS SCHEMA'})
 	})
 
-})
-
-app.post('/allOrders',isLoggedIn,function(req,res){
-	Order.find({} , null , { sort : { status : 1 } })
-	.then(function(bills){
-		res.json({status : 'SXS' , result : bills})
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
 })
 
 app.post('/pickUpOrder',isLoggedIn,function(req,res){

@@ -119,12 +119,12 @@ var updateCustomer = function( customerForUpdate , updateData ){
 var reduceCredit = function( paidCustomer , paidAmout , objToSave ){
 	return new Promise((resolve,reject)=>{
 		customerExists( paidCustomer )
-		.then((response)=>{
-			var newCredit = response.details.credit - parseInt( paidAmout )
+		.then((custResponse)=>{
+			var newCredit = custResponse.details.credit - parseInt( paidAmout )
 			var objForUpdate = {
 				credit : newCredit
 			}
-			custService.updateCustomer( response.details , objForUpdate )
+			custService.updateCustomer( custResponse.details , objForUpdate )
 			.then((response)=>{
 				objToSave.details.name = response.details.name
 				objToSave.details.contact = response.details.contact
@@ -140,6 +140,32 @@ var reduceCredit = function( paidCustomer , paidAmout , objToSave ){
 	})
 }
 
+var newOrder = function( detailsForCustomer , objToSave ){
+	return new Promise((resolve,reject)=>{
+		customerExists( detailsForCustomer.customer )
+		.then((custResponse)=>{
+			var newCredit = custResponse.details.credit + parseInt( detailsForCustomer.totalAmount )
+			var newOrders = custResponse.details.orders + 1 
+			var objForUpdate = {
+				credit : newCredit ,
+				orders : newOrders
+			}
+			custService.updateCustomer( custResponse.details , objForUpdate )
+			.then((response)=>{	
+				objToSave[0].details.name = response.details.name
+				objToSave[1].details.totalCredit = response.details.credit
+				for ( var i = 0 ; i < objToSave.length ; ++i )
+					logger.logSave ( objToSave[i]) 
+				resolve(response)
+			},(err)=>{
+				reject(response)
+			})			
+		},(err)=>{
+			reject( err )
+		})
+	})
+}
+
 module.exports.customerExists = customerExists
 module.exports.saveCustomer = saveCustomer
 module.exports.totalCustomers = totalCustomers
@@ -147,3 +173,4 @@ module.exports.customerList = customerList
 module.exports.deleteCustomer = deleteCustomer
 module.exports.updateCustomer = updateCustomer
 module.exports.reduceCredit = reduceCredit
+module.exports.newOrder = newOrder

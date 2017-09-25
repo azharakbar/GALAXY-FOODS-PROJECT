@@ -87,7 +87,27 @@ var newBill = function( detailsForBill ){
 	return new Promise((resolve,reject)=>{
 		billService.saveNewBill( detailsForBill )
 		.then((response)=>{
-			//INSERT LOGGING HERE
+			response.logObj = []
+			let objToSave = {
+				category : 'BILL' ,
+				details : {
+					type : 'NEW BILL GENERATION',
+					billId : response.details.billId,
+					amount : response.details.billAmount
+				}
+			}
+			response.logObj.push( objToSave )
+			objToSave = {
+				category : 'TRANSACTION' ,
+				details : {
+					type : 'CREDIT',
+					id : response.details.billId ,
+					amount : response.details.billAmount ,
+					name : response.details.name ,
+					contact : response.details.customer
+				}
+			}
+			response.logObj.push( objToSave )
 			resolve(response)
 		},(err)=>{
 			reject(err)

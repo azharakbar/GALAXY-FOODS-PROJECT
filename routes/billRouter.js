@@ -2,7 +2,8 @@
 const 	express = require('express'),
 		billRouter = express.Router(),
 		billController = require('../controllers/billController'),
-		custController = require('../controllers/custController')
+		custController = require('../controllers/custController'),
+		orderController = require('../controllers/orderController')
 
 billRouter.route('/total')
 	.post((req,res)=>{
@@ -73,6 +74,27 @@ billRouter.route('/save')
 	.post((req,res)=>{
 		let incomingDataObj = JSON.parse( req.body.finalObj )
 		billController.newBill( incomingDataObj.billSchema )
+		.then((response)=>{
+			console.log(`... BILL GENERATION SXSFUL : ${response.details.billId} --> ${response.details.billAmount} --> ${response.details.status} ...`)
+			return orderController.newOrder( incomingDataObj.orderSchema , response.logObj )			
+		},(err)=>{
+			console.log(`--- ERROR DURING SAVING NEW BILL ${err} ---`)
+			res.json({status : 'ERROR'})
+		})
+		.then((response)=>{
+			console.log(`... ORDER PLACEMENT SXSFUL : ${response.details.orderId} ...`)
+			return custController.newOrder( incomingDataObj.customerSchema , response.logObj )			
+		},(err)=>{
+			console.log(`--- ERROR DURING PLACING NEW ORDER ${err} ---`)
+			res.json({status : 'ERROR'})
+		})
+		.then((response)=>{
+			console.log(`... ORDER MAPPED TO CUSTOMER SXS : ${response.details.name} --> ${response.details.contact}  ...`)
+			res.json({status : 'SXS'})
+		},(err)=>{
+			console.log(`--- ERROR DURING MAPPING ORDER TO CUSTOMER ${err} ---`)
+			res.json({status : 'ERROR'})
+		})
 	})
 
 

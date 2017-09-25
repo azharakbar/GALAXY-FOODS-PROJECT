@@ -8,4 +8,8 @@ var customerSchema =  mongoose.Schema({
 	orders : { type: Number , default: 0 }
 });
 
+customerSchema.post('save',function(){
+	// console.log(this)
+})
+
 module.exports = mongoose.model('customer',customerSchema)
