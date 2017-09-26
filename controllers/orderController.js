@@ -20,6 +20,13 @@ var orderExists = function( billId ){
 
 var newOrder = function( detailsForOrder , logObj ){
 	return new Promise((resolve,reject)=>{
+		for ( var key in detailsForOrder )
+			console.log(`${key} ---> ${detailsForOrder[key]}`)
+		detailsForOrder['pickupDate'] = dateConverter.dateReset( new Date( detailsForOrder['pickupDate'] ) )
+		detailsForOrder['returnDate'] = dateConverter.dateReset( new Date( detailsForOrder['returnDate'] ) )
+		console.log("================")
+		for ( var key in detailsForOrder )
+			console.log(`${key} ---> ${detailsForOrder[key]}`)
 		orderService.saveNewOrder( detailsForOrder )
 		.then((response)=>{
 			let objToSave = {

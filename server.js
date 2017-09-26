@@ -177,102 +177,6 @@ app.post('/saveLostBill' , isLoggedIn , function(req,res){
 
 })
 
-app.post('/cancelOrder' , isLoggedIn , function(req,res){
-	console.log(`CANCEL ORDER API ... orderId = ${req.body.orderId}`)
-	var amt = 0 ;
-	var refundAmt = 0;
-	Order.findOne({orderId : req.body.orderId})
-	.then(function(order){
-		if ( order !== null ){
-			order.status = "ORDER CANCELLED"
-			order.save()
-			.then(function(orderResponse){
-				var objToSave = {
-					category : 'ORDER' ,
-					details : {
-						type : 'ORDER CANCELLATION',
-						number : orderResponse.orderId,
-						name : orderResponse.name,
-						contact : orderResponse.customer
-					}
-				}
-				logSave( objToSave )
-				Bill.findOne({ billId : orderResponse.billId })
-				.then(function(bill){
-					if ( bill !== null )
-						console.log(`FOUND BILL ${orderResponse.billId}`)
-					else
-						console.log(`NOT FOUND BILL ${orderResponse.billId}`)
-					amt = bill.billAmount
-					refundAmt = bill.remAmount - bill.billAmount
-					console.log(`BILL DETAILS : ${bill.billId}   ${bill.billAmount}    ${bill.totalPaid}`)
-					if ( refundAmt )
-						bill.status = "CANCELLED & REFUNDED"
-					else
-						bill.status = "CANCELLED"
-					bill.lastPaidDate = new Date()
-					bill.save()
-					.then(function(billResponse){
-						var objToSave = {
-							category : 'BILL' ,
-							details : {
-								type : 'BILL CANCELLATION',
-								number : billResponse.billId,
-								name : orderResponse.name,
-								contact : orderResponse.customer
-							}
-						}
-						logSave( objToSave )						
-						Customer.findOne({ contact : billResponse.customer })
-						.then(function(customer){
-								if ( customer !== null )
-									console.log(`FOUND CUSTOMER ${billResponse.customer}`)
-								else
-									console.log(`NOT FOUND CUSTOMER ${billResponse.customer}`)
-								console.log(`CUSTOMER DETAILS B4 : ${customer.orders}   ${customer.credit}`)							
-							customer.orders -= 1 ;
-							customer.credit -= amt 
-							console.log(`CUSTOMER DETAILS A4 : ${customer.orders}   ${customer.credit}`)							
-							customer.save()
-							.then(function(custResponse){
-								if ( refundAmt ){
-									var objToSave = {
-										category : 'TRANSACTION' ,
-										details : {
-											type : 'CNL',
-											id : billResponse.billId,
-											amount : -amt,
-											totalCredit : custResponse.credit,
-											name : custResponse.name,
-											contact : orderResponse.customer
-										}
-									}
-									logSave( objToSave )	
-								}	
-								res.json({status : 'SXS'})			
-							},function(err){
-								res.json({status : 'ERROR'})
-							})
-						},function(err){
-							res.json({status : 'ERROR'})
-						})
-					},function(err){
-						res.json({status : 'ERROR'})
-					})
-				},function(err){
-					res.json({status : 'ERROR'})
-				})
-			},function(err){
-				res.json({status : 'ERROR'})
-			})
-		} else {
-			res.json({status : 'NO ORDER FOUND'})
-		}
-	},function(err){
-		res.json({status : 'ERROR'})
-	})
-})
-
 app.get('/report' , isLoggedIn , function(req,res){
 	var mnth = ['January' , 'February' , 'March' , 'April' , 'May' , 'June' , 'July' , 'August' , 'September' , 'October' , 'November' , 'December' ] ;
 	var shortid = req.query.shortid ;
@@ -371,6 +275,37 @@ app.get('/logs',function(req,res){
 	},function(err){
 		res.send(err)
 	})
+})
+
+
+app.get('/reset',(req,res)=>{
+/*	Order.find({})
+	.then((response)=>{
+		for ( var i = 0 ; i < response.length ; ++i ){
+			response[i].status = "NOT DELIVERED"
+			response[i].save()
+		}
+	})*/
+	Order.remove({})
+	.then(()=>{})
+
+	Item.find({})
+	.then((response)=>{
+		for ( var i = 0 ; i < response.length ; ++i ){
+			response[i].rentedStock = 0
+			response[i].availableStock = response[i].totalStock	
+			response[i].save()
+		}
+	})
+	Customer.find({})
+	.then((response)=>{
+		for ( var i = 0 ; i < response.length ; ++i ){
+			response[i].credit = 0
+			response[i].orders = 0
+			response[i].save()
+		}			
+	})
+	res.send("ok")
 })
 
 app.get('*'  , function(req,res){

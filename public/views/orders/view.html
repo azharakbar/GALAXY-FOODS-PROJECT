@@ -43,7 +43,7 @@
 			<td width="13%"><center>{{order.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
 			<td width="13%"><center>{{order.pickupDate | date:"dd MMMM, yyyy"}}</center> </td>
 			<td width="13%"><center>{{order.returnDate | date:"dd MMMM, yyyy"}}</center> </td>
-			<td width="13%"><center>{{order.status}}</center> </td>
+			<td width="13%"><center>ORDER {{order.status}}</center> </td>
 			<td width="13%">
 			<center>
 				<span ng-show="order.status=='NOT DELIVERED'">

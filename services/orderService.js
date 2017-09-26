@@ -71,20 +71,20 @@ var getOrderPrediction = function( _pickupDate , _returnDate ){
 								{ $or : [
 											{
 												$and : [
-														{ pickupDate : { $gt : _pickupDate } } ,
-														{ pickupDate : { $lt : _returnDate } }
+														{ pickupDate : { $gte : _pickupDate } } ,
+														{ pickupDate : { $lte : _returnDate } }
 													   ]
 											},
 											{
 												$and : [
-														{ returnDate : { $gt : _pickupDate } } ,
-														{ returnDate : { $lt : _returnDate } }
+														{ returnDate : { $gte : _pickupDate } } ,
+														{ returnDate : { $lte : _returnDate } }
 													   ]
 											},
 											{
 												$and : [
-														{ pickupDate : { $lt : _pickupDate } } ,
-														{ returnDate : { $gt : _returnDate } }
+														{ pickupDate : { $lte : _pickupDate } } ,
+														{ returnDate : { $gte : _returnDate } }
 													   ]												
 											}
 										] 

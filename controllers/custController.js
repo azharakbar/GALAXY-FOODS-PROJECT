@@ -144,7 +144,7 @@ var newOrder = function( detailsForCustomer , objToSave ){
 	return new Promise((resolve,reject)=>{
 		customerExists( detailsForCustomer.customer )
 		.then((custResponse)=>{
-			var newCredit = custResponse.details.credit + parseInt( detailsForCustomer.totalAmount )
+			var newCredit = custResponse.details.credit + parseInt( objToSave[0].details.amount )
 			var newOrders = custResponse.details.orders + 1 
 			var objForUpdate = {
 				credit : newCredit ,

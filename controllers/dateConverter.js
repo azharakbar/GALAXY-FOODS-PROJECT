@@ -20,6 +20,7 @@ var dateReset = function(string){
 	string.setHours(0)
 	string.setMinutes(0)
 	string.setSeconds(0)
+	return string
 }
 
 module.exports.dateConverter1 = dateConverter1
