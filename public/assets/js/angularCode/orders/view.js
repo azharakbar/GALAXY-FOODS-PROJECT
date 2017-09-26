@@ -62,7 +62,7 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	var postPickup = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/pickUpOrder",
+				url : "/order/pickup",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -87,7 +87,7 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	var postCancel = function( ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/cancelOrder",
+				url : "/order/cancel",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
@@ -113,7 +113,7 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	var postReturn = function( dataObj ){
 		return new Promise(function(resolve,reject){
 			$http({
-				url : "/returnOrder",
+				url : "/order/return",
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'

@@ -37,7 +37,7 @@
 			<th width ="13%"><center> ACTIONS <i class="fa fa-chevron-down" style="font-size: 15px"></i></center></th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order,$index)" id="row{{$index}}" ng-class="{'warning' : order.status=='NOT PICKED UP' , 'success' : order.status=='ORDER RETURNED' , 'blue' : order.status=='ORDER CANCELLED' , 'danger' : order.status=='PICKED UP' && today > order.returnDate, 'info' : order.status=='PICKED UP' && today < order.returnDate }" height="48">
+			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order,$index)" id="row{{$index}}" ng-class="{'warning' : order.status=='NOT DELIVERED' , 'success' : order.status=='RETURNED' , 'blue' : order.status=='CANCELLED' , 'danger' : order.status=='DELIVERED' && today > order.returnDate, 'info' : order.status=='DELIVERED' && today < order.returnDate }" height="48">
 			<td width="15%"> {{order.orderId}} </td>
 			<td width="20%">  &nbsp;&nbsp;&nbsp;&nbsp;{{order.name}} </td>
 			<td width="13%"><center>{{order.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
@@ -46,16 +46,16 @@
 			<td width="13%"><center>{{order.status}}</center> </td>
 			<td width="13%">
 			<center>
-				<span ng-show="order.status=='NOT PICKED UP'">
+				<span ng-show="order.status=='NOT DELIVERED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,1)" style="position: relative; bottom: 2px; width:150px; height: 35px"> DELIVER ORDER </button>
 				</span>
-				<span ng-show="order.status=='PICKED UP'">
+				<span ng-show="order.status=='DELIVERED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,2)" style="position: relative; bottom: 2px; width:150px; height: 35px"> RETURN ORDER </button>
 				</span>
-				<span ng-show="order.status=='ORDER RETURNED'">
+				<span ng-show="order.status=='RETURNED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" style="position: relative; bottom: 2px; width:150px; height: 35px" ng-disabled="true"> RETURNED </button>
 				</span>
-				<span ng-show="order.status=='ORDER CANCELLED'">
+				<span ng-show="order.status=='CANCELLED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" style="position: relative; bottom: 2px; width:150px; height: 35px" ng-disabled="true"> CANCELLED </button>
 				</span>				
 			</center> </td>
@@ -93,18 +93,18 @@
 	</div>
 	<div class="modal-footer">
 		<span style="float:left;">
-			<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="deliverNote()" ng-disabled="selectedOrder.status == 'RETURNED' || selectedOrder.status == 'NOT PICKED UP' || selectedOrder.status == 'ORDER CANCELLED'"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-print"></i> DELIVERY NOTE </span></button>
+			<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="deliverNote()" ng-disabled="selectedOrder.status == 'RETURNED' || selectedOrder.status == 'NOT DELIVERED' || selectedOrder.status == 'CANCELLED'"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-print"></i> DELIVERY NOTE </span></button>
 		</span>
 		<span style="position:absolute; float:right; right:75px">
 		<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="update()" ng-disabled="true"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-refresh"></i> UPDATE </span></button>
-		<button id="" class="waves-effect waves-light btn-large" ng-click="cancelOrder(0)" ng-disabled="selectedOrder.status != 'NOT PICKED UP'" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"> CANCEL ORDER <i class="fa fa-trash"></i></span></button>
+		<button id="" class="waves-effect waves-light btn-large" ng-click="cancelOrder(0)" ng-disabled="selectedOrder.status != 'NOT DELIVERED'" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"> CANCEL ORDER <i class="fa fa-trash"></i></span></button>
 		</span>
 	</div>	
 </div>
 
 <div id="pickUpConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
-		<center><h4>ARE YOU SURE THAT THIS ORDER IS PICKED UP BY <b>{{selectedOrder.name}}</b> ?</h4></center>
+		<center><h4>ARE YOU SURE THAT THIS ORDER IS DELIVERED TO <b>{{selectedOrder.name}}</b> ?</h4></center>
 		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="pickUp()"> YES </button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>

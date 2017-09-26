@@ -67,7 +67,7 @@ var findPossessionDetails = function( barCodeForSearch ){
 var getOrderPrediction = function( _pickupDate , _returnDate ){
 	return new Promise((resolve,reject)=>{
 		Order.find( { $and : [ 
-								{ status : { $in : [ "NOT PICKED UP" , "PICKED UP" ] } } ,
+								{ status : { $in : [ "NOT DELIVERED" , "DELIVERED" ] } } ,
 								{ $or : [
 											{
 												$and : [
@@ -87,7 +87,7 @@ var getOrderPrediction = function( _pickupDate , _returnDate ){
 														{ returnDate : { $gt : _returnDate } }
 													   ]												
 											}
-								     	] 
+										] 
 								}
 							 ] 
 					})
@@ -99,8 +99,25 @@ var getOrderPrediction = function( _pickupDate , _returnDate ){
 	})
 }
 
+var updateOrderStatus = function ( orderId , updateString ){
+	return new Promise((resolve,reject)=>{
+		Order.findOne({orderId : orderId})
+		.then(function(order){
+			order.status = updateString
+			order.pickupDate = new Date()
+			order.save()
+			.then((orderResponse)=>{
+				resolve ( { 'status' : true , 'details' : orderResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		})
+	})
+}
+
 module.exports.saveNewOrder = saveNewOrder
 module.exports.totalOrderCount = totalOrderCount
 module.exports.getOrderList = getOrderList
 module.exports.findPossessionDetails = findPossessionDetails
 module.exports.getOrderPrediction = getOrderPrediction
+module.exports.updateOrderStatus = updateOrderStatus

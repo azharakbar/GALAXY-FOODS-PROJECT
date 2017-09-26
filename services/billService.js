@@ -12,7 +12,7 @@ var findBill = function( billToSearch ){
 				resolve ( { 'status' : false , 'details' : null } )
 			}
 		},( err )=>{
-			reject ( { 'status' : false , 'details' : err } ) 
+			reject ( { 'status' : false , 'details' : err } )
 		})
 	})
 }
@@ -27,9 +27,9 @@ var billStatusCheck = function( billToSearch ){
 				resolve ( { 'status' : false , 'details' : billResponse.status } )
 			}
 		},( err )=>{
-			reject ( { 'status' : false , 'details' : err } ) 
+			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var saveNewBill = function( detailsForBill ){
@@ -54,7 +54,7 @@ var totalBillCount = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var getBillList = function(){
@@ -65,7 +65,7 @@ var getBillList = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var billPayment = function( billForPayment ){
@@ -79,9 +79,35 @@ var billPayment = function( billForPayment ){
 	})
 }
 
+var cancelBill = function( billToCancel ){
+	return new Promise((resolve,reject)=>{
+		var refundAmt = 0
+		Bill.findOne({ billId : billToCancel })
+		.then((billResponse)=>{
+			refundAmt = billResponse.remAmount - billResponse.billAmount
+			if( refundAmt )
+				billResponse.status = "CANCELLED & REFUNDED"
+			else
+				billResponse.status = "CANCELLED"
+			// billResponse.status = "CANCELLED & REFUNDED" ? refundAmt : "CANCELLED"
+			billResponse.lastPaidDate = new Date()
+			billResponse.save()
+			.then((billResponse)=>{
+				resolve ( { 'status' : true , 'details' : billResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
+
 module.exports.findBill = findBill
 module.exports.billStatusCheck = billStatusCheck
 module.exports.totalBillCount = totalBillCount
 module.exports.getBillList = getBillList
 module.exports.billPayment = billPayment
 module.exports.saveNewBill = saveNewBill
+module.exports.cancelBill = cancelBill

@@ -166,6 +166,17 @@ var newOrder = function( detailsForCustomer , objToSave ){
 	})
 }
 
+var cancelOrder = function( contact , refundAmt ){
+	return new Promise((resolve,reject)=>{
+		custService.cancelBill( contact , refundAmt )
+		.then((response)=>{
+			resolve(response)
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
 module.exports.customerExists = customerExists
 module.exports.saveCustomer = saveCustomer
 module.exports.totalCustomers = totalCustomers
@@ -174,3 +185,4 @@ module.exports.deleteCustomer = deleteCustomer
 module.exports.updateCustomer = updateCustomer
 module.exports.reduceCredit = reduceCredit
 module.exports.newOrder = newOrder
+module.exports.cancelOrder = cancelOrder

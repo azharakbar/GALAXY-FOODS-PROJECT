@@ -77,9 +77,28 @@ var updateCustomer = function( customerForUpdate , updateData ){
 	})
 }
 
+var cancelBill = function( contact , refundAmt ){
+	return new Promise((resolve,reject)=>{
+		Customer.findOne({contact : contact})
+		.then(( custResponse )=>{
+			custResponse.orders -= 1 ;
+			custResponse.credit -= refundAmt 
+			custResponse.save()
+			.then((custResponse)=>{
+				resolve ( { 'status' : true , 'details' : custResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		},( err )=>{
+			reject ( { 'status' : false , 'details' : err } )
+		})
+	})
+}
+
 module.exports.findCustomer = findCustomer
 module.exports.insertCustomer = insertCustomer
 module.exports.totalCustomerCount = totalCustomerCount
 module.exports.getCustomerList = getCustomerList
 module.exports.delCustomer = delCustomer
 module.exports.updateCustomer = updateCustomer
+module.exports.cancelBill = cancelBill

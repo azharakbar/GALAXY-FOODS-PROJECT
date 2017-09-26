@@ -29,12 +29,36 @@ orderRouter.route('/list')
 
 orderRouter.route('/pickup')
 	.post((req,res)=>{
-		orderController.orderPickUp( req.body.dataObj )
+		orderController.orderPickUp( req.body.dataObj , req.body.orderId )
 		.then(( response )=>{
-			console.log(`... ORDER PICKUP COMPLETE --> ${response.details} ...`)
+			console.log(`... ORDER PICKUP COMPLETE --> ${response.details.orderId} ...`)
 			res.json({status : "SXS"})
 		},( err )=>{
-			console.log(`--- ERROR DURING ORDER LIST RETRIEVAL ${err.details} ---`)
+			console.log(`--- ERROR DURING ORDER DELIVERY ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})	
+	})
+
+orderRouter.route('/return')
+	.post((req,res)=>{
+		orderController.orderReturn( req.body.dataObj , req.body.orderId )
+		.then(( response )=>{
+			console.log(`... ORDER RETURN COMPLETE --> ${response.details.orderId} ...`)
+			res.json({status : "SXS"})
+		},( err )=>{
+			console.log(`--- ERROR DURING ORDER RETURN ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})	
+	})
+
+orderRouter.route('/cancel')
+	.post((req,res)=>{
+		orderController.orderCancel( req.body.orderId )
+		.then(( response )=>{
+			console.log(`... ORDER CANCEL COMPLETE --> ${response.details.orderId} ...`)
+			res.json({status : "SXS"})
+		},( err )=>{
+			console.log(`--- ERROR DURING ORDER CANCEL ${err.details} ---`)
 			res.json({status : 'ERROR'})
 		})	
 	})

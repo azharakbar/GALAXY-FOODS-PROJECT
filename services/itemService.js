@@ -2,7 +2,7 @@
 
 const Item = require('../models/item')
 
-var findItem = function( barCodeToSearch ){ 
+var findItem = function( barCodeToSearch ){
 	return new Promise((resolve,reject)=>{
 		Item.findOne( {barCode : barCodeToSearch} )
 		.then(( itemResponse )=>{
@@ -12,7 +12,7 @@ var findItem = function( barCodeToSearch ){
 				resolve ( { 'status' : false , 'details' : null } )
 			}
 		},( err )=>{
-			reject ( { 'status' : false , 'details' : err } ) 
+			reject ( { 'status' : false , 'details' : err } )
 		})
 	})
 }
@@ -39,7 +39,7 @@ var totalItemCount = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var getItemList = function(){
@@ -50,7 +50,7 @@ var getItemList = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var delItem = function( itemToDelete ){
@@ -60,7 +60,7 @@ var delItem = function( itemToDelete ){
 			resolve ( { 'status' : true , 'details' : itemDelResponse } )
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
-		})		
+		})
 	})
 }
 
@@ -71,14 +71,14 @@ var updateItem = function( itemForUpdate , updateData ){
 		if ( updateData.totalStock !== undefined && updateData.totalStock !== ''){
 			itemForUpdate.totalStock = parseInt(updateData.totalStock)
 			if ( updateData.availableStock !== undefined && updateData.availableStock !== ''){
-				itemForUpdate.availableStock = parseInt(updateData.availableStock) 
+				itemForUpdate.availableStock = parseInt(updateData.availableStock)
 				itemForUpdate.rentedStock = itemForUpdate.totalStock - itemForUpdate.availableStock
 			} else {
 				itemForUpdate.availableStock = 0 ;
 				itemForUpdate.rentedStock = 0
 			}
-		} else { 
-			itemForUpdate.totalStock = 0 
+		} else {
+			itemForUpdate.totalStock = 0
 			itemForUpdate.rentedStock = 0
 		}
 		itemForUpdate.save()
@@ -90,10 +90,46 @@ var updateItem = function( itemForUpdate , updateData ){
 	})
 }
 
+var deliverStock = function( barCode , qty ){
+	return new Promise((resolve,reject)=>{
+		Item.findOne({ barCode : barCode })
+		.then(function(item){
+			item.availableStock = item.availableStock - qty
+			item.rentedStock = item.rentedStock + qty
+			item.lastVal = qty
+			item.timesOrdered = item.timesOrdered + 1
+			item.save()
+			.then((itemResponse)=>{
+				resolve ( { 'status' : true , 'details' : itemResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		})
+	})
+}
 
-module.exports.findItem = findItem 
+var returnStock = function( barCode , qty ){
+	return new Promise((resolve,reject)=>{
+		Item.findOne({ barCode : barCode })
+		.then(function(item){
+			item.availableStock = item.availableStock + qty
+			item.rentedStock = item.rentedStock - qty
+			item.lastVal = qty
+			item.save()
+			.then((itemResponse)=>{
+				resolve ( { 'status' : true , 'details' : itemResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		})
+	})
+}
+
+module.exports.findItem = findItem
 module.exports.insertItem = insertItem
 module.exports.totalItemCount = totalItemCount
 module.exports.getItemList = getItemList
 module.exports.delItem = delItem
 module.exports.updateItem = updateItem
+module.exports.deliverStock = deliverStock
+module.exports.returnStock = returnStock

@@ -164,6 +164,28 @@ var forecastAvailability = function( pickupDate , returnDate ){
 	})
 }
 
+var deliverStock = function( barCode , qty ){
+	return new Promise((resolve,reject)=>{
+		itemService.deliverStock( barCode , qty )
+		.then((response)=>{
+			resolve(response)
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
+var returnStock = function( barCode , qty ){
+	return new Promise((resolve,reject)=>{
+		itemService.returnStock( barCode , qty )
+		.then((response)=>{
+			resolve(response)
+		},(err)=>{
+			reject(err)
+		})
+	})	
+}
+
 module.exports.itemExists = itemExists
 module.exports.saveItem = saveItem
 module.exports.totalItems = totalItems
@@ -172,3 +194,5 @@ module.exports.deleteItem = deleteItem
 module.exports.updateItem = updateItem
 module.exports.findDetails = findDetails
 module.exports.forecastAvailability = forecastAvailability
+module.exports.deliverStock = deliverStock
+module.exports.returnStock = returnStock

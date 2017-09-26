@@ -22,7 +22,7 @@ var totalBills = function(){
 		},(err)=>{
 			reject(err)
 		})
-	})	
+	})
 }
 
 var billList = function(){
@@ -33,7 +33,7 @@ var billList = function(){
 		},(err)=>{
 			reject(err)
 		})
-	})		
+	})
 }
 
 var billPaymentStatus = function( billId ){
@@ -60,13 +60,13 @@ var billPay = function( billForPayment , paymentData ){
 		billForPayment.totalPaid += Math.round( parseFloat(paymentData.paid) )
 		billForPayment.remAmount -= Math.round( parseFloat(paymentData.paid) )
 		if ( billForPayment.remAmount < 1 ){
-			billForPayment.remAmount = 0 
+			billForPayment.remAmount = 0
 			billForPayment.status = "PAID"
 		}
 		else{
 			billForPayment.status = "ADVANCE PAYMENT"
 		}
-		billForPayment.lastPaidDate = new Date()	
+		billForPayment.lastPaidDate = new Date()
 		billService.billPayment( billForPayment )
 		.then((response)=>{
 			if ( response.details.status === "PAID" )
@@ -79,12 +79,13 @@ var billPay = function( billForPayment , paymentData ){
 			resolve(response)
 		},(err)=>{
 			reject(err)
-		})			
+		})
 	})
 }
 
 var newBill = function( detailsForBill ){
 	return new Promise((resolve,reject)=>{
+		detailsForBill.remAmount = detailsForBill.billAmount
 		billService.saveNewBill( detailsForBill )
 		.then((response)=>{
 			response.logObj = []
@@ -115,9 +116,21 @@ var newBill = function( detailsForBill ){
 	})
 }
 
+var cancelBill = function( billId ){
+	return new Promise((resolve,reject)=>{
+		billService.cancelBill( billId )
+		.then((response)=>{
+			resolve(response)
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
 module.exports.billExists = billExists
 module.exports.totalBills = totalBills
 module.exports.billList = billList
 module.exports.billPaymentStatus = billPaymentStatus
 module.exports.billPay = billPay
 module.exports.newBill = newBill
+module.exports.cancelBill = cancelBill
