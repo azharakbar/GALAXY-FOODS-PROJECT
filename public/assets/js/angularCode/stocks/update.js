@@ -109,7 +109,7 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 					showToast("normal");
 				}
 			} else {
-				toast.setMsg("!! ERROR ADDING ITEM !!")
+				toast.setMsg("!! ERROR UPDATING ITEM !!")
 				showToast("error");
 			}
 		} else {

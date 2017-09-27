@@ -100,6 +100,7 @@ var updateItem = function( itemForUpdate , updateData ){
 						objToSave.details.changes = logger.changesForLog ( itemForLog , response.details , ['name','barCode','price','costPrice','rentedStock','availableStock','totalStock'] )
 						objToSave.status = response.details.availableStock + " / " + response.details.totalStock
 						logger.logSave( objToSave )
+						orderController.updateItemData( itemForLog.barCode , updateData )
 						resolve(response)
 					},(err)=>{
 						reject(err)

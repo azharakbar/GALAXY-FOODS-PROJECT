@@ -24,7 +24,7 @@ var totalOrderCount = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var getOrderList = function(){
@@ -35,13 +35,13 @@ var getOrderList = function(){
 		},( err )=>{
 			reject ( { 'status' : false , 'details' : err } )
 		})
-	})	
+	})
 }
 
 var findPossessionDetails = function( barCodeForSearch ){
 	return new Promise((resolve,reject)=>{
 		var resObj = []
-		var foundItemDetails = {} 
+		var foundItemDetails = {}
 		Order.find({status : { $eq: 'PICKED UP' } }, 'name customer items pickupDate returnDate -_id' )
 		.then(function(orders){
 			for( var i = 0 ; i < orders.length ; ++i ){
@@ -60,13 +60,13 @@ var findPossessionDetails = function( barCodeForSearch ){
 			resolve ( { 'status' : true , 'details' : resObj } )
 		},function(err){
 			reject ( { 'status' : false , 'details' : err } )
-		})		
+		})
 	})
 }
 
 var getOrderPrediction = function( _pickupDate , _returnDate ){
 	return new Promise((resolve,reject)=>{
-		Order.find( { $and : [ 
+		Order.find( { $and : [
 								{ status : { $in : [ "NOT DELIVERED" , "DELIVERED" ] } } ,
 								{ $or : [
 											{
@@ -85,17 +85,17 @@ var getOrderPrediction = function( _pickupDate , _returnDate ){
 												$and : [
 														{ pickupDate : { $lte : _pickupDate } } ,
 														{ returnDate : { $gte : _returnDate } }
-													   ]												
+													   ]
 											}
-										] 
+										]
 								}
-							 ] 
+							 ]
 					})
 		.then((predictedOrderList)=>{
 			resolve ( { 'status' : true , 'details' : predictedOrderList } )
 		},(err)=>{
 			reject ( { 'status' : false , 'details' : err } )
-		})		
+		})
 	})
 }
 
@@ -115,9 +115,76 @@ var updateOrderStatus = function ( orderId , updateString ){
 	})
 }
 
+var updateCustomerData = function( customer , _updateCustomerData ){
+	return new Promise((resolve,reject)=>{
+		Order.find({ customer : customer})
+		.then((orderList)=>{
+			var promiseList = []
+			promiseList.length = orderList.length
+			for ( var i = 0 ; i < orderList.length ; ++i ){
+				orderList[i].name = _updateCustomerData.name
+				orderList[i].customer = _updateCustomerData.contact
+				promiseList[i] = orderList[i].save()
+			}
+			Promise.all( promiseList )
+			.then(()=>{
+				resolve ( { 'status' : true , 'details' : 'updateCustomerData Completed' } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		},(err)=>{
+			reject ( { 'status' : false , 'details' : err } )
+		})
+	})
+}
+
+var updateItemData = function( barCode , updateItemData ){
+	return new Promise((resolve,reject)=>{
+		Order.find({})
+		.then((orderList)=>{
+			if ( orderList !== null && orderList !== undefined ){
+				var promiseList = []
+				var itemList = []
+				promiseList.length = orderList.length
+				for ( var i = 0 ; i < orderList.length ; ++i ){
+					itemList = orderList[i].items
+					orderList[i].items = []
+					for ( var j = 0 ; j < itemList.length ; ++j ){
+						if ( itemList[j].barCode !== updateItemData.barCode ){
+							orderList[i].items.push( itemList[j] )
+						} else {
+							var newObj = {
+								barCode : "updateItemData.barCode",
+								name : updateItemData.name,
+								qty : itemList[j].qty,
+								price : itemList[j].price
+							}
+							console.log(newObj)
+							orderList[i].items.push(newObj)
+						}
+					}
+					promiseList[i] = orderList[i].save()
+				}
+				Promise.all( promiseList )
+				.then(()=>{
+					resolve ( { 'status' : true , 'details' : 'updateItemData Completed' } )
+				},(err)=>{
+					reject ( { 'status' : false , 'details' : err } )
+				})
+			} else {
+				resolve ( { 'status' : true , 'details' : 'updateItemData Completed' } )
+			}
+		},(err)=>{
+			reject ( { 'status' : false , 'details' : err } )
+		})
+	})
+}
+
 module.exports.saveNewOrder = saveNewOrder
 module.exports.totalOrderCount = totalOrderCount
 module.exports.getOrderList = getOrderList
 module.exports.findPossessionDetails = findPossessionDetails
 module.exports.getOrderPrediction = getOrderPrediction
 module.exports.updateOrderStatus = updateOrderStatus
+module.exports.updateCustomerData = updateCustomerData
+module.exports.updateItemData = updateItemData

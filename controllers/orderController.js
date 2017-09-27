@@ -261,6 +261,27 @@ var orderCancel = function( orderId ){
 	})
 }
 
+var updateCustomerData = function( customer , updateCustomerData ){
+	orderService.updateCustomerData( customer , updateCustomerData )
+	.then((response)=>{
+		console.log(`--- updateCustomerData of orderController SXSFULLY COMPLETED ---`)
+	},(err)=>{
+		console.log(`--- ERROR DURING updateCustomerData of orderController ${err.details} ---`)
+	})
+}
+
+var updateItemData = function( barCode , updateItemData ){
+/*	console.log("in ctrlt")
+		for ( let key in updateItemData )
+			console.log(`${key} --> ${updateItemData[key]}`)*/
+	orderService.updateItemData( barCode , updateItemData	 )
+	.then((response)=>{
+		console.log(`--- updateItemData of orderController SXSFULLY COMPLETED ---`)
+	},(err)=>{
+		console.log(`--- ERROR DURING updateItemData of orderController ${err.details} ---`)
+	})
+}
+
 module.exports.orderExists = orderExists
 module.exports.newOrder = newOrder
 module.exports.totalOrders = totalOrders
@@ -270,3 +291,5 @@ module.exports.findOrdersForecast = findOrdersForecast
 module.exports.orderPickUp = orderPickUp
 module.exports.orderReturn = orderReturn
 module.exports.orderCancel = orderCancel
+module.exports.updateCustomerData = updateCustomerData
+module.exports.updateItemData = updateItemData

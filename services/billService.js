@@ -85,11 +85,7 @@ var cancelBill = function( billToCancel ){
 		Bill.findOne({ billId : billToCancel })
 		.then((billResponse)=>{
 			refundAmt = billResponse.remAmount - billResponse.billAmount
-			if( refundAmt )
-				billResponse.status = "CANCELLED & REFUNDED"
-			else
-				billResponse.status = "CANCELLED"
-			// billResponse.status = "CANCELLED & REFUNDED" ? refundAmt : "CANCELLED"
+			billResponse.status = refundAmt ? "CANCELLED & REFUNDED" : "CANCELLED"
 			billResponse.lastPaidDate = new Date()
 			billResponse.save()
 			.then((billResponse)=>{
@@ -103,6 +99,28 @@ var cancelBill = function( billToCancel ){
 	})
 }
 
+var updateCustomerData = function( customer , updateCustomerData ){
+	return new Promise((resolve,reject)=>{
+		Bill.find({ customer : customer})
+		.then((billList)=>{
+			var promiseList = []
+			promiseList.length = billList.length
+			for ( var i = 0 ; i < billList.length ; ++i ){
+				billList[i].name = updateCustomerData.name
+				billList[i].customer = updateCustomerData.contact
+				promiseList[i] = billList[i].save()
+			}
+			Promise.all( promiseList )
+			.then(()=>{
+				resolve ( { 'status' : true , 'details' : 'updateCustomerData Completed' } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		},(err)=>{
+			reject ( { 'status' : false , 'details' : err } )
+		})
+	})
+}
 
 module.exports.findBill = findBill
 module.exports.billStatusCheck = billStatusCheck
@@ -111,3 +129,4 @@ module.exports.getBillList = getBillList
 module.exports.billPayment = billPayment
 module.exports.saveNewBill = saveNewBill
 module.exports.cancelBill = cancelBill
+module.exports.updateCustomerData = updateCustomerData

@@ -286,9 +286,11 @@ app.get('/reset',(req,res)=>{
 			response[i].save()
 		}
 	})*/
+	console.log("****RESET API****")
 	Order.remove({})
 	.then(()=>{})
-
+	Bill.remove({})
+	.then(()=>{})
 	Item.find({})
 	.then((response)=>{
 		for ( var i = 0 ; i < response.length ; ++i ){

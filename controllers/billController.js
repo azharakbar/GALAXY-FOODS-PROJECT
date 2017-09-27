@@ -127,6 +127,15 @@ var cancelBill = function( billId ){
 	})
 }
 
+var updateCustomerData = function( customer , updateCustomerData ){
+	billService.updateCustomerData( customer , updateCustomerData )
+	.then((response)=>{
+		console.log(`--- updateCustomerData of billController SXSFULLY COMPLETED ---`)
+	},(err)=>{
+		console.log(`--- ERROR DURING updateCustomerData of billController ${err.details} ---`)
+	})
+}
+
 module.exports.billExists = billExists
 module.exports.totalBills = totalBills
 module.exports.billList = billList
@@ -134,3 +143,4 @@ module.exports.billPaymentStatus = billPaymentStatus
 module.exports.billPay = billPay
 module.exports.newBill = newBill
 module.exports.cancelBill = cancelBill
+module.exports.updateCustomerData = updateCustomerData
