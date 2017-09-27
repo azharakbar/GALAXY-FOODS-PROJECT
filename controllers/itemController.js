@@ -27,7 +27,7 @@ var saveItem = function( details ){
 					name : response.details.name ,
 					rentPrice : response.details.price ,
 					costPrice : response.details.costPrice ,
-					status : response.details.availableStock + " / " + response.totalStock
+					status : response.details.availableStock + " / " + response.details.totalStock
 				}
 			}
 			logger.logSave( objToSave )
@@ -97,6 +97,8 @@ var updateItem = function( itemForUpdate , updateData ){
 				} else {
 					itemService.updateItem( itemForUpdate, updateData )
 					.then((response)=>{
+						objToSave.details.barCode = response.details.barCode
+						objToSave.details.name = response.details.name
 						objToSave.details.changes = logger.changesForLog ( itemForLog , response.details , ['name','barCode','price','costPrice','rentedStock','availableStock','totalStock'] )
 						objToSave.status = response.details.availableStock + " / " + response.details.totalStock
 						logger.logSave( objToSave )
@@ -112,9 +114,12 @@ var updateItem = function( itemForUpdate , updateData ){
 		} else {
 			itemService.updateItem( itemForUpdate , updateData )			
 			.then((response)=>{
+				objToSave.details.barCode = response.details.barCode
+				objToSave.details.name = response.details.name
 				objToSave.details.changes = logger.changesForLog ( itemForLog , response.details , ['name','barCode','price','costPrice','rentedStock','availableStock','totalStock'] )
 				objToSave.status = response.details.availableStock + " / " + response.details.totalStock
 				logger.logSave( objToSave )
+				orderController.updateItemData( itemForLog.barCode , updateData )
 				resolve(response)
 			},(err)=>{
 				reject(err)

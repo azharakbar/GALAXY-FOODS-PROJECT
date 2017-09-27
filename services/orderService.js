@@ -150,16 +150,15 @@ var updateItemData = function( barCode , updateItemData ){
 					itemList = orderList[i].items
 					orderList[i].items = []
 					for ( var j = 0 ; j < itemList.length ; ++j ){
-						if ( itemList[j].barCode !== updateItemData.barCode ){
+						if ( itemList[j].barCode !== barCode ){
 							orderList[i].items.push( itemList[j] )
 						} else {
 							var newObj = {
-								barCode : "updateItemData.barCode",
+								barCode : updateItemData.barCode,
 								name : updateItemData.name,
 								qty : itemList[j].qty,
 								price : itemList[j].price
 							}
-							console.log(newObj)
 							orderList[i].items.push(newObj)
 						}
 					}

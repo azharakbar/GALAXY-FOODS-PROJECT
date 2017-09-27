@@ -1,5 +1,5 @@
 angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serviceModule2'])
-.controller('newOrderCtrl',function( $rootScope , $scope , hotkeys , $state , $http , user , toast ){
+.controller('newOrderCtrl',function( $rootScope , $scope , hotkeys , $state , $http , $timeout , user , toast ){
 
 	$('.modal').modal();
 	$('.datepicker').css('font-size','19px')
@@ -144,11 +144,11 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 	}		
 
 	$scope.enrollItem = function(){
-		console.log("I AM HERE" + $scope.qty + ' ' + $rootScope.item.availableStock )
 		if ( $scope.qty > $rootScope.item.totalStock || $scope.qty === undefined ){
-			console.log("I AM INSEIDE IF")
-			$('#maxVal').removeClass('shake')
 			$('#maxVal').addClass('shake')
+			$timeout(function(){
+				$('#maxVal').removeClass('shake')
+			},1000);			
 		} else {
 			orderedItem.barCode = $rootScope.item.barCode
 			orderedItem.name = $rootScope.item.name
@@ -312,6 +312,8 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 				$('#nextContent').addClass('hide'); 
 				$('#custList').removeClass('fadeOut');
 				$scope.titleMsg = "PICK THE CUSTOMER TO PLACE ORDER"
+				$scope.eveLoxn = ''
+				$scope.evePurpose = ''
 				$scope.$apply();
 				$('#custList').show();
 				$('#custList').addClass('fadeIn');

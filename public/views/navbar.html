@@ -1,10 +1,10 @@
 <style type="text/css">
   #tt{
-    font-family: 'Dancing Script', sans-serif ;
-    font-size: 38px ;
+	font-family: 'Dancing Script', sans-serif ;
+	font-size: 38px ;
   }
   ul{
-  	font-family: 'Raleway', sans-serif;
+	font-family: 'Raleway', sans-serif;
   }
 </style>
 
@@ -13,20 +13,20 @@
 
 <nav>
   <div class="nav-wrapper" id="header">
-    <a href="#"><i class="material-icons" id="reorderBtn">reorder</i></a><a class="brand-logo"><img src="./assets/imgs/logo.png" id="qLogo"></a><span id="tt" style="position: relative; left:180px;">RENTALS &amp; DECORATIONS</span>
-    <ul class="right hide-on-med-and-down">   
-      <li id="refreshBtn"><a ng-click="ref()"><i class="material-icons">update</i></a></li>
-      <li id="logoutBtn"><a ui-sref="logout"><i class="material-icons">input</i></a></li>
-    </ul>
+	<a href="#" ng-click="humburger()"><i class="material-icons" id="reorderBtn">reorder</i></a><a class="brand-logo"><img src="./assets/imgs/logo.png" id="qLogo"></a><span id="tt" style="position: relative; left:180px;">RENTALS &amp; DECORATIONS</span>
+	<ul class="right hide-on-med-and-down">   
+	  <li id="refreshBtn"><a ng-click="ref()"><i class="material-icons">update</i></a></li>
+	  <li id="logoutBtn"><a ui-sref="logout"><i class="material-icons">input</i></a></li>
+	</ul>
   </div>
 </nav>
 </div>
 
-<ul id="slide-out" class="side-nav fixed" style="width:250px">
+<ul id="slide-out" class="side-nav fixed expanded" ng-show="sideNavDisplayFinal" style="width:250px">
   <li><div class="user-view">
-    <i class="large material-icons" id="reorderBtn">perm_identity</i>
-    <span class="name" id="nameField">{{userName}}</span>
-    <span class="email" id="desigField">{{ role }}</span>
+	<i class="large material-icons" id="reorderBtn">perm_identity</i>
+	<span class="name" id="nameField">{{userName}}</span>
+	<span class="email" id="desigField">{{ role }}</span>
   </div></li>
   <li><div class="divider"></div></li>
   <br>
@@ -48,36 +48,48 @@
 </ul>
 
   <ul id='custDropDown' class='dropdown-content'>
-    <li><a ui-sref="new_customer"><i class="material-icons">person_add</i>New Customer</a></li>
-    <li><a ui-sref="view_customer"><i class="fa fa-users"></i>Customers Central</a></li>
+	<li><a ui-sref="new_customer"><i class="material-icons">person_add</i>New Customer</a></li>
+	<li><a ui-sref="view_customer"><i class="fa fa-users"></i>Customers Central</a></li>
   </ul>
 
   <ul id='stockDropDown' class='dropdown-content'>
-    <li><a ui-sref="new_item"><i class="material-icons">add</i>New Item</a></li>
-    <li><a ui-sref="view_stock"><i class="fa fa-cubes"></i>Stocks Central</a></li>
+	<li><a ui-sref="new_item"><i class="material-icons">add</i>New Item</a></li>
+	<li><a ui-sref="view_stock"><i class="fa fa-cubes"></i>Stocks Central</a></li>
   </ul>  
 
   <ul id='billDropDown' class='dropdown-content'>
-    <li><a ui-sref="new_bill"><i class="material-icons">note_add</i>New Bill</a></li>
-    <li><a ui-sref="view_bill"><i class="fa fa-money" style="position: relative; left:4px; font-size: 20px"></i>Billing Central</a></li>
+	<li><a ui-sref="new_bill"><i class="material-icons">note_add</i>New Bill</a></li>
+	<li><a ui-sref="view_bill"><i class="fa fa-money" style="position: relative; left:4px; font-size: 20px"></i>Billing Central</a></li>
   </ul>  
 
   <ul id='orderDropDown' class='dropdown-content'>
-    <li><a ui-sref="new_order"><i class="material-icons">add_shopping_cart</i>New Order</a></li>
-    <li><a ui-sref="view_order"><i class="fa fa-shopping-bag" style="position: relative; left:4px; font-size: 20px"></i>Orders Central</a></li>
+	<li><a ui-sref="new_order"><i class="material-icons">add_shopping_cart</i>New Order</a></li>
+	<li><a ui-sref="view_order"><i class="fa fa-shopping-bag" style="position: relative; left:4px; font-size: 20px"></i>Orders Central</a></li>
   </ul> 
 
   <ul id='reportDropDown' class='dropdown-content'>
-    <li><a ui-sref="report_central"><i class="fa fa-file-code-o" style="position: relative; left:4px; font-size: 20px"></i>Reports Central</a></li>
+	<li><a ui-sref="report_central"><i class="fa fa-file-code-o" style="position: relative; left:4px; font-size: 20px"></i>Reports Central</a></li>
   </ul> 
 
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-      $('.dropdown-button').dropdown({
-        belowOrigin : true
-      }
-    );  
+	  $('.dropdown-button').dropdown({
+		belowOrigin : true
+	  }
+	);
+    $('#reorderBtn').click(function (){
+    		checkWidth()
+	})
+/*	$('.dropdown-content').click(function(){
+		checkWidth()
+		$('#slide-out').removeClass('expanded')
+		$('#slide-out').addClass('shrunk')
+		$('#slide-out').animate({
+			'width' : '0',
+		})
+		tr1()
+	})*/
   })
 </script>
