@@ -112,6 +112,8 @@ var updateCustomer = function( customerForUpdate , updateData ){
 			.then((response)=>{
 				objToSave.details.changes = logger.changesForLog ( customerForLog , updateData , ['name','contact'] )
 				logger.logSave( objToSave )
+				orderController.updateCustomerData( customerForLog.contact , updateData )
+				billController.updateCustomerData( customerForLog.contact , updateData )				
 				resolve(response)
 			},(err)=>{
 				reject(err)

@@ -21,12 +21,20 @@
     <link rel="stylesheet" type="text/css" href="./assets/fonts/Raleway/Raleway.css">    
     <link rel="stylesheet" type="text/css" href="./assets/fonts/Roboto/Roboto.css">    
     <link rel="stylesheet" type="text/css" href="./assets/fonts/Artifika/Artifika.css">    
+    <style type="text/css">
+        .c1{
+            margin-left: 250px;
+        }
+        .c2{
+            margin-left: 0px;
+        }
+    </style>
 <body ng-controller="indexCtrl">
     
     <div ng-class="{'container-fluid':loggedIn , 'container':!loggedIn }">
-        <div ui-view="v1"></div>
-        <div ui-view="v2" style="margin-left: 250px"></div>
-        <div ui-view="v3"></div>
+        <div id="vw1" ui-view="v1"></div>
+        <!-- <div id="vw2" ui-view="v2" style="margin-left: 250px"></div> -->
+        <div id="vw2" ui-view="v2" ng-class="{'c1':$rootScope.sideNavDisplayFinal , 'c2':!($rootScope.sideNavDisplayFinal) }"></div>
     </div>
     
     <div id="snackbar">

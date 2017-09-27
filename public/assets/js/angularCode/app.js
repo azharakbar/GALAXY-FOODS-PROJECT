@@ -10,6 +10,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/",
 		resolve : {
 			check : function(user,$state,$location){
+				// $rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if ( user.isLoggedIn() )
 					$state.go('dashboard')
 			}
@@ -25,6 +26,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/dashboard" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -55,6 +57,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -76,6 +79,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -103,6 +107,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -124,6 +129,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_item" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -145,6 +151,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_stock" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -172,6 +179,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -193,6 +201,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -217,6 +226,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/pay_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -238,6 +248,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -262,6 +273,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -283,6 +295,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -307,6 +320,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/update_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -329,6 +343,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/report_central" ,
 		resolve : {
 			check : function($rootScope,$state,user){
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -359,7 +374,9 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 	$locationProvider.html5Mode(true).hashPrefix('!');
 })
 
-app.controller('indexCtrl',function($scope,$rootScope,$state,toast,hotkeys){
+app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotkeys){
+	$rootScope.sideNavDisplay = true
+	$rootScope.sideNavDisplayFinal = true
 	hotkeys.add({
 		combo: 'ctrl+alt+c',
 		description: 'CUSTOMERS CENTRAL',
@@ -409,7 +426,36 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,toast,hotkeys){
 			if ( $state.current.name != 'login')
 				$state.go('logout')	
 		}
-	})		
+	})
+
+	$rootScope.setSideNavVisibility = function( value ){
+		console.log("in fn")
+		if ( value == undefined )
+			$rootScope.sideNavDisplay = !($rootScope.sideNavDisplay)
+		else if ( value != $rootScope.sideNavDisplay )
+			$rootScope.sideNavDisplay = value
+		else
+			return
+
+		console.log(`sideNavDisplay = ${$rootScope.sideNavDisplay}`)
+		if ( $rootScope.sideNavDisplay ){
+			console.log("fn1")
+				$rootScope.sideNavDisplayFinal = true
+				// $rootScope.$apply()
+			$timeout(function(){
+				expand()
+			},50)
+
+		} else {
+			console.log("fn2")
+			shrink()
+			$timeout(function(){
+				$rootScope.sideNavDisplayFinal = false
+				$rootScope.$apply()
+			},400)			
+		}
+	}
+
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){
 			if(oldVal === "LOADING")
