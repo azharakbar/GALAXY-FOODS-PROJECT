@@ -10,7 +10,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/",
 		resolve : {
 			check : function(user,$state,$location){
+<<<<<<< HEAD
 				// $rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
+=======
+				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
+>>>>>>> af0c353fe11fd3a0d4ecd0aa17aee4c4a74c654a
 				if ( user.isLoggedIn() )
 					$state.go('dashboard')
 			}
@@ -436,7 +440,7 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotk
 			$rootScope.sideNavDisplay = value
 		else
 			return
-
+		
 		console.log(`sideNavDisplay = ${$rootScope.sideNavDisplay}`)
 		if ( $rootScope.sideNavDisplay ){
 			console.log("fn1")
