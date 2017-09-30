@@ -6,26 +6,26 @@
 		font-family: 'Montserrat',sans-serif;
 	}
 	.ng-table-pager {
-	    display: none;
+		display: none;
 	}	
 	.list tr:hover{
 		text-decoration: none;
 		cursor: pointer;
 	}
 	.update{
+		position: absolute; 
 		font-size: 15px;
 		width: 170px;
 		height: 45px;
-		position: absolute; 
 		left: 550px;
 	}
 	.delete{
+		position: absolute; 
 		font-size: 15px;
-		background-color: #d32f2f ;
 		width: 170px;
 		height: 45px;
-		position: absolute; 
 		right: 350px;
+		background-color: #d32f2f ;
 	}	
 </style>
 <div class="animated">
@@ -33,23 +33,23 @@
 <h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL CUSTOMERS REGISTERED : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
   <div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
   <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
-    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-keyup="searchBlur()" id="search" style="width: 0px">
+	<input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-init="" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-keyup="searchBlur()" id="search" style="width: 0px">
   </div> 
 	<table ng-table="custTable" class="table table-hover table-responsive list">
   <thead>
-    <tr style="cursor: default;">
-      <th width ="35%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
-      <th width ="25%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT NUMBER</th>
-      <th width ="20%"><center><i class="fa fa-cube" style="font-size: 15px"></i> OUTSTANDING ORDERS</center></th>
-      <th width ="20%"><center><i class="fa fa-inr" style="font-size: 15px"></i> CREDIT</center></th>
-    </tr>
+	<tr style="cursor: default;">
+	  <th width ="35%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+	  <th width ="25%"><i class="fa fa-phone" style="font-size: 15px"></i> CONTACT NUMBER</th>
+	  <th width ="20%"><center><i class="fa fa-cube" style="font-size: 15px"></i> OUTSTANDING ORDERS</center></th>
+	  <th width ="20%"><center><i class="fa fa-inr" style="font-size: 15px"></i> CREDIT</center></th>
+	</tr>
   </thead>
-    <tr ng-repeat="customer in $data | filter : search" ng-click="set(customer,$index)" id="row{{$index}}" height="48">
-    <td width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
-    <td width="25%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
-    <td width="20%" title = "Orders"> <center>{{customer.orders}}</center> </td>
-    <td width="20%" title = "Credit"> <center>{{customer.credit}}</center> </td>
-  	</tr>         
+	<tr ng-repeat="customer in $data | filter : search" ng-click="set(customer,$index)" id="{{$index}}" height="48">
+	<td width="35%" title = "Name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.name}} </td>
+	<td width="25%" title = "Contact"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{customer.contact}} </td>
+	<td width="20%" title = "Orders"> <center>{{customer.orders}}</center> </td>
+	<td width="20%" title = "Credit"> <center>{{customer.credit}}</center> </td>
+	</tr>         
 </table>
 </div>
 
@@ -76,33 +76,32 @@
 
 	$('#buttonSet').hide(); 
 
-    $('.table').click(function(event){
+	$('.table').click(function(event){
 			var $target = $(event.target);
 			var ele = $target.closest("tr").attr("id");
 			var idNew = $target.closest("td").attr("id")
+			//1st 265
+			//2nd 315
+			$('#buttonSet').fadeOut()
 			if ( ele != undefined ){
-				var posTop = $target.closest("tr").position().top ;
-				$('#buttonSet').fadeOut()
 				if ( $('#'+ele).hasClass('tableRow') ){
 					$('.tableRow').animate({'height':48})
 					$('tr').removeClass('tableRow')
 				}
 				else{
-					$('#'+ele).animate({'height' : 100})
 					$('.tableRow').animate({'height':48})
 					$('tr').removeClass('tableRow')
+					$('#'+ele).animate({'height' : 100})
 					$('#'+ele).addClass('tableRow')
+					var posTop = $target.closest("tr").position().top ;
+					$('.update').css('top' , parseInt(posTop)+40 )					
+					$('.delete').css('top' , parseInt(posTop)+40 )					
 					$('#buttonSet').fadeIn()
-					$('.update').css('top' , posTop+40 )
-					$('.delete').css('top' , posTop+40 )
-					$('.update').attr('id',idNew)
-					$('.delete').attr('id',idNew)
 				}
 			}else{
-					$('#buttonSet').fadeOut()
 					$('.tableRow').animate({'height':48})
 			}
 
-    })
+	})
 	})
 </script>

@@ -40,14 +40,12 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 					toast.setMsg("LOADING")
 					showLoading();
 					var data = "name=" + $scope.custName + "&contact=" + $scope.custContact+'&token='+user.getToken()
-					console.log(data)
 					update(data)
 					.then(function(res){
 						showToast("success");
 						$state.go('view_customer',{ showLoading:false } )
 						// setTimeout(function() { $state.go('view_customer') ; }, 500);
 					},function(err){
-						console.log("from main err= "+err)
 						showToast("error");
 					})
 				} else {

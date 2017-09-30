@@ -3,8 +3,6 @@ angular.module('reportModule' , ['pickadate','serviceModule','serviceModule2'] )
 	$scope.startDate = new Date()
 	$scope.endDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
 	$scope.generate = function(){
-		// console.log( $scope.startDate )
-		// console.log( $scope.endDate )
 		if ( convertDate ( $scope.startDate ) === convertDate ( $scope.endDate ) ){
 			toast.setMsg("!! START AND END DATES SHOULD NOT BE SAME !!")
 			showToast("error")

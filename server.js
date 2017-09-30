@@ -247,25 +247,39 @@ app.get('/report' , isLoggedIn , function(req,res){
 		} else if ( req.query.type === '3' ){
 			Order.findOne({ orderId : req.query.orderId })
 			.then(function(rslt){
-				incData.orderId = rslt.orderId
-				incData.name = rslt.name
-				incData.contact = rslt.customer
-				incData.dateOfIssue = rslt.issueDate
-				incData.dateOfDelivery = rslt.pickupDate
-				incData.dateOfReturn = rslt.returnDate
-				incData.stkItems = rslt.items
-				console.log(`incData = ${incData}`)
-				console.log(rslt)
-				console.log(rslt.orderId)
+				for ( let key in rslt )
+					incData[key] = rslt[key]
 				dataObj.data = incData
 				dataObj.template.shortid = "Hkx4iKs9b"
 				options.json = dataObj
 				request(options).pipe(res)			
 				},function(err){
-					incData.stkItems = { status : "ERROR" }
+					incData.items = { status : "ERROR" }
 				})
+		} else if ( req.query.type === '4' ){
+			Bill.findOne({ billId : req.query.billId },'-_id')
+			.then(function(billResponse){
+				Log.find({$and:[{
+					"category" : "TRANSACTION"
+				},{
+					"details.id" : { $eq : req.query.billId}
+				}]},
+				'readableDate details.type details.paid details.status details.remAmount details.amount details.totalCredit -_id')
+				.then(function(logResponse){
+					incData.history = []
+					for ( let key in billResponse )
+						incData[key] = billResponse[key]
+					dataObj.data = {'incData' : incData , 'logData' : logResponse}
+					dataObj.template.shortid = "SJe4TwTsW"
+					options.json = dataObj
+					request(options).pipe(res)							
+				},(err)=>{
+					res.send("error while rendering report")
+				})
+			},(err)=>{
+				res.send("error while rendering report")
+			})
 		}
-		console.log("here in report")
 })	
 
 app.get('/logs',function(req,res){

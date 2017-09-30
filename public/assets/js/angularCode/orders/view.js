@@ -21,8 +21,6 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	})	
 
 	var getOrderList = function( showLoad ){
-		console.log("here in getOrderList")
-		console.log ( $stateParams )
 		if ( $stateParams.showLoading ){
 			toast.setMsg("LOADING")
 			showLoading();
@@ -137,20 +135,8 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 
 
 	$scope.deliverNote = function(){
-		var loxn = "http://localhost:2016/report?type=3&orderId="+$rootScope.selectedOrder.orderId ;
-		console.log(loxn)
-/*		var dataObj = {
-			startDate : $scope.startDate
-		};*/
-
-/*		if ( $scope.reportOpt == "stkReport" ){
-			loxn += "shortid=B1yDqRVwW&type=1&data=" ;
-		}
-		else{
-			loxn += "shortid=H1e0jWYdZ&type=2&data=" ;
-		}
-		loxn += JSON.stringify(dataObj) ;*/
-		// var win = window.open(loxn);
+		var loxn = "http://localhost:2017/report?type=3&orderId="+$rootScope.selectedOrder.orderId ;
+		var win = window.open(loxn);
 	}	
 
 	getOrderList( true )
@@ -183,7 +169,6 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 	$scope.set= function(inComing,idx){
 		$rootScope.selectedOrder = inComing
 		$rootScope.idx = idx 
-		console.log($rootScope.selectedOrder)
 		$('#orderDetails').modal('open')
 	}
 

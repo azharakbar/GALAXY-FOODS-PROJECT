@@ -42,7 +42,6 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 			if ( $scope.custName.length >= 2 && $scope.custContact.length >= 7 ){
 				$rootScope.newCustFormError = false ;
 				var tkn = user.getToken()
-				console.log("OUTGOINING REQ =="+'name='+$scope.custName+'&contact='+$scope.custContact+'&token='+tkn)
 				$http({
 					url : '/customer/new' ,
 					method : 'POST' ,
@@ -52,7 +51,6 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 					data: 'name='+$scope.custName+'&contact='+$scope.custContact+'&token='+tkn
 				})
 				.then(function(response){
-					console.log(response.data)
 					if ( response.data.status === "SXS" ){
 						toast.setMsg("USER SUCCESSFULLY ADDED")
 						$scope.custName="" 

@@ -42,7 +42,7 @@ var findPossessionDetails = function( barCodeForSearch ){
 	return new Promise((resolve,reject)=>{
 		var resObj = []
 		var foundItemDetails = {}
-		Order.find({status : { $eq: 'PICKED UP' } }, 'name customer items pickupDate returnDate -_id' )
+		Order.find({status : { $eq: 'DELIVERED' } }, 'name customer items pickupDate returnDate -_id' )
 		.then(function(orders){
 			for( var i = 0 ; i < orders.length ; ++i ){
 				for( var j = 0 ; j < orders[i].items.length ; ++j ){

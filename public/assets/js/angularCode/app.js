@@ -10,11 +10,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/",
 		resolve : {
 			check : function(user,$state,$location){
-<<<<<<< HEAD
-				// $rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
-=======
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
->>>>>>> af0c353fe11fd3a0d4ecd0aa17aee4c4a74c654a
 				if ( user.isLoggedIn() )
 					$state.go('dashboard')
 			}
@@ -30,7 +25,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/dashboard" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -61,7 +55,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -83,7 +76,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -111,7 +103,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -133,7 +124,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_item" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -155,7 +145,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_stock" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -183,7 +172,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -205,7 +193,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -230,7 +217,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/pay_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -252,7 +238,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -277,7 +262,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -299,7 +283,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -324,7 +307,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/update_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -347,7 +329,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/report_central" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				$rootScope.setSideNavVisibility($rootScope.sideNavDisplay)
 				if(!user.isLoggedIn()){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
@@ -431,34 +412,6 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotk
 				$state.go('logout')	
 		}
 	})
-
-	$rootScope.setSideNavVisibility = function( value ){
-		console.log("in fn")
-		if ( value == undefined )
-			$rootScope.sideNavDisplay = !($rootScope.sideNavDisplay)
-		else if ( value != $rootScope.sideNavDisplay )
-			$rootScope.sideNavDisplay = value
-		else
-			return
-		
-		console.log(`sideNavDisplay = ${$rootScope.sideNavDisplay}`)
-		if ( $rootScope.sideNavDisplay ){
-			console.log("fn1")
-				$rootScope.sideNavDisplayFinal = true
-				// $rootScope.$apply()
-			$timeout(function(){
-				expand()
-			},50)
-
-		} else {
-			console.log("fn2")
-			shrink()
-			$timeout(function(){
-				$rootScope.sideNavDisplayFinal = false
-				$rootScope.$apply()
-			},400)			
-		}
-	}
 
 	$rootScope.$watch('msg',function(oldVal,newVal){
 		if ( newVal != oldVal ){

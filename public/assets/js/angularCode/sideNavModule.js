@@ -6,13 +6,5 @@ angular.module('sideNavModule', ['serviceModule'])
 	$scope.ref = function(){
 		$state.reload() ;
 	}
-
-	$scope.humburger = function(){
-		$rootScope.setSideNavVisibility()
-	}
-
-	$('.dropdown-content').click(function(){
-		$rootScope.setSideNavVisibility(false)
-	})
 });
 

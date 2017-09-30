@@ -1,5 +1,5 @@
 angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2'])
-.controller('viewBillCtrl',function( $rootScope,$scope,hotkeys,$http,$state,$stateParams,user,toast ){
+.controller('viewBillCtrl',function( $rootScope,$scope,$timeout,hotkeys,$http,$state,$stateParams,user,toast ){
 	$('.modal').modal();
 
 	hotkeys.bindTo($scope)
@@ -120,9 +120,10 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		$('#buttonSet').fadeOut()
 	}
 
-	$scope.set= function(inComing,index){
+	$scope.set= function(inComing){
 		$rootScope.bill = inComing
 		$rootScope.roundedAmount = Math.round($rootScope.bill.remAmount)
+		console.log("in set")
 	}	
 
 	$scope.check = function(){
@@ -148,4 +149,12 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		})
 	}
 
+	$scope.viewBill = function(){
+		$timeout( function(){
+			var loxn = "http://localhost:2017/report?type=4&billId="+$rootScope.bill.billId ;
+			var win = window.open(loxn);
+		},50 )
+	}
+
 })
+

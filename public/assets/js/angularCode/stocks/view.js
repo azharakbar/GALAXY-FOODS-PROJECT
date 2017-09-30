@@ -52,13 +52,12 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 					data : 'token='+user.getToken()
 				})
 				.then(function(response){
-					console.log(response.data);
 					$scope.itemTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
 					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 				},function(err){
-					console.log("ERROR");
+					$scope.total = "ERROR"	
 				})
 			} else {
 				$scope.total = "ERROR"	
@@ -120,7 +119,6 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}
 
 	$scope.update = function(){
-		console.log("GOING TO UPDATE "+$rootScope.item.barCode)
 		$('.modal').modal('close')
 		$state.go('update_stock',{'item':$rootScope.item})
 	}
@@ -134,19 +132,16 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 		} else {
 			$('#stockViewModal').modal('close')
 			$rootScope.delAllowed = false ;
-			console.log("U R NOT ALLOWED TO DELETE")
 			toast.setMsg("!! ITEMS WITH RENTED STOCK CANT BE DELETED !!")
 			showToast("error")
 		}		
 	}
 
 	$scope.delete = function(){
-		console.log("GOING TO DELETE "+$rootScope.item.barCode)
 		$('#delConfirm').modal('close');
 		toast.setMsg("LOADING")
 		showLoading();
 		var data = "token=" + user.getToken()
-		console.log(data)
 		deleteItem( data )
 		.then(function(res){
 			$('#buttonSet').fadeOut();
@@ -154,7 +149,6 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			$('#row'+$rootScope.index).addClass('animated fadeOutRight')
 			setTimeout( function(){ getCount( false ) } , 500 )
 		},function(err){
-			console.log("from main err= "+err)
 			showToast("error");
 		})
 		$rootScope.delAllowed = false ;
@@ -176,13 +170,11 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			else 
 				newHeight = 440 + ( 60 * ( resLength-1 ) )*/
 			$('#contentsModal').css('height' , newHeight )
-			console.log(res)
 			$scope.posDetails = res ;
 			$scope.$apply() ;
 		},function(err){
 			showToast("error");
 		})
-		console.log("INDEX IS :"+$rootScope.index)
 	}
 	$scope.noDel = function(){
 		$rootScope.delAllowed = false ;
@@ -192,7 +184,6 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 
 	$scope.$watch('total',function(newVal,oldVal){
 		if ( newVal != oldVal ){
-			console.log('changed from '+oldVal+' to '+newVal)
 		}
 	})
 

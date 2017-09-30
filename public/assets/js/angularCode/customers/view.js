@@ -48,16 +48,15 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 					data : 'token='+user.getToken()
 				})
 				.then(function(response){
-					console.log(response.data);
 					$scope.custTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
 					if( $stateParams.showLoading ){
 						hideLoading();
 					}
 				},function(err){
-					console.log("ERROR");
+					$scope.total = "ERROR"
 				})
 			} else {
-				$scope.total = "ERROR"	
+				$scope.total = "ERROR"
 			}
 		},function(err){
 			$scope.total = "ERROR"
@@ -83,7 +82,6 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}
 
 	$scope.update = function(){
-		console.log("GOING TO UPDATE "+$rootScope.customer.contact)
 		$state.go('update_customer',{'customer':$rootScope.customer})
 	}
 
@@ -93,28 +91,23 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			$('#delConfirm').modal('open');
 		} else {
 			$rootScope.delAllowed = false ;
-			console.log("U R NOT ALLOWED TO DELETE")
 			toast.setMsg("!! CUSTOMERS WITH OUTSTANDING ORDERS AND CREDIT CANT BE DELETED !!")
 			showToast("error")
 		}		
 	}
 
 	$scope.delete = function(){
-		console.log("GOING TO DELETE "+$rootScope.customer.contact)
 		$('#delConfirm').modal('close');
-		console.log("i m here*+9+*+")
 		toast.setMsg("LOADING")
 		showLoading();
 		var data = "token=" + user.getToken()
-		console.log(data)
 		deleteCustomer( data )
 		.then(function(res){
 			$('#buttonSet').fadeOut();
 			showToast("success");
-			$('#row'+$rootScope.index).addClass('animated fadeOutRight')
+			$('#'+$rootScope.index).addClass('animated fadeOutRight')
 			setTimeout( function(){ getCount( false ) } , 500 )
 		},function(err){
-			console.log("from main err= "+err)
 			showToast("error");
 		})
 		$rootScope.delAllowed = false ;
@@ -129,9 +122,6 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 	}
 
 	$scope.$watch('total',function(newVal,oldVal){
-		if ( newVal != oldVal ){
-			console.log('changed from '+oldVal+' to '+newVal)
-		}
 	})
 
 	var deleteCustomer = function( dataObj ){
