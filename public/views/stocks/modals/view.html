@@ -1,56 +1,11 @@
 <style type="text/css">
-	body{
-		font-family: 'Raleway',sans-serif;
-	}
-	table{
-		font-family: 'Montserrat',sans-serif;
-	}
-/*	#contentsModal table :hover{
+	#contentsModal table :hover{
 		cursor: default;
 	}
 	#contentsModal h3{
 		font-family: 'Artifika', serif;
-	}*/
-	.ng-table-pager {
-	    display: none;
-	}	
-	.list tr:hover{
-		text-decoration: none;
-		cursor: pointer;
 	}
-	hr.style2 {
-		border-top: 3px double #8c8b8b;
-	}	
 </style>
-<!-- <div class="animated"> -->
-<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">STOCK CENTRAL </h2>
-<h4 style="font-family: 'Montserrat', sans-serif;"> &nbsp;TOTAL ITEMS IN DATABASE : <div class="animated swing" style="display: inline-block;">{{total}}</div></h4> 
-  <div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
-  <i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
-    <input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-init="" ng-keyup="searchBlur()" id="search" style="width: 0px">
-  </div>  
-	<table ng-table="itemTable" class="table table-hover table-responsive list">
-  <thead>
-    <tr style="cursor: default;">
-      <th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
-      <th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
-      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> PRICE</center></th>
-      <th width ="12.50%"><center><i class="fa fa-stack-overflow" style="font-size: 20px"></i> TOTAL STOCK</center></th>
-      <th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> RENTED</center></th>
-      <th width ="12.50%"><center><i class="fa fa-check" style="font-size: 15px"></i> AVAILABLE</center></th>
-    </tr>
-  </thead>
-    <tr ng-repeat="item in $data | filter : search" ng-click="set(item,$index)" id="row{{$index}}" height="48">
-    <td width="20%" id="{{item.barCode}}" title = "CODE"> {{item.barCode}} </td>
-    <td width="30%" id="{{item.barCode}}" title = "NAME" style="position:relative; left:10px">  {{item.name}} </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "PRICE"> <center>{{item.price | currency:""}} ₹</center> </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "TOTAL STOCK"> <center>{{item.totalStock}}</center> </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "RENTED STOCK"> <center>{{item.rentedStock}}</center> </td>
-    <td width="12.50%" id="{{item.barCode}}" title = "AVAILABLE"> <center>{{item.availableStock}}</center> </td>
-  	</tr>
-</table>
-</div>
-<!-- 
 <div id="delConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
 		<center><h4>ARE YOU SURE YOU WANT TO DELETE <b>{{item.name}}</b> ?</h4></center>
@@ -110,7 +65,6 @@
 		</div>
 
 
-
 	</div>
 
 	<div class="modal-footer">
@@ -119,4 +73,4 @@
 		<button id="" class="waves-effect waves-light btn-large" ng-click="delConfirm()" style="height:40px;  background-color: #d32f2f ;"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-trash"></i> DELETE </span></button>
 		</span>
 	</div>
-</div> -->
+</div>

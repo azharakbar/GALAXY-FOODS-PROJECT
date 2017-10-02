@@ -56,7 +56,6 @@ app.use('/',express.static(__dirname+'/public'));
 
 
 app.use ( '/' , indexRouter )
-// app.use('/test', isLoggedIn, indexRouter )
 
 app.get('/check',function(req,res){
     res.json({status:req.isAuthenticated()})
@@ -75,106 +74,6 @@ app.post('/testAPI/:name?',isLoggedIn,function(req,res){
 	})
 
 	
-})
-
-app.post('/saveLostBill' , isLoggedIn , function(req,res){
-	var finalObj = JSON.parse(req.body.finalObj)
-	var dataForBillSchema = finalObj.billSchema ;
-	var dataForCustomerSchema = finalObj.customerSchema ;
-	var items = finalObj.lostItems 
-
-	var updateItemsForStock = [] ;
-	updateItemsForStock.length = items.length
-
-	var bill = new Bill() ;
-
-	bill.billId = dataForBillSchema.billId
-	bill.billDate = dataForBillSchema.billDate
-	bill.customer = dataForBillSchema.customer
-	bill.orderId = dataForBillSchema.orderId
-	bill.billAmount = dataForBillSchema.billAmount
-	bill.remAmount = bill.billAmount
-	bill.name = dataForBillSchema.name
-
-	var custContact = dataForCustomerSchema.customer
-	var cr = parseFloat(dataForBillSchema.billAmount)
-
-	var cnt = 0 ;
-	var v = 0 ;
-	for ( var i = 0 ; i < items.length ; ++i ){
-		updateItemsForStock[i] = 
-		Item.findOne({ barCode : items[i].barCode })
-		.then(function(item){
-			// var v = items[cnt++].qty ;
-			for ( var j = 0 ; j < items.length ; ++j )
-				if ( items[j].barCode == item.barCode )
-					v = items[j].qty 			
-			item.totalStock = item.totalStock - v
-			item.availableStock = item.availableStock - v
-			item.lastVal = v
-			item.save()
-			.then(function(rslt){
-				var objToSave = {
-					category : 'STOCK' ,
-					details : {
-						type : 'LOST',
-						// orderId : req.body.orderId ,
-						barCode : rslt.barCode ,
-						name : rslt.name ,
-						qty : rslt.lastVal ,
-						status : rslt.availableStock + " / " + rslt.totalStock 
-					}
-				}		
-				logSave( objToSave )				
-				console.log(`UPDATED STOCK ${item.name}`)
-			},function(err){
-			})
-		},function(err){
-			reject(err)
-		})
-	}
-	Promise.all( updateItemsForStock )
-	.then ( function(response){
-		Customer.findOne( { contact:custContact } )
-		.then( function(cust){
-			cust.credit += cr
-
-			cust.save()
-			.then(function(custResponse){
-				bill.save()
-				.then(function(billResponse){
-					objToSave = {
-						category : 'TRANSACTION' ,
-						details : {
-							type : 'CREDIT',
-							id : billResponse.billId ,
-							amount : billResponse.billAmount ,
-							totalCredit : custResponse.credit ,
-							name : billResponse.name ,
-							contact : billResponse.customer
-						}
-					}
-					logSave( objToSave )					
-					console.log({status : 'SXS'})
-					res.json({status : 'SXS'})
-				},function(err){
-					console.log({status : 'ERROR IN ADDING BILL'})		
-					res.json({status : 'ERROR IN ADDING BILL'})		
-				})
-			},function(err){
-				console.log({status : 'ERROR IN UPDATING CUSTOMER'})	
-				res.json({status : 'ERROR IN UPDATING CUSTOMER'})	
-			})
-
-		},function(err){
-			console.log({status : 'ERROR IN CUSTOMER SCHEMA'})
-			res.json({status : 'ERROR IN CUSTOMER SCHEMA'})
-		})
-	},function(err){
-		console.log({status : 'ERROR IN ITEMS SCHEMA'})
-		res.json({status : 'ERROR IN ITEMS SCHEMA'})
-	})
-
 })
 
 app.get('/report' , isLoggedIn , function(req,res){
@@ -196,8 +95,6 @@ app.get('/report' , isLoggedIn , function(req,res){
 		// json : data 
 	}	
 
-		// console.log ( 'BEFORE CONVERTING')
-		// console.log ( incData ) ;
 		if ( req.query.type === '1' || req.query.type === '2'){
 			var x = new Date( incData.startDate )
 			// var t1 = incData.startDate
@@ -220,8 +117,6 @@ app.get('/report' , isLoggedIn , function(req,res){
 			y.setMinutes(0)
 			y.setSeconds(0)			
 		}
-		// console.log(`x = ${x}`)
-		// console.log(`y = ${y}`)
 		if ( req.query.type === '1' ){	
 			Log.find({$and:[{ createdDate : {$gte : x }},{ createdDate : {$lte : y}},{ category : { $eq : "STOCK" } }]})
 			.then(function(rslt){

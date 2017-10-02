@@ -139,7 +139,7 @@ var orderPickUp = function( dataObj , orderId ){
 				reject(err)
 			})
 		},(err)=>{
-			res.json({status : 'ERROR'})
+			reject(err)
 		})
 	})
 }

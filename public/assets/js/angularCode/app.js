@@ -93,7 +93,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/customers/view.html" ,
 				controller : 'viewCustCtrl'
-			}
+			},
+			'v3' : {
+				templateUrl : "./views/customers/modals/view.html" ,
+				controller : 'viewCustCtrl'
+			}			
 		}
 	})
 	.state('update_customer',{
@@ -162,7 +166,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/stocks/view.html" ,
 				controller : 'viewItemCtrl'
-			}
+			},
+			'v3' : {
+				templateUrl : "./views/stocks/modals/view.html" ,
+				controller : 'viewItemCtrl'
+			}			
 		}
 	})
 	.state('update_stock',{
@@ -210,7 +218,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/billing/new.html" ,
 				controller : 'newBillCtrl'
-			}
+			},
+			'v3' : {
+				templateUrl : "./views/billing/modals/new.html" ,
+				controller : 'newBillCtrl'
+			}			
 		}
 	})
 	.state('pay_bill',{
@@ -255,7 +267,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/billing/view.html" ,
 				controller : 'viewBillCtrl'
-			}
+			},
+			'v3' : {
+				templateUrl : "./views/billing/modals/view.html" ,
+				controller : 'viewBillCtrl'
+			}			
 		}
 	})
 	.state('new_order',{
@@ -276,7 +292,11 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/orders/new.html" ,
 				controller : 'newOrderCtrl'
-			}
+			},
+			'v3' : {
+				templateUrl : "./views/orders/modals/new.html" ,
+				controller : 'newOrderCtrl'
+			}			
 		}
 	})
 	.state('view_order',{
@@ -299,6 +319,10 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			},
 			'v2' : {
 				templateUrl : "./views/orders/view.html" ,
+				controller : 'viewOrderCtrl'
+			},
+			'v3' : {
+				templateUrl : "./views/orders/modals/view.html" ,
 				controller : 'viewOrderCtrl'
 			}
 		}

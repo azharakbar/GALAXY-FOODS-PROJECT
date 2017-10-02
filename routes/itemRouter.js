@@ -156,4 +156,17 @@ itemRouter.route('/forecastList')
 		})
 	})
 
+itemRouter.route('/loss')
+	.post((req,res)=>{
+		var dataObj = JSON.parse(req.body.dataObj)
+		itemController.reduceStock( dataObj , req.body.custId , dataObj.autoGen )
+		.then(( response )=>{
+			console.log(`... UPDATED STOCKS & BILL GENERATED FOR LOSS ...`)
+			res.json({status : 'SXS' , result : response.details})
+		},( err )=>{
+			console.log(`--- ERROR DURING UPDATING STOCK LOSS PROCEDURES ${err.details} ---`)
+			res.json({status : 'ERROR'})
+		})		
+	})
+
 module.exports = itemRouter

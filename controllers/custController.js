@@ -146,6 +146,27 @@ var reduceCredit = function( paidCustomer , paidAmout , objToSave ){
 	})
 }
 
+var increaseCredit = function( customer , amount , objToSave ){
+	return new Promise((resolve,reject)=>{
+		customerExists( customer )
+		.then((custResponse)=>{
+			var newCredit = custResponse.details.credit + parseInt( amount )
+			var objForUpdate = {
+				credit : newCredit
+			}
+			custService.updateCustomer( custResponse.details , objForUpdate )
+			.then((response)=>{
+				console.log(`... UPDATED CUSTOMER CREDIT FOR STOCK LOSS : ${response.details.name} ---> ${parseInt(amount)} ...`)
+				resolve(response)
+			},(err)=>{
+				reject(response)
+			})
+		},(err)=>{
+			reject(err)
+		})
+	})
+}
+
 var newOrder = function( detailsForCustomer , objToSave ){
 	return new Promise((resolve,reject)=>{
 		customerExists( detailsForCustomer.customer )
@@ -190,5 +211,6 @@ module.exports.customerList = customerList
 module.exports.deleteCustomer = deleteCustomer
 module.exports.updateCustomer = updateCustomer
 module.exports.reduceCredit = reduceCredit
+module.exports.increaseCredit = increaseCredit
 module.exports.newOrder = newOrder
 module.exports.cancelOrder = cancelOrder

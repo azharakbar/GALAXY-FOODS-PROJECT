@@ -1,0 +1,25 @@
+<div id="orderItemConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4><i class="fa fa-cubes" id="qtyIcon"></i> ENTER THE QUANTITY FOR <b>{{item.name}}</b> 
+		&nbsp;&nbsp;<div class="input-field animated" id="quantity" style="display: inline-block;">
+			<input type="number" ng-model="qty" ng-keydown="tap(enrollItem())" id="qtySearch" ng-init="qty=1" min="1" max="{{item.availableStock}}" style="font-size: 20px; width: 50px">
+		</div> 
+		<div id="maxVal" class="animated" style="display: inline-block;">(MAX : {{item.totalStock}} )</div>
+		<form style="display: inline-block;">
+		<button class="btn waves-effect waves-light" style="background-color: #388E3C" type="submit" name="sbm" ng-click="enrollItem()"><i class="fa fa-check"></i></button>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="cancelItem()"><i class="fa fa-times"></i></button>
+		</form>
+		</h4></center>
+	</div>
+</div>
+
+<div id="orderConfirm" class="modal bottom-sheet">
+	<div class="modal-content">
+		<center><h4>ARE YOU SURE TO ISSUE ORDER TO <b>{{customer.name}}</b> ?</h4></center>
+		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="orderProceed()"> YES </button>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="noOrder()"> NO </button></center>
+	</div>
+</div>
+

@@ -1,86 +1,83 @@
 <!DOCTYPE html>
 <html ng-app="pcApp">
-    <head>
-        <base href="/">
-        <title>PC DECORATIONS</title>
-        <link rel="icon" href="./assets/imgs/PC.jpg">
-    </head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="./assets/css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/hotkeys.min.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/matIcons/MatIcons.css">
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/montessarat/montessarat.css">
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/Dancing/Dancing.css">    
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/Raleway/Raleway.css">    
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/Roboto/Roboto.css">    
-    <link rel="stylesheet" type="text/css" href="./assets/fonts/Artifika/Artifika.css">    
-    <style type="text/css">
-        .c1{
-            margin-left: 250px;
-        }
-        .c2{
-            margin-left: 0px;
-        }
-    </style>
+	<head>
+		<base href="/">
+		<title>PC DECORATIONS</title>
+		<link rel="icon" href="./assets/imgs/PC.jpg">
+	</head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./assets/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/hotkeys.min.css">
+	<link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/matIcons/MatIcons.css">
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/montessarat/montessarat.css">
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/Dancing/Dancing.css">    
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/Raleway/Raleway.css">    
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/Roboto/Roboto.css">    
+	<link rel="stylesheet" type="text/css" href="./assets/fonts/Artifika/Artifika.css">    
+	<style type="text/css">
+		.c1{
+			margin-left: 250px;
+		}
+		.c2{
+			margin-left: 0px;
+		}
+	</style>
 <body ng-controller="indexCtrl">
-    
-    <div ng-class="{'container-fluid':loggedIn , 'container':!loggedIn }">
-        <div id="vw1" ui-view="v1"></div>
-        <div id="vw2" ui-view="v2" style="margin-left: 250px"></div>
-        <!-- <div id="vw2" ui-view="v2" ng-class="{'c1':$rootScope.sideNavDisplayFinal , 'c2':!($rootScope.sideNavDisplayFinal) }"></div> -->
-    </div>
-    
-    <div id="snackbar">
-    {{errorMsg}}
-    <center ng-show="bar">
-        <div class="progress" style="height:2px;width: 400px;">
-            <div class="indeterminate" style="background-color :#c62828"></div>
-        </div>
-    </center>
-    </div>
+	
+	<div ng-class="{'container-fluid':loggedIn , 'container':!loggedIn }">
+		<div ui-view="v1"></div>
+		<div ui-view="v2" style="margin-left: 250px"></div>
+	</div>
+	
+	<div id="snackbar">
+	{{errorMsg}}
+	<center ng-show="bar">
+		<div class="progress" style="height:2px;width: 400px;">
+			<div class="indeterminate" style="background-color :#c62828"></div>
+		</div>
+	</center>
+	</div>
 
-<!--     <footer class="footer">
-      <div class="container">
-       <p class="text-muted">MADE WITH <img src="./assets/imgs/shape 1.png"> AT QBURST</p>
-      </div>
-    </footer> -->    
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-    <script src = "./assets/js/jquery.js"></script>
-    <script src = "./assets/js/angular.js"></script>
-    <script src = "./assets/js/ng-pickadate.js"></script>
-    <script src = "./assets/js/angular-route.min.js"></script>
-    <script src = "./assets/js/ui-router.js"></script>
-    <script src = "./assets/js/ngTable.js"></script>
-    <script src=  "./assets/js/angularCode/loginModule.js"></script>
-    <script src = "./assets/js/materialize.min.js"></script>
-    <script src = "./assets/js/hotkeys.min.js"></script>
-    <script src = "./assets/js/myScripts.js"></script>
-    
-    <script src = "./assets/js/angularCode/app.js"></script>
-    <script src = "./assets/js/angularCode/angularServices.js"></script>
-    <script src = "./assets/js/angularCode/loginModule.js"></script>
-    <script src = "./assets/js/angularCode/logutModule.js"></script>
-    <script src = "./assets/js/angularCode/dashModule.js"></script>
-    <script src = "./assets/js/angularCode/sideNavModule.js"></script>
-    <script src = "./assets/js/angularCode/customers/new.js"></script>
-    <script src = "./assets/js/angularCode/customers/view.js"></script>
-    <script src = "./assets/js/angularCode/customers/update.js"></script>
-    <script src = "./assets/js/angularCode/stocks/new.js"></script>
-    <script src = "./assets/js/angularCode/stocks/update.js"></script>
-    <script src = "./assets/js/angularCode/stocks/view.js"></script>
-    <script src = "./assets/js/angularCode/orders/new.js"></script>
-    <script src = "./assets/js/angularCode/orders/view.js"></script>
-    <script src = "./assets/js/angularCode/billing/new.js"></script>
-    <script src = "./assets/js/angularCode/billing/view.js"></script>
-    <script src = "./assets/js/angularCode/reports/view.js"></script>
-    <script>if (window.module) module = window.module;</script>
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<script src = "./assets/js/jquery.js"></script>
+	<script src = "./assets/js/angular.js"></script>
+	<script src = "./assets/js/ng-pickadate.js"></script>
+	<script src = "./assets/js/angular-route.min.js"></script>
+	<script src = "./assets/js/ui-router.js"></script>
+	<script src = "./assets/js/ngTable.js"></script>
+	<script src=  "./assets/js/angularCode/loginModule.js"></script>
+	<script src = "./assets/js/materialize.min.js"></script>
+	<script src = "./assets/js/hotkeys.min.js"></script>
+	<script src = "./assets/js/myScripts.js"></script>
+	
+	<script src = "./assets/js/angularCode/app.js"></script>
+	<script src = "./assets/js/angularCode/angularServices.js"></script>
+	<script src = "./assets/js/angularCode/loginModule.js"></script>
+	<script src = "./assets/js/angularCode/logutModule.js"></script>
+	<script src = "./assets/js/angularCode/dashModule.js"></script>
+	<script src = "./assets/js/angularCode/sideNavModule.js"></script>
+	<script src = "./assets/js/angularCode/customers/new.js"></script>
+	<script src = "./assets/js/angularCode/customers/view.js"></script>
+	<script src = "./assets/js/angularCode/customers/update.js"></script>
+	<script src = "./assets/js/angularCode/stocks/new.js"></script>
+	<script src = "./assets/js/angularCode/stocks/update.js"></script>
+	<script src = "./assets/js/angularCode/stocks/view.js"></script>
+	<script src = "./assets/js/angularCode/orders/new.js"></script>
+	<script src = "./assets/js/angularCode/orders/view.js"></script>
+	<script src = "./assets/js/angularCode/billing/new.js"></script>
+	<script src = "./assets/js/angularCode/billing/view.js"></script>
+	<script src = "./assets/js/angularCode/reports/view.js"></script>
+	<script>if (window.module) module = window.module;</script>
+
+	<div ui-view="v3"></div>
+
 </body>
-    
+	
 </html>

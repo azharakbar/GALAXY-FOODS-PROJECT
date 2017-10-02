@@ -2,6 +2,8 @@
 
 const 	itemService = require('../services/itemService'),
 	 	orderController = require('./orderController'),
+	 	custController = require('./custController'),
+	 	billController = require('./billController'),
 		logger = require('./logger')
 
 var itemExists = function( barCode ){
@@ -192,6 +194,70 @@ var returnStock = function( barCode , qty ){
 	})	
 }
 
+var reduceStock = function( dataObj , customer , autoGen ){
+	return new Promise((resolve,reject)=>{
+		var objToSave = {}
+		var lostItemsList = dataObj.lostItems
+		var totalAmount = 0
+		let updateItemsForLoss = []
+		updateItemsForLoss.length = lostItemsList.length
+
+		for ( var i = 0 ; i < lostItemsList.length ; ++i ){
+			updateItemsForLoss[i] = 
+			itemService.reduceStock ( lostItemsList[i].barCode , lostItemsList[i].qty , autoGen )
+			.then((response)=>{
+				totalAmount += response.details.amount
+				objToSave = {
+					category : 'STOCK' ,
+					details : {
+						type : 'LOST',
+						barCode : response.details.barCode ,
+						name : response.details.name ,
+						qty : response.details.lastVal ,
+						status : response.details.availableStock + " / " + response.details.totalStock
+					}
+				}
+				console.log(`... UPDATED STOCK OF ${response.details.name} --> ${response.details.lastVal} ..`)
+				logger.logSave( objToSave )
+			},(err)=>{
+				reject ( err )
+			})			
+		}
+		Promise.all( updateItemsForLoss )
+		.then(()=>{
+			custController.increaseCredit ( customer , totalAmount )
+			.then((custResponse)=>{
+				billController.genStkLossBill ( custResponse.details.name , custResponse.details.contact , totalAmount )
+				.then((billResponse)=>{
+					objToSave = {
+						category : 'TRANSACTION' ,
+						details : {
+							type : 'CREDIT',
+							id : billResponse.details.billId ,
+							amount : billResponse.details.billAmount ,
+							totalCredit : custResponse.details.credit ,
+							name : billResponse.details.name ,
+							contact : billResponse.details.customer
+						}
+					}
+					console.log(`... GENERATED BILL FOR STOCK LOSS : ${billResponse.details.billId} ---> ${billResponse.details.name} ...`)
+					logger.logSave( objToSave )					
+					resolve( objToSave )
+				},(err)=>{
+					console.log(`... ERROR DURING BILL GENERATION FOR STOCK LOSS ${err} ...`)
+					reject(err)
+				})
+			},(err)=>{
+				console.log(`... ERROR DURING CUSTOMER UPDATE FOR STOCK LOSS ${err} ...`)
+				reject(err)
+			})
+		},(err)=>{
+			console.log(`... ERROR DURING UPDATING STOCK LOSS ${err} ...`)
+			reject(err)
+		})
+	})
+}
+
 module.exports.itemExists = itemExists
 module.exports.saveItem = saveItem
 module.exports.totalItems = totalItems
@@ -202,3 +268,4 @@ module.exports.findDetails = findDetails
 module.exports.forecastAvailability = forecastAvailability
 module.exports.deliverStock = deliverStock
 module.exports.returnStock = returnStock
+module.exports.reduceStock = reduceStock
