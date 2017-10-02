@@ -13,9 +13,6 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
-	.redTextOnly{
-		color : red;
-	}
 </style>
 
 <div class="animated">
@@ -30,21 +27,21 @@
 		<thead>
 			<th width ="15%"><i class="fa fa-code" style="font-size: 12px"></i> NUMBER</th>
 			<th width ="20%"><i class="fa fa-user-o" style="font-size: 15px"></i> CUSTOMER</th>
-			<th width ="13%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> ISSUE DATE</center></th>
-			<th width ="13%"><center><i class="fa fa-truck" style="font-size: 15px"></i> DELIVERY DATE</center></th>
-			<th width ="13%"><center><i class="fa fa-exchange" style="font-size: 15px"></i> RETURN DATE </center></th>
-			<th width ="13%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
-			<th width ="13%"><center> ACTIONS <i class="fa fa-chevron-down" style="font-size: 15px"></i></center></th>
+			<th width ="15%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> ISSUE DATE</center></th>
+			<th width ="15%"><center><i class="fa fa-truck" style="font-size: 15px"></i> DELIVERY DATE</center></th>
+			<th width ="15%"><center><i class="fa fa-exchange" style="font-size: 15px"></i> RETURN DATE </center></th>
+			<th width ="10%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
+			<th width ="10%"><center> ACTIONS <i class="fa fa-chevron-down" style="font-size: 15px"></i></center></th>
 		</thead>
 		<tbody>
 			<tr ng-repeat="order in orderList | filter : search" ng-click="set(order,$index)" id="row{{$index}}" ng-class="{'warning' : order.status=='NOT DELIVERED' , 'success' : order.status=='RETURNED' , 'blue' : order.status=='CANCELLED' , 'danger' : order.status=='DELIVERED' && today > order.returnDate, 'info' : order.status=='DELIVERED' && today < order.returnDate }" height="48">
 			<td width="15%"> {{order.orderId}} </td>
 			<td width="20%">  &nbsp;&nbsp;&nbsp;&nbsp;{{order.name}} </td>
-			<td width="13%"><center>{{order.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
-			<td width="13%"><center>{{order.pickupDate | date:"dd MMMM, yyyy"}}</center> </td>
-			<td width="13%"><center>{{order.returnDate | date:"dd MMMM, yyyy"}}</center> </td>
-			<td width="13%"><center>ORDER {{order.status}}</center> </td>
-			<td width="13%">
+			<td width="15%"><center>{{order.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="15%"><center>{{order.pickupDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="15%"><center>{{order.returnDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="10%"><center>ORDER {{order.status}}</center> </td>
+			<td width="10%">
 			<center>
 				<span ng-show="order.status=='NOT DELIVERED'">
 					<button class="btn waves-effect waves-light btn-large" ng-model="proceed" ng-click="action($event,order,$index,1)" style="position: relative; bottom: 2px; width:150px; height: 35px"> DELIVER ORDER </button>
@@ -114,6 +111,7 @@
 <div id="returnConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
 		<center><h4>ARE YOU SURE THAT THE ORDERED ITEMS ARE RETURNED BY <b>{{selectedOrder.name}}</b> ?</h4></center>
+		<span ng-show="lostFlag"><center>!! THE BILL FOR LOST ITEMS WILL ALSO BE GENERATED !!</center></span>
 		<center><button class="btn waves-effect waves-light" style="background-color: #388E3C" ng-click="return()"> YES </button>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
@@ -127,4 +125,47 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
 	</div>
+</div>
+
+
+<div id="returnCheck" class="modal bottom-sheet" style="overflow-y: scroll;">
+	<div class="modal-content">
+		<h3>ORDER DETAILS <span style="position: relative; left:50px">#{{selectedOrder.orderId}}</span>
+			<b><center>RETURN CHECK</center></b></h3>
+		<span style="font-size: 15px " ng-show="selectedOrder.evePurpose != ''"><i class="fa fa-connectdevelop"></i> EVENT PURPOSE &nbsp;: </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.evePurpose}}
+		<br>
+		<span style="font-size: 15px " ng-show="selectedOrder.eveLoxn != ''">&nbsp;<i class="fa fa-map-marker"></i> &nbsp;EVENT LOCATION : </span>&nbsp;&nbsp;&nbsp;&nbsp;{{selectedOrder.eveLoxn}}
+      	<table class="table">
+      		<thead>
+				<th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> BARCODE</th>
+				<th width ="30%"><i class="fa fa-cube" style="font-size: 15px"></i> NAME</th>
+				<th width ="12.50%"><center><i class="fa fa-truck" style="font-size: 20px"></i> QTY DELIVERED </center></th>
+				<th width ="12.50%"><center><i class="fa fa-exchange" style="font-size: 15px"></i> QTY RETURNED </center></th>
+				<th width ="12.50%"><center><i class="fa fa-database" style="font-size: 15px"></i> LOST / DAMAGED</center></th>
+      		</thead>
+      		<tbody>
+				<tr ng-repeat="orderedItem in selectedOrder.items" height="48" id="item{{$index}}">
+					<td width="20%" title = "CODE"> {{orderedItem.barCode}} </td>
+					<td width="30%" title = "NAME" style="position:relative; left:10px">  {{orderedItem.name}} </td>
+					<td width="12.50%" title = "PRICE"> <center>{{orderedItem.qty}}</center> </td>
+					<td width="12.50%" title = "TOTAL STOCK"> <center>
+						<input type="number" ng-model="qtyReturned" ng-change="stkLost($index,orderedItem.qty-qtyReturned,qtyReturned >=0 && qtyReturned <= orderedItem.qty)" id="qtyReturned" ng-init="qtyReturned=orderedItem.qty" min="0" max="{{orderedItem.qty}}" style="font-size: 15px; width: 50px; position: relative; bottom: 5px">
+					</center> </td>
+					<td width="12.50%" title = "AVAILABLE"> <center>
+						<span ng-show="qtyReturned >=0 && qtyReturned <= orderedItem.qty">
+							{{orderedItem.qty-qtyReturned}}
+						</span>
+						<span ng-show="!(qtyReturned >=0 && qtyReturned <= orderedItem.qty)">
+							<div class="animated shake">ERROR</div>
+						</span>						
+				</center> </td>
+				</tr>      			
+      		</tbody>
+      	</table>
+	</div>
+	<div class="modal-footer">
+		<span style="position:absolute; float:right; right:75px">
+		<button id="" class="waves-effect waves-light btn-large" style="height:40px" ng-click="chk()" ng-disabled="!(errorFlag.indexOf(true) == -1)"><span style="position: relative; bottom: 8px; font-size:15px"><i class="fa fa-refresh"></i> RETURN CONFIRM </span></button>
+		</span>
+	</div>	
 </div>

@@ -1,5 +1,5 @@
 angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
-.controller('newBillCtrl',function( $rootScope , $scope , $state , $stateParams , $http , user , toast ){
+.controller('newBillCtrl',function( $rootScope , $scope , $state , $stateParams , $http , $timeout , user , toast ){
 
 	$('.modal').modal() ;
 
@@ -70,24 +70,27 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		})
 	}	
 
-	var saveNewLostBill = function(dataObj){
+	var saveNewLostBill = function( dataObj ){
 		return new Promise( function( resolve , reject ){
 			$http({
-				url : '/saveLostBill',
+				url : '/item/loss',
 				method : 'POST',
 				headers : {
 					'Content-Type' : 'application/x-www-form-urlencoded'
 				},
-				data : "finalObj="+JSON.stringify(dataObj)+"&token="+user.getToken()
+				data : "dataObj="+JSON.stringify(dataObj)+"&custId="+$scope.customerData.contact+"&token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
+					toast.setMsg("!! BILL SAVED & STOCKS UPDATED SUCCESSFULLY !!")
 					resolve(response.data.status)
+				}
 				else{
 					toast.setMsg("** ERROR IN SAVING BILL **")
 					reject("ERROR1")
 				}
 			},function(err){
+				toast.setMsg("** ERROR IN SAVING BILL **")
 				reject(err)
 			})
 		})
@@ -360,7 +363,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			x.name = $scope.orderData[i].name ;
 			list.push(x) ;
 		}
-		var finalObj = {
+/*		var finalObj = {
 			billSchema : {
 				billId : $scope.billNo ,
 				billDate : $scope.dateData.issueDate ,
@@ -375,13 +378,19 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				totalAmount	: $scope.grandTotal
 			}
 
-		}
+		}*/
 
-		saveNewLostBill( finalObj )
+		var obj = {
+			lostItems : list,
+			autoGen : false
+		}		
+
+		saveNewLostBill( obj )
 		.then(function(response){
-			toast.setMsg("!! BILL SAVED & STOCKS UPDATED SUCCESSFULLY !!")
 			showToast("success")
-			$state.go('dashboard')
+			$timeout(function(){				
+				$state.go( 'view_bill' )
+			},1000)
 		},function(err){
 			showToast("error")
 		})	

@@ -136,6 +136,37 @@ var updateCustomerData = function( customer , updateCustomerData ){
 	})
 }
 
+var genStkLossBill = function( name , customer , amount ){
+	return new Promise((resolve,reject)=>{
+		var detailsForBill = {}
+		billService.totalBillCount()
+		.then((response)=>{
+			detailsForBill.billId = pad((response.details)+1)
+			detailsForBill.billDate = new Date()
+			detailsForBill.customer = customer
+			detailsForBill.orderId = "LOSS OF STOCK"
+			detailsForBill.billAmount = amount
+			detailsForBill.remAmount = amount
+			detailsForBill.name = name
+			billService.saveNewBill( detailsForBill )
+			.then((response)=>{
+				resolve(response)
+			},(err)=>{
+				reject(err)
+			})
+		},(err)=>{
+			reject(err)
+		})
+	})	
+}
+
+	var pad = function( num ){
+		while ( num.toString().length < 5 )
+			num = "0" + num ; 
+		num = "PC"+num
+		return num ;
+	}
+
 module.exports.billExists = billExists
 module.exports.totalBills = totalBills
 module.exports.billList = billList
@@ -144,3 +175,4 @@ module.exports.billPay = billPay
 module.exports.newBill = newBill
 module.exports.cancelBill = cancelBill
 module.exports.updateCustomerData = updateCustomerData
+module.exports.genStkLossBill = genStkLossBill

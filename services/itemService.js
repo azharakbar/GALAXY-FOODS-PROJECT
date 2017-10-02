@@ -125,6 +125,28 @@ var returnStock = function( barCode , qty ){
 	})
 }
 
+var reduceStock = function( barCode , qty , autoGen ){
+	return new Promise((resolve,reject)=>{
+		Item.findOne({ barCode : barCode })
+		.then(function(item){
+			item.totalStock = item.totalStock - qty
+			if ( autoGen ){
+				item.rentedStock = item.rentedStock - qty
+			} else {
+				item.availableStock = item.availableStock - qty
+			}
+			item.lastVal = qty
+			item.save()
+			.then((itemResponse)=>{
+				itemResponse.amount = qty * itemResponse.costPrice
+				resolve ( { 'status' : true , 'details' : itemResponse } )
+			},(err)=>{
+				reject ( { 'status' : false , 'details' : err } )
+			})
+		})
+	})
+}
+
 module.exports.findItem = findItem
 module.exports.insertItem = insertItem
 module.exports.totalItemCount = totalItemCount
@@ -133,3 +155,4 @@ module.exports.delItem = delItem
 module.exports.updateItem = updateItem
 module.exports.deliverStock = deliverStock
 module.exports.returnStock = returnStock
+module.exports.reduceStock = reduceStock
