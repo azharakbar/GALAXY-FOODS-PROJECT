@@ -363,12 +363,28 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			x.name = $scope.orderData[i].name ;
 			list.push(x) ;
 		}
-		
+
+/*		var finalObj = {
+			billSchema : {
+				billId : $scope.billNo ,
+				billDate : $scope.dateData.issueDate ,
+				customer : $scope.customerData.contact ,
+				name : $scope.customerData.name,
+				orderId :  $scope.orderId ,
+				billAmount : Math.round($scope.orderTotal)
+			},
+			lostItems : list ,
+			customerSchema : {
+				customer : $scope.customerData.contact , 
+				totalAmount	: $scope.grandTotal
+			}
+
+		}*/
+
 		var obj = {
 			lostItems : list,
 			autoGen : false
 		}		
-
 		saveNewLostBill( obj )
 		.then(function(response){
 			showToast("success")
