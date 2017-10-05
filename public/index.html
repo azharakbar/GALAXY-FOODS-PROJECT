@@ -33,7 +33,8 @@
 	
 	<div ng-class="{'container-fluid':loggedIn , 'container':!loggedIn }">
 		<div ui-view="v1"></div>
-		<div ui-view="v2" style="margin-left: 250px"></div>
+		<div id="view2" ui-view="v2" ng-class="{'c1' : showSideNavFinal , 'c2' : !showSideNavFinal }"></div>
+		<!-- <div ui-view="v2" style="margin-left: 250px"></div> -->
 	</div>
 	
 	<div id="snackbar">

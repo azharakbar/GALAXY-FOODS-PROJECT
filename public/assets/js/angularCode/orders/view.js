@@ -168,8 +168,8 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 
 
 	$scope.deliverNote = function(){
-		var loxn = "http://localhost:2017/report?type=3&orderId="+$rootScope.selectedOrder.orderId ;
-		var win = window.open(loxn);
+		var loxn = "http://"+window.host+":"+window.port+"/report/deliveryNote?orderId="+$rootScope.selectedOrder.orderId ;
+		var win = window.open(loxn,"_blank","width=700,height=700");
 	}	
 
 	getOrderList( true )

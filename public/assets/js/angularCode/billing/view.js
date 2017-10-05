@@ -151,8 +151,8 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 
 	$scope.viewBill = function(){
 		$timeout( function(){
-			var loxn = "/report?type=4&billId="+$rootScope.bill.billId ;
-			var win = window.open(loxn);
+			var loxn = "/report/invoice?billId="+$rootScope.bill.billId ;
+			var win = window.open(loxn,"_blank","width=700,height=700");
 		},50 )
 	}
 

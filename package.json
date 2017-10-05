@@ -24,6 +24,7 @@
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "hat": "0.0.3",
+    "jsreport": "^1.8.2",
     "md5": "^2.2.1",
     "mongoose": "^4.11.1",
     "morgan": "^1.8.2",

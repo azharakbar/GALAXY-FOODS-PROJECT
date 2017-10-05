@@ -60,14 +60,14 @@ table { margin: 0 auto; }
                 <br><br>
                 <b>CUSTOMER NAME : </b>{{:name}}
                 <br>
-                <b>CONTACT : </b>{{:contact}}
+                <b>CONTACT : </b>{{:customer}}
             </div>
             <div style="float:right">
-                <b>DATE OF ORDER : </b>{{:~formatDate(dateOfIssue)}}
+                <b>DATE OF ORDER : </b>{{:~formatDate(issueDate)}}
                 <br><br>
-                <b>DELIVERY DATE &nbsp;: </b>{{:~formatDate(dateOfDelivery)}}
+                <b>DELIVERY DATE &nbsp;: </b>{{:~formatDate(pickupDate)}}
                 <br>
-                <b>RETURN DATE &nbsp;&nbsp;&nbsp;: </b>{{:~formatDate(dateOfReturn)}}
+                <b>RETURN DATE &nbsp;&nbsp;&nbsp;: </b>{{:~formatDate(returnDate)}}
             </div>
         </h4>
         <br>
@@ -83,7 +83,7 @@ table { margin: 0 auto; }
                     <th width="15%"><center>RENT TOTAL</center></th>                 
                 </tr>
             </thead>
-            {{for stkItems}}
+            {{for items}}
                     <tr>
                         <td width="15%">{{:barCode}}</td>
                         <td width="25%">{{:name}}</td>

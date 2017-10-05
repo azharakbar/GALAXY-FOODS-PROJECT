@@ -1,0 +1,132 @@
+<html>
+    <head>
+        <title>REPORT</title>
+    </head>
+    
+    <style>
+    body{
+        font-family : 'Trebuchet MS'
+    }
+        hr.style13 {
+        width: 100%;
+        height: 10px;
+        border: 0;
+        box-shadow: 0 10px 10px -10px #8c8b8b inset;
+        }
+
+hr.style8 {
+    border-top: 1px solid #8c8b8b;
+    border-bottom: 1px solid #fff;
+}
+        
+th, td { padding: 15px; 
+    
+}
+
+/* cellspacing */
+table { border-collapse: separate; border-spacing: 5px; } /* cellspacing="5" */
+
+/* valign */
+th, td { vertical-align: top; }
+
+/* align (center) */
+table { margin: 0 auto; }        
+        
+    </style>    
+    
+    <body>
+     
+    <span style="position:relative;float:left">
+        <font face="Trebuchet MS">
+            <h1> PC DECORATIONS </h1>
+            <h2 style="position:relative; bottom:15px"> EVENT MANAGEMENT RENTALS </h2>
+        </font>
+    </span>
+    <span style="position:relative;float:right">
+        <font face="Trebuchet MS">
+            <h3> CONTACT : 9846 516979
+            <br>
+            <span style="float:right"><span style="position:relative; right:6px">9656 722834 </span></span> </h3>
+            
+        </font>        
+    </span>
+    <hr class="style13" style="position:relative; bottom:15px">
+        <center>
+            <h1> RECEIPT </h1>
+        </center>
+        <h4>
+            <div style="float:left">
+                <b>BILL ID : </b>{{:incData.billId}}
+                <br><br>
+                <b>CUSTOMER NAME : </b>{{:incData.name}}
+                <br>
+                <b>CONTACT&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b>{{:incData.customer}}
+            </div>
+            <div style="float:right">
+                <b>BILL DATE : </b>{{:~formatDate(incData.billDate)}}
+                <br><br>
+                <b>BILL FOR &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> 
+                {{if incData.orderId !== "LOSS OF STOCK"}}
+                ORDER #{{:incData.orderId}}
+                {{else}}
+                LOSS OF STOCK
+                {{/if}}
+                <br>
+                <b>LAST PAYMENT ON &nbsp;&nbsp;&nbsp;: </b>{{:~formatDate(incData.lastPaidDate)}}
+            </div>
+        </h4>
+        <br>
+        <hr class="style13" style="position:relative; top:15px">
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th width="15%"><span style="float:left">DATE</span></th>
+                    <th width="25%"><span style="float:left">PARTICULARS</span></th>
+                    <th width="10%"><center>AMOUNT</center></th>
+                    <th width="15%"><center>BALANCE</center></th>                 
+                </tr>
+            </thead>
+            {{for logData}}
+                    <tr>
+                        <td width="15%">{{:readableDate}}</td>
+                        {{if details.type =="CNL"}}
+                            <td width="25%">REFUND</td>
+                        {{else}}
+                            <td width="25%">{{:details.type}}</td>                     
+                        {{/if}}
+                        {{if details.type == "CREDIT" || details.type =="CNL"}}
+                            <td width="10%"><center>{{:details.amount}}</center></td>
+                            {{:~add(details.amount)}}
+                        {{else details.type == "DEBIT"}}
+                            <td width="10%"><center>{{:details.paid}}</center></td>
+                            {{:~deduct(details.paid)}}
+                        {{/if}}
+                        <td width="15%"><center>{{:~getTotal()}}</center></td>
+                    </tr>
+            {{/for}}
+        </table>
+        <hr class="style13" style="">
+        <span style="float:right">
+            <span style="position:relative; right:85px">
+                {{if incData.status == "PAID"}}
+                <b> STATUS : BILL SETTLED </b>
+                {{else}}
+                <b> STATUS : {{:incData.status}} </b>
+                {{/if}}
+            </span>
+        </span>
+ <div id="spacer" style="width: 200px; height: 100px; display:inline-block"></div>
+     <div style="position: absolute; bottom: 0;">
+         <h3>
+        <span style="float:left">
+            PC DECORATIONS
+        </span>
+        <span style="position:relative; right:-550px">
+            {{:incData.name}}
+        </span>
+        </h3>
+         </div>
+        
+    </body>
+</html>

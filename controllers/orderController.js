@@ -20,8 +20,8 @@ var orderExists = function( billId ){
 
 var newOrder = function( detailsForOrder , logObj ){
 	return new Promise((resolve,reject)=>{
-		detailsForOrder['pickupDate'] = dateConverter.dateReset( new Date( detailsForOrder['pickupDate'] ) )
-		detailsForOrder['returnDate'] = dateConverter.dateReset( new Date( detailsForOrder['returnDate'] ) )
+		detailsForOrder['pickupDate'] = dateConverter.dateReset( new Date( detailsForOrder['pickupDate'] ) , "dayStart" )
+		detailsForOrder['returnDate'] = dateConverter.dateReset( new Date( detailsForOrder['returnDate'] ) , "dayEnd" )
 		orderService.saveNewOrder( detailsForOrder )
 		.then((response)=>{
 			let objToSave = {
@@ -79,8 +79,8 @@ var findDetails = function( barCode ){
 
 var findOrdersForecast = function( pickupDate , returnDate ){
 	return new Promise((resolve,reject)=>{
-		dateConverter.dateReset( pickupDate )
-		dateConverter.dateReset( returnDate )
+		dateConverter.dateReset( pickupDate , "dayStart" )
+		dateConverter.dateReset( returnDate , "dayEnd" )
 		orderService.getOrderPrediction( pickupDate , returnDate )
 		.then((response)=>{
 			resolve( response )

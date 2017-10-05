@@ -16,10 +16,19 @@ var dateConverter1 = function(string){
 }
 
 //RESET DATE TO 12AM
-var dateReset = function(string){
-	string.setHours(0)
-	string.setMinutes(0)
-	string.setSeconds(0)
+var dateReset = function(string , type){
+	var v1 = 0 ,
+		v2 = 0
+	if ( type === "dayStart" ){
+		v1  = 0
+		v2 = 0
+	} else if ( type === "dayEnd" ){
+		v1 = 23
+		v2 = 59
+	}
+	string.setHours(v1)
+	string.setMinutes(v2)
+	string.setSeconds(v2)
 	return string
 }
 
