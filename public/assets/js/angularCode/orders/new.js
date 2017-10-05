@@ -81,7 +81,6 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			})
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
-					console.log(response.data.result)
 					resolve(response.data)
 				}
 				else{
@@ -126,14 +125,12 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 		$rootScope.customer = inComing
 		$rootScope.index = index ;
 		$('#orderConfirm').modal('open')
-		console.log("INDEX IS :"+$rootScope.index)
 	}
 	
 	$scope.setItem= function(inComing,index){
 		$rootScope.item = inComing
 		$rootScope.index = index ;
 		$('#orderItemConfirm').modal('open')
-		console.log("INDEX IS :"+$rootScope.index)
 	}
 	
 	$scope.noOrder = function(){
@@ -200,7 +197,6 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			orders : $scope.orderedList ,
 			orderTotal : orderTotal
 		}	
-		console.log(orderObj)
 		$state.go('new_bill',{ orderDetails : orderObj } )
 	}
 
@@ -265,7 +261,6 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 
 	getCustomerList()
 	.then(function(response){
-		console.log("SXS RESPONSE")
 		$scope.titleMsg = "PICK THE CUSTOMER TO PLACE ORDER"
 		$scope.list = response
 		$scope.$apply()
@@ -321,7 +316,6 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 				$('#searchContainer').addClass('rollIn')
 			}, 500);			
 		} else if ( Type == 2 ) {
-			console.log("IN NEW BACK")
 			$('#itemContent').removeClass('fadeIn')
 			$('#itemContent').addClass('fadeOut')
 			setTimeout(function(){

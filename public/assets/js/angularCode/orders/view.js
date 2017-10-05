@@ -271,10 +271,6 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 		$('.modal').modal('close')
 		var t = [] ;
 		var x = {} ;
-/*		console.log("$rootScope.selectedOrder.items")
-		console.log($rootScope.selectedOrder.items)
-		console.log("$rootScope.qtyReturnedList")
-		console.log($rootScope.qtyReturnedList)	*/	
 		for ( var i = 0 ; i < $rootScope.selectedOrder.items.length ; ++i ){
 			x = {} ;
 			x.barCode = $rootScope.selectedOrder.items[i].barCode 

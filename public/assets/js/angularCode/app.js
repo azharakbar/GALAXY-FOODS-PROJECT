@@ -361,7 +361,6 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 
 app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotkeys){
 
-	console.log("i am loaded")
 	$rootScope.showSideNav = true
 	$rootScope.showSideNavFinal = true
 
@@ -372,7 +371,6 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotk
 			$rootScope.initalLoad = false 
 		} else {
 			if ( !newVal ){
-				console.log("i have to hide sidenav now")
 				$('#view2').animate({
 					"margin-left" : "0px" 
 				})
@@ -381,7 +379,6 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotk
 				},function(){
 					$rootScope.showSideNavFinal = false
 					$rootScope.$apply()
-					console.log(`i have to hide sideNav now ${$rootScope.showSideNavFinal}`)
 				})
 			} else {
 				$('#view2').animate({
@@ -393,9 +390,7 @@ app.controller('indexCtrl',function($scope,$rootScope,$state,$timeout,toast,hotk
 				$('#slide-out').animate({
 					width : "250px"
 				})				
-				console.log(`i have to show sideNav now ${$rootScope.showSideNavFinal}`)
 			}
-			// console.log(`changed from ${oldVal} --> ${newVal}`)
 		}
 	})
 

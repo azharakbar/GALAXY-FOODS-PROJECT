@@ -93,14 +93,11 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 					if ( $scope.totalStock != undefined && $scope.totalStock != '' )
 						data += "&totalStock="+$scope.totalStock ;
 					data += "&token="+user.getToken()
-					console.log(data)
 					update(data)
 					.then(function(res){
 						showToast("success");
 						$state.go('view_stock' , { showLoading : false }) ;
-						// setTimeout(function() { $state.go('view_stock') ; }, 500);
 					},function(err){
-						console.log("from main err= "+err)
 						showToast("error");
 					})
 				}

@@ -13,7 +13,6 @@ angular.module('loginModule', ['serviceModule','serviceModule2'])
                 data : 'username='+username+'&password='+password
             })
             .then(function(response){
-                console.log(response.data)
                 if ( response.data.status === "authDone" ){
                     user.saveData( response.data )
                     toast.setMsg("!! LOGGED IN !!")

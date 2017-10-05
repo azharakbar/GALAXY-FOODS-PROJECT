@@ -103,12 +103,10 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 				if ( $scope.totalStock != undefined && $scope.totalStock != '' )
 					data += "&totalStock="+$scope.totalStock ;
 				data += "&token="+user.getToken()
-				console.log(data)
 				post(data)
 				.then(function(res){
 					showToast("success");
 				},function(err){
-					console.log("from main err= "+err)
 					showToast("error");
 				})
 			}

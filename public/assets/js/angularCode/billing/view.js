@@ -123,7 +123,6 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 	$scope.set= function(inComing){
 		$rootScope.bill = inComing
 		$rootScope.roundedAmount = Math.round($rootScope.bill.remAmount)
-		console.log("in set")
 	}	
 
 	$scope.check = function(){
