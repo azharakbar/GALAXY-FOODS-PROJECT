@@ -128,7 +128,7 @@
 
     </div>
   </div>
-<!-- 
+
 <div id="saveBillConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
 		<center><h4>ARE YOU SURE TO SAVE THIS ORDER &amp; BILL ?</h4>
@@ -159,7 +159,7 @@
 		<button class="btn waves-effect waves-light" style="background-color: #d32f2f" ng-click="no()"> NO </button></center>
 	</div>
 </div>
- -->
+
 
 
 
@@ -170,10 +170,10 @@
 	<div ng-show="content===1">
 		<h4>GENERATE BILL ON ACCOUNT OF :</h4>
 		<br>
-		<input name="purpose" type="radio" id="opt1" checked="true" />
+		<input name="purpose" type="radio" id="opt1" checked="true" ng-disabled="true" />
 		<label for="opt1"><font size="4" color="brown"> LOSS / DAMAGE OF STOCK </font></label>
 		<span style="position: absolute; bottom:35px ; float: right; right:48px">
-			<button class="waves-effect waves-light btn-large" type="submit" id="proceedBtn" ng-model="proceedBtn" ng-click="proceed()" ><font size="4" > PROCEED <i class="fa fa-chevron-right"></i> </font></button>
+			<button class="waves-effect waves-light btn-large" type="submit" id="proceedBtn" ng-model="proceedBtn" ng-click="proceed()" ng-disabled="true" ><font size="4" > PROCEED <i class="fa fa-chevron-right"></i> </font></button>
 		</span>
 	</div>
 
@@ -273,11 +273,11 @@
 </div>
 
 
-<!-- <div id="lostItemConfirm" class="modal bottom-sheet">
+<div id="lostItemConfirm" class="modal bottom-sheet">
 	<div class="modal-content">
 		<center><h4><i class="fa fa-cubes" id="qtyIcon"></i> ENTER THE LOST QUANTITY FOR <b>{{item.name}}</b> 
   		&nbsp;&nbsp;<div class="input-field animated" id="quantity" style="display: inline-block;">
-    		<input type="number" ng-model="qty" ng-keydown="tap(enrollItem())" id="qtySearch" ng-init="qty=1" min="1" max="{{item.availableStock}}" style="font-size: 20px; width: 50px">
+    		<input type="number" ng-model="qty" id="qtySearch" ng-init="qty=1" min="1" max="{{item.availableStock}}" style="font-size: 20px; width: 50px">
   		</div> 
   		<form style="display: inline-block;">
 		<button class="btn waves-effect waves-light" style="background-color: #388E3C" type="submit" name="sbm" ng-click="enrollItem()"><i class="fa fa-check"></i></button>
@@ -286,4 +286,4 @@
 		</form>
 		</h4></center>
 	</div>
-</div> -->
+</div>

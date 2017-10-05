@@ -11,5 +11,6 @@ router.use('/customer' , isLoggedIn , require('./custRouter'))
 router.use('/item' , isLoggedIn , require('./itemRouter'))
 router.use('/bill' , isLoggedIn , require('./billRouter'))
 router.use('/order' , isLoggedIn , require('./orderRouter'))
+router.use('/report' , isLoggedIn , require('./reportRouter'))
 
 module.exports = router

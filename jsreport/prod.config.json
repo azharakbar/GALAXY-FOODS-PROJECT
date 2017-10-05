@@ -16,7 +16,7 @@
   "connectionString": {
     "name": "fs"
   },
-  "httpPort": 5488,
+  "httpPort": 1802,
   "httpsPort": null,
   "logger": {
     "console": {
