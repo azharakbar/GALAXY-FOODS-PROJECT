@@ -13,10 +13,10 @@ angular.module('reportModule' , ['pickadate','serviceModule','serviceModule2'] )
 				endDate   : $scope.endDate
 			};
 			if ( $scope.reportOpt == "stkReport" ){
-				loxn += "/stockReport?data=" ;
+				loxn += "/stockReport?token="+user.getToken()+"data=" ;
 			}
 			else{
-				loxn += "/transactionReport?data=" ;
+				loxn += "/transactionReport?token="+user.getToken()+"data=" ;
 			}
 			loxn += JSON.stringify(dataObj) ;
 			var win = window.open(loxn,"_blank","width=700,height=700");

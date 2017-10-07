@@ -286,7 +286,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	$scope.cancel = function(){
 		$('.modal').modal('close')
 		if ( $scope.orderId != "LOSS OF STOCK")
-			$state.go('new_order')
+			$state.go('view_order')
 		else
 			$state.go('dashboard')
 	}
