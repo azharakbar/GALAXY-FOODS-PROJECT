@@ -42,6 +42,9 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 						hideLoading();
 					}
 					resolve(response.data.result)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					if( $stateParams.showLoading ){
 						hideLoading();
@@ -73,6 +76,9 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("!! ORDER PICKUP UPDATED SUCCESSFULLY !!")
 					resolve(response.data.status)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {			
 					toast.setMsg("!! ERROR IN UPDATING ORDER PICKUP !!")
 					reject ("ERROR1") 
@@ -98,6 +104,9 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("!! ORDER CANCELLED SUCCESSFULLY !!")
 					resolve(response.data.status)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {			
 					toast.setMsg("!! ERROR IN CANCELLING ORDER !!")
 					reject ("ERROR1") 
@@ -124,6 +133,9 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("!! ORDER RETURN UPDATED SUCCESSFULLY !!")
 					resolve(response.data.status)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {			
 					toast.setMsg("!! ERROR IN UPDATING ORDER RETURN !!")
 					reject ("ERROR1") 
@@ -177,7 +189,10 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 		$scope.orderList = res ;
 		$scope.$apply() ;
 	},function(err){
-		showToast("error");
+		showToast("error")
+		if ( err == "authErr" ){
+			$state.go('logout')
+		}
 	})
 
 	$scope.expandSearch = function(){
@@ -242,7 +257,11 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 			.then(function(res){
 				showToast("success")
 				$state.go( $state.current ,{ showLoading : false } )
-				// setTimeout(function(){ $state.reload(); } , 750 )
+			},function(err){
+				showToast("error")
+				if ( err == "authErr" ){
+					$state.go('logout')
+				}				
 			})
 		}
 	}
@@ -261,9 +280,11 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 		.then(function(res){
 			showToast("success")
 			$state.go( $state.current ,{ showLoading : false } )
-			// setTimeout(function(){ $state.reload(); } , 750);
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 	}
 
@@ -314,6 +335,9 @@ angular.module('viewOrderModule',['cfp.hotkeys','serviceModule','serviceModule2'
 			}
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 	}
 

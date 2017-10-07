@@ -7,7 +7,7 @@ var genConfig = {
 	secret : 'galaxygalaxy'	,
 	host : '127.0.0.1',
 	port : '2017',
-	debug : 1
+	debug : 0
 }
 
 var dbConfig = {

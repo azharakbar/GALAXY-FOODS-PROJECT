@@ -34,9 +34,12 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 				data : "token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
 					resolve(response.data.result)
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else{
 					toast.setMsg("** ERROR IN GETTING CUSTOMER LIST **")
 					reject("ERROR1")
 				}
@@ -57,9 +60,12 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 				data : "token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
 					resolve(response.data.count+1)
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN GETTING ORDER ID **")
 					reject("ERROR1")
 				}
@@ -82,8 +88,10 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
 					resolve(response.data)
-				}
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN GETTING ITEM LIST **")
 					reject("ERROR1")
 				}
@@ -215,6 +223,9 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			$scope.$apply()
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 
 	}
@@ -245,6 +256,9 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 			$scope.$apply()
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})	
 
 	}	
@@ -266,6 +280,9 @@ angular.module('newOrderModule',['cfp.hotkeys','pickadate','serviceModule','serv
 		$scope.$apply()
 	},function(err){
 		showToast("error")
+		if ( err == "authErr" ){
+			$state.go('logout')
+		}
 	})	
 
 	$scope.proceed = function(){

@@ -14,9 +14,6 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	else
 		$scope.showBill = false ;
 
-	var monthNames = ["January", "February", "March", "April", "May", "June",
-	  "July", "August", "September", "October", "November", "December"];
-
 	var pad = function( num ){
 		while ( num.toString().length < 5 )
 			num = "0" + num ; 
@@ -35,9 +32,12 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				data : "token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
 					resolve(response.data.count+1)
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN GETTING BILL NUMBER **")
 					reject("ERROR1")
 				}
@@ -58,9 +58,12 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				data : "finalObj="+JSON.stringify(dataObj)+"&token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
 					resolve(response.data.status)
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN SAVING BILL **")
 					reject("ERROR1")
 				}
@@ -84,8 +87,10 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("!! BILL SAVED & STOCKS UPDATED SUCCESSFULLY !!")
 					resolve(response.data.status)
-				}
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN SAVING BILL **")
 					reject("ERROR1")
 				}
@@ -107,9 +112,12 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 				data : "token="+user.getToken()
 			})
 			.then(function(response){
-				if ( response.data.status === "SXS" )
+				if ( response.data.status === "SXS" ){
 					resolve(response.data.result)
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN GETTING CUSTOMER LIST **")
 					reject("ERROR1")
 				}
@@ -132,8 +140,10 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			.then(function(response){
 				if ( response.data.status === "SXS" ){
 					resolve(response.data)
-				}
-				else{
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
+				} else {
 					toast.setMsg("** ERROR IN GETTING ITEM LIST **")
 					reject("ERROR1")
 				}
@@ -168,6 +178,9 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			$scope.$apply()
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})		
 	}
 	
@@ -222,6 +235,9 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			$scope.$apply()
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})	
 	}
 
@@ -249,6 +265,9 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 		$scope.$apply()
 	},function(err){
 		showToast("error")
+		if ( err == "authErr" ){
+			$state.go('logout')
+		}
 	})	
 
 	if ( $stateParams.orderDetails.orderId === "LOSS OF STOCK" ){
@@ -286,7 +305,7 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 	$scope.cancel = function(){
 		$('.modal').modal('close')
 		if ( $scope.orderId != "LOSS OF STOCK")
-			$state.go('new_order')
+			$state.go('view_order')
 		else
 			$state.go('dashboard')
 	}
@@ -347,6 +366,9 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			$state.go('new_order')
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})	
 	}
 
@@ -393,6 +415,9 @@ angular.module('newBillModule',['pickadate','serviceModule','serviceModule2'])
 			},1000)
 		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})	
 	}	
 

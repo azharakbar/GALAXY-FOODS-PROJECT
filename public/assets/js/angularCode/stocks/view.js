@@ -52,13 +52,23 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 					data : 'token='+user.getToken()
 				})
 				.then(function(response){
-					$scope.itemTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
 					if( $stateParams.showLoading ){
 						hideLoading();
+					}
+					if ( response.data.status == "SXS" ){
+						$scope.itemTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
+					} else if ( response.data.status === "AUTH_ERROR" ){
+						toast.setMsg("** AUTHENTICATION ERROR **")
+						showToast("error")
+						$state.go('logout')
 					}
 				},function(err){
 					$scope.total = "ERROR"	
 				})
+			} else if ( response.data.status === "AUTH_ERROR" ){
+				toast.setMsg("** AUTHENTICATION ERROR **")
+				showToast("error")
+				$state.go('logout')
 			} else {
 				$scope.total = "ERROR"	
 			}
@@ -87,6 +97,10 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 						hideLoading();
 					// }
 					resolve(response.data.result)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					hideLoading()
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					// if( showLoad || $stateParams.showLoading ){
 						hideLoading();
@@ -149,7 +163,10 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			$('#row'+$rootScope.index).addClass('animated fadeOutRight')
 			setTimeout( function(){ getCount( false ) } , 500 )
 		},function(err){
-			showToast("error");
+			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 		$rootScope.delAllowed = false ;
 	}
@@ -173,7 +190,10 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			$scope.posDetails = res ;
 			$scope.$apply() ;
 		},function(err){
-			showToast("error");
+			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 	}
 	$scope.noDel = function(){
@@ -201,6 +221,9 @@ angular.module('viewItemModule',['ngTable','cfp.hotkeys','serviceModule','servic
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("ITEM SUCCESSFULLY DELETED")
 					resolve("SUCCESS")
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					toast.setMsg("!! ERROR DELETING ITEM !!")
 					reject ("ERROR1") 

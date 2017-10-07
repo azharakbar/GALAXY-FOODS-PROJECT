@@ -107,7 +107,10 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 				.then(function(res){
 					showToast("success");
 				},function(err){
-					showToast("error");
+					showToast("error")
+					if ( err == "authErr" ){
+						$state.go('logout')
+					}
 				})
 			}
 			else{
@@ -144,6 +147,9 @@ angular.module('newItemModule',['serviceModule','serviceModule2'])
 					$rootScope.temp = '' ;
 					$('#itemBarCode').focus()
 					resolve("SUCCESS")
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					if (response.data.status === "REDUNDANT") {
 						toast.setMsg("ITEM WITH NEW BARCODE ALREADY EXISTS")

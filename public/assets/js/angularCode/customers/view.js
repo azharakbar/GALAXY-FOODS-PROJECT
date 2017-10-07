@@ -48,13 +48,23 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 					data : 'token='+user.getToken()
 				})
 				.then(function(response){
-					$scope.custTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
 					if( $stateParams.showLoading ){
 						hideLoading();
+					}
+					if ( response.data.status == "SXS" ){
+						$scope.custTable = new NgTableParams({count : 100 },{ dataset: response.data.result });
+					} else if ( response.data.status == "AUTH_ERROR" ){
+						toast.setMsg("** AUTHENTICATION ERROR **")
+						showToast("error")
+						$state.go('logout')
 					}
 				},function(err){
 					$scope.total = "ERROR"
 				})
+			} else if( response.data.status == "AUTH_ERROR" ){
+				toast.setMsg("** AUTHENTICATION ERROR **")
+				showToast("error")
+				$state.go('logout')
 			} else {
 				$scope.total = "ERROR"
 			}
@@ -108,7 +118,10 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 			$('#'+$rootScope.index).addClass('animated fadeOutRight')
 			setTimeout( function(){ getCount( false ) } , 500 )
 		},function(err){
-			showToast("error");
+			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 		$rootScope.delAllowed = false ;
 	}
@@ -138,6 +151,9 @@ angular.module('viewCustModule',['ngTable','cfp.hotkeys','serviceModule','servic
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("CUSTOMER SUCCESSFULLY DELETED")
 					resolve("SUCCESS")
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					toast.setMsg("!! ERROR DELETING CUSTOMER !!")
 					reject ("ERROR1") 

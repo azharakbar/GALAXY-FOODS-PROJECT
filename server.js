@@ -122,7 +122,7 @@ app.listen ( app.settings.port , function(err){
 	if(err)
 		console.log("**ERROR CREATING SERVER**")
 	else
-		console.log(`SERVER LISTENING TO ${app.settings.port}`)
+		console.log(`SERVER LISTENING TO ${app.settings.host}:${app.settings.port}`)
 })
 
 

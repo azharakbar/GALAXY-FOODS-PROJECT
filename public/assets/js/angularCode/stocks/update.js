@@ -98,7 +98,10 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 						showToast("success");
 						$state.go('view_stock' , { showLoading : false }) ;
 					},function(err){
-						showToast("error");
+						showToast("error")
+						if ( err == "authErr" ){
+							$state.go('logout')
+						}
 					})
 				}
 				else{
@@ -142,6 +145,9 @@ angular.module('updateItemModule',['serviceModule','serviceModule2'])
 				if ( response.data.status === "SXS" ){
 					toast.setMsg("ITEM SUCCESSFULLY UPDATED")
 					resolve("SUCCESS")
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					if (response.data.status === "REDUNDANT") {
 						toast.setMsg("ITEM WITH NEW BARCODE ALREADY EXISTS")

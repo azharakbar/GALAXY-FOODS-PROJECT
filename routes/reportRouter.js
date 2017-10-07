@@ -31,7 +31,6 @@ reportRouter.route('/deliveryNote')
 	.get((req,res)=>{
 		reportController.genDeliveryNote( req.query.orderId )
 		.then((dataInput)=>{
-			console.log( dataInput )
 			request(dataInput).pipe(res)
 		},(err)=>{
 			console.log(`ERROR DURING DELIVERY-NOTE GENERATION ${err}`)

@@ -44,9 +44,11 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 					.then(function(res){
 						showToast("success");
 						$state.go('view_customer',{ showLoading:false } )
-						// setTimeout(function() { $state.go('view_customer') ; }, 500);
 					},function(err){
-						showToast("error");
+						showToast("error")
+						if ( err == "authErr" ){
+							$state.go('logout')
+						}
 					})
 				} else {
 					if ( $scope.custName.length < 2 ){
@@ -94,10 +96,13 @@ angular.module('updateCustomerModule',['serviceModule','serviceModule2'])
 				} else {
 					if (response.data.status === "REDUNDANT") {
 						toast.setMsg("CUSTOMER WITH NEW CONTACT NUMBER ALREADY EXISTS")
+					} else if ( response.data.status === "AUTH_ERROR" ){
+						toast.setMsg("** AUTHENTICATION ERROR **")
+						reject("authErr")
 					} else {
 						toast.setMsg("!! ERROR UPDATING CUSTOMER !!")
+						reject ("ERROR1") 
 					}
-					reject ("ERROR1") 
 				}
 			},function(err){
 				toast.setMsg("!! ERROR UPDATING CUSTOMER !!")

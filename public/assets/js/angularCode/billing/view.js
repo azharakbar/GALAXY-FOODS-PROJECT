@@ -44,6 +44,12 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 						hideLoading();
 					}
 					resolve(response.data.result)
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					if( $stateParams.showLoading ){
+						hideLoading();
+					}					
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					if( $stateParams.showLoading ){
 						hideLoading();
@@ -82,6 +88,12 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 					}
 					toast.setMsg("!! PAYMENT DETAILS UPDATED SUCCESSFULLY !!")
 					resolve("SXS")
+				} else if ( response.data.status === "AUTH_ERROR" ){
+					if( $stateParams.showLoading ){
+						hideLoading();
+					}					
+					toast.setMsg("** AUTHENTICATION ERROR **")
+					reject("authErr")
 				} else {
 					if(  $stateParams.showLoading  ){
 						hideLoading();
@@ -104,7 +116,10 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		$scope.billList = res ;
 		$scope.$apply() ;
 	},function(err){
-		showToast("error");
+			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 	})
 
 	$scope.expandSearch = function(){
@@ -142,9 +157,11 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		.then(function(res){
 			showToast("success")
 			$state.go ('view_bill' , {showLoading : false})
-			
-		},function(err){	
+		},function(err){
 			showToast("error")
+			if ( err == "authErr" ){
+				$state.go('logout')
+			}
 		})
 	}
 

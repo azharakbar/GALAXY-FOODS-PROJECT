@@ -41,14 +41,13 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 		if ( $scope.custName != undefined && $scope.custContact != undefined ){
 			if ( $scope.custName.length >= 2 && $scope.custContact.length >= 7 ){
 				$rootScope.newCustFormError = false ;
-				var tkn = user.getToken()
 				$http({
 					url : '/customer/new' ,
 					method : 'POST' ,
 					headers : {
 						'Content-Type' : 'application/x-www-form-urlencoded'
 					},
-					data: 'name='+$scope.custName+'&contact='+$scope.custContact+'&token='+tkn
+					data: 'name='+$scope.custName+'&contact='+$scope.custContact+'&token='+user.getToken()
 				})
 				.then(function(response){
 					if ( response.data.status === "SXS" ){
@@ -62,7 +61,12 @@ angular.module('newCustModule',['serviceModule','serviceModule2'])
 					} else if ( response.data.status === "REDUNDANT" ){
 						toast.setMsg("USER ALREADY EXISTS")
 						showToast("normal");		
-					} else {
+					} else if ( response.data.status === "AUTH_ERROR" ){
+						toast.setMsg("** AUTHENTICATION ERROR **")
+						showToast("error");
+						$location.path('/logout')
+						return ;	
+					}  else {
 						toast.setMsg("!! ERROR ADDING USER !!")
 						showToast("error");
 					}
