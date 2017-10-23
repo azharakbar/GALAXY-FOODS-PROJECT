@@ -14,13 +14,14 @@ angular.module('serviceModule', ['ui.router'])
 	    this.getRole = function(){
 	    	return role ;
 	    }
-	    this.isLoggedIn = function(){
+	    this.isLoggedIn = function( frmState ){
+	    	$rootScope.fS = frmState
 	    	if ( sessionStorage.getItem ('login')){
 				var data = JSON.parse(sessionStorage.getItem('login')) ;
 				if ( data.time+900000 <= Date.now() ){
 					this.clear()
 					loggedIn = false
-					$state.go('logout') 
+					$state.go('logout')
 				}else{
 					loggedIn = true ;
 					$rootScope.loggedIn = true ;

@@ -1,4 +1,4 @@
-window.host = "10.67.116.185"
+window.host = "127.0.0.1"
 window.port = "2017"
 
 var showToast = function(type) {

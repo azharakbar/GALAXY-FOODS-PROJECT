@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended : true }))
 app.use(cors())
 
-process.env.TZ = config.TZ 
+process.env.TZ = config.genConfig.TZ 
 
 mongoose.Promise = bluebird ;
 

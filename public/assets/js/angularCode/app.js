@@ -10,7 +10,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/",
 		resolve : {
 			check : function(user,$state,$location){
-				if ( user.isLoggedIn() )
+				if ( user.isLoggedIn('login') )
 					$state.go('dashboard')
 			}
 		},
@@ -25,7 +25,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url : "/dashboard" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('dashboard')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -55,7 +55,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('new_customer')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -76,7 +76,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_customer" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('view_customer')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -103,7 +103,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('update_customer')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -124,7 +124,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_item" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('new_item')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -145,7 +145,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_stock" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('view_stock')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -172,7 +172,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		},
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('update_stock')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -193,7 +193,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('new_bill')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -217,7 +217,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/pay_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('pay_bill')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -238,7 +238,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_bill" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('view_bill')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -262,7 +262,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/new_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('new_order')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -283,7 +283,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/view_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('view_order')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -307,7 +307,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/update_order" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('update_order')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}
@@ -329,7 +329,7 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 		url: "/report_central" ,
 		resolve : {
 			check : function($rootScope,$state,user){
-				if(!user.isLoggedIn()){
+				if(!user.isLoggedIn('report_central')){
 					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
 					$state.go('logout')
 				}

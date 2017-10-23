@@ -1,5 +1,5 @@
 angular.module('loginModule', ['serviceModule','serviceModule2'])
-    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , $timeout ,  user , toast){
+    .controller('loginCtrl',function( $scope , $rootScope , $http , $location , $state , $timeout ,  user , toast){
         $scope.login = function(){
             var username = $scope.username ;
             var password = $scope.password ;
@@ -17,7 +17,12 @@ angular.module('loginModule', ['serviceModule','serviceModule2'])
                     user.saveData( response.data )
                     toast.setMsg("!! LOGGED IN !!")
                     showToast("success")
-                    $location.path('/dashboard')
+                    if ( localStorage.getItem('toGo') ){
+                        $state.go(localStorage.getItem('toGo'))
+                    } else {
+                        $location.path('/dashboard')
+                    }
+                    localStorage.removeItem('toGo')
                 }else{
                     if ( $rootScope.error != undefined ){
                         $scope.error = $rootScope.error

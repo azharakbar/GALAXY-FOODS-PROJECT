@@ -5,7 +5,7 @@ var localStrategy = require('passport-local').Strategy,
 var genConfig = {
 	TZ : 'Asia/Kolkata' ,
 	secret : 'galaxygalaxy'	,
-	host : '10.67.116.185',
+	host : '127.0.0.1',
 	port : '2017',
 	debug : 0
 }
@@ -14,9 +14,9 @@ var dbConfig = {
 	db : 'galaxy' , 
 	dbUser : encodeURIComponent('galaxyadmin'),
 	dbPwd : encodeURIComponent('map1802'),
-	dbHost : '10.27.116.185',
+	dbHost : '127.0.0.1',
 	dbPort : '27017',
-	authorizationDatabase : 'galaxy',
+	authenticationDatabase : 'galaxy',
 }
 
 var passportConfig = {
@@ -65,6 +65,6 @@ module.exports = {
 	'dbConfig' : dbConfig ,
 	'passportConfig' : passportConfig ,
 	'reportConfig' : reportConfig ,
-	//'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authorizationDatabase 
+	//'connURI' : "mongodb://"+dbConfig.dbUser+":"+dbConfig.dbPwd+"@"+dbConfig.dbHost+":"+dbConfig.dbPort+"/"+dbConfig.db+"?authSource="+dbConfig.authenticationDatabase 
 	 'connURI' : "mongodb://127.0.0.1:27017/galaxy"
 }
