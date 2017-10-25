@@ -10,6 +10,7 @@ router.use('/loginFailure' , require('./authRouter').authFailureRouter)
 router.use('/customer' , isLoggedIn , require('./custRouter'))
 router.use('/item' , isLoggedIn , require('./itemRouter'))
 router.use('/bill' , isLoggedIn , require('./billRouter'))
+router.use('/refund' , isLoggedIn , require('./refundRouter'))
 router.use('/order' , isLoggedIn , require('./orderRouter'))
 router.use('/report' , require('./reportRouter'))
 

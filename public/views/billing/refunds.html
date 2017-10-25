@@ -1,0 +1,117 @@
+<style type="text/css">
+	body{
+		font-family: 'Raleway',sans-serif;
+	}
+	table{
+		font-family: 'Montserrat',sans-serif;
+		cursor: default;
+	}
+	table th:hover{
+		cursor: default;
+	}
+	.list tr:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.redTextOnly{
+		color : red;
+	}
+	.test{
+		background-color: #ff5252;
+		color:  white ;
+	}
+	.test tr:hover{
+		background-color: #ff5252;
+		color:  white ;		
+	}
+</style>
+<div class="animated" ng-click="t=false">
+	<h2 style="font-family: 'Raleway', sans-serif; margin-top: 50px">REFUND PAYMENT </h2>
+	<br>
+	<div class="input-field" style="position: absolute; top:120px; right:65px; float: right; width:300px;">
+		<i class="fa fa-search prefix" id="searchIcon" ng-mouseenter="expandSearch()"></i>
+		<input type="text"  placeholder="SEARCH HERE.." ng-model="search" ng-focus="searchFocus()" ng-blur="compressSearch()" ng-init="" ng-keyup="searchBlur()" id="search" style="width: 0px">
+	</div>
+
+	<table class="table table-hover table-responsive list">
+		<thead>
+			<th width ="20%"><i class="fa fa-barcode" style="font-size: 12px"></i> NUMBER</th>
+			<th width ="30%"><i class="fa fa-user-o" style="font-size: 15px"></i> NAME</th>
+			<th width ="12.50%"><center><i class="fa fa-calendar" style="font-size: 15px"></i> DATE</center></th>
+			<th width ="12.50%"><center><i class="fa fa-inr" style="font-size: 15px"></i> AMOUNT</center></th>
+			<th width ="12.50%"><center> STATUS <i class="fa fa-question" style="font-size: 15px"></i></center></th>
+			<th width ="12.50%"><center><i class="fa fa-chevron-down" style="font-size: 15px"></i> REFUND</center></th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="refundItem in refundList | filter : search" ng-click="set(refundItem)" id="row{{$index}}" ng-class="{'danger': refundItem.status === 'NOT PAID' , 'success' : refundItem.status === 'PAID' }" height="48">
+			<td width="20%"> {{refundItem.refundId}} </td>
+			<td width="30%">  &nbsp;&nbsp;&nbsp;&nbsp;{{refundItem.name}} </td>
+			<td width="12.50%"><center>{{refundItem.issueDate | date:"dd MMMM, yyyy"}}</center> </td>
+			<td width="12.50%"><center>{{refundItem.amount | currency:""}} ₹</center> </td>
+			<td width="12.50%"><center>{{refundItem.status}}</center> </td>
+			<td width="12.50%">
+			<center>
+				<button class="btn waves-effect waves-light" style="background-color: #43a047; position: relative; bottom: 2px; width: 50px;" data-target="payNow"><i class="fa fa-inr"></i> <i class="fa fa-exchange"></i></button> 				
+			</center> </td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+
+<div id="refundNow" class="modal modal-fixed-footer">
+	<div class="modal-content">	
+		<div style="position: absolute; float: left; top:110px; left:200px;font-size: 17px" ng-show="!t">
+			<b> REFUND NUMBER</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{refundItem.refundId}}
+			<br>
+			<b> ISSUE DATE</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{refundItem.issueDate | date:"dd MMMM, yyyy"}}
+			<br>
+			<b> AMOUNT</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{refundItem.amount | currency:""}} ₹
+			<br>
+			<b> ORDER ID</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{refundItem.orderId}}
+            <br>
+            <b> BILL CANCELLED ON</b> &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{refundItem.billCancelDate | date:"dd MMMM, yyyy"}}
+            <br><br>
+			<!-- <span ng-show="bill.remAmount > 0 && bill.status.indexOf('CANCEL') == -1">
+				<span ng-show="bill.remAmount != bill.billAmount">
+				<b> PREVIOUS AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.billAmount-bill.remAmount | currency:""}} ₹			
+				<br>
+				</span>
+				<b> PAYABLE AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{roundedAmount | currency:""}} ₹
+				<br>
+				<b> AMOUNT PAID</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+				<div class="input-field" style="display: inline-block; left:50px;">
+					<input type="number" style="font-size: 17px " min=1 max="{{roundedAmount}}" ng-model="paid" ng-init="paid=1" id="" style="width: 120px">
+				</div>
+				<br>  			
+				<center ng-show="!check()" ng-class="{'animated shake' : !check()}">ENTER A VALID PAYMENT AMOUNT</center>
+			</span>
+			<span ng-show="bill.remAmount == 0 && bill.status.indexOf('CANCEL')==-1">
+				
+				<b> BILL SETTLED ON</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			
+				<br><br>			
+				<center><div id="sxsMsg" class="animated flash"><b> !! PAYMENT COMPLETED !! </b></div></center>
+			</span> -->
+			<span ng-show="refundItem.status == 'COMPLETED'">
+				<b> REFUND SETTLED ON</b> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{refundItem.paymentDate | date:"dd MMMM, yyyy"}}			
+				<br><br>			
+				<center><div id="sxsMsg" class="animated flash"><b> !! REFUND COMPLETED !! </b></div></center>
+			</span>			
+
+			<!-- <span ng-show="bill.status == 'ISSUED'">
+				<b> REFUND AMOUNT</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{bill.totalPaid | currency:""}} ₹
+				<br>				
+				<b> BILL CANCELLED ON</b> &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{bill.lastPaidDate | date:"dd MMMM, yyyy"}}			
+				<br><br>			
+				<center><div id="sxsMsg" class="animated flash"><b> !! BILL CANCELLATION COMPLETED !! </b></div></center>
+			</span>			 -->
+
+		</div>
+
+
+	</div>
+		<div class="modal-footer">
+			<button style="position: relative; bottom: 5px; height:43px; background-color: #d32f2f" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="checkoutBtn" ng-click="no()"><font size="4"><span style="position: relative; bottom: 5px;"><i class="fa fa-times"></i> CLOSE </span></font></button>
+			<button style="position: relative; bottom: 5px; height:43px; background-color: #388e3c" class="waves-effect waves-light btn-large" id="checkoutBtn" ng-model="payNowBtn" ng-click="payNow()" ng-show="!check() || t"><font size="4" ><span style="position: relative; bottom: 5px;"> REFUND NOW <i class="fa fa-inr"></i> <i class="fa fa-exchange"></i></span></font></button>	
+		</div>
+</div>

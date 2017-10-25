@@ -116,10 +116,10 @@ angular.module('viewBillModule',['cfp.hotkeys','serviceModule','serviceModule2']
 		$scope.billList = res ;
 		$scope.$apply() ;
 	},function(err){
-			showToast("error")
-			if ( err == "authErr" ){
-				$state.go('logout')
-			}
+		showToast("error")
+		if ( err == "authErr" ){
+			$state.go('logout')
+		}
 	})
 
 	$scope.expandSearch = function(){

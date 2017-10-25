@@ -1,6 +1,6 @@
 var app = angular.module('pcApp',['ui.router','cfp.hotkeys','serviceModule','loginModule','logoutModule','dashModule','sideNavModule'
 	,'newCustModule','viewCustModule','newItemModule','viewItemModule','updateItemModule','updateCustomerModule',
-	'serviceModule2','newOrderModule','newBillModule','viewBillModule','viewOrderModule','reportModule']) ;
+	'serviceModule2','newOrderModule','newBillModule','viewBillModule','viewRefundsModule','viewOrderModule','reportModule']) ;
 
 app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 	$urlRouterProvider.otherwise('/error') ;
@@ -255,6 +255,30 @@ app.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 			'v2' : {
 				templateUrl : "./views/billing/view.html" ,
 				controller : 'viewBillCtrl'
+			}
+		}
+	})
+	.state('view_refunds',{
+		url: "/view_refunds" ,
+		resolve : {
+			check : function($rootScope,$state,user){
+				if(!user.isLoggedIn('view_refunds')){
+					$rootScope.error = "YOU ARE NOT LOGGED IN" ;
+					$state.go('logout')
+				}
+			}
+		},
+		params : {
+			showLoading : { value : true }
+		},        
+		views : {
+			'v1' : {
+				templateUrl : "./views/navbar.html" ,
+				controller : 'sideNavCtrl'
+			},
+			'v2' : {
+				templateUrl : "./views/billing/refunds.html" ,
+				controller : 'viewRefundCtrl'
 			}
 		}
 	})
